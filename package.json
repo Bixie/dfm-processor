@@ -1,9 +1,10 @@
 {
   "name": "dfm-processor",
   "version": "0.0.1",
-  "description": "File processor for DFM",
+  "description": "Requests and file processor for DFM",
   "main": "index.js",
   "scripts": {
+    "install": "node %NODE_DEBUG_OPTION% ./scripts/install.js",
     "start": "node %NODE_DEBUG_OPTION% ./bin/www",
     "mon": "nodemon %NODE_DEBUG_OPTION% ./bin/www"
   },
