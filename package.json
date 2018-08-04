@@ -4,7 +4,8 @@
   "description": "Requests and file processor for DFM",
   "main": "index.js",
   "scripts": {
-    "install": "node %NODE_DEBUG_OPTION% ./scripts/install.js",
+    "install": "node ./scripts/install.js",
+    "test-dfm": "node ./scripts/test-dfm.js",
     "start": "node %NODE_DEBUG_OPTION% ./bin/www",
     "mon": "nodemon %NODE_DEBUG_OPTION% ./bin/www"
   },
