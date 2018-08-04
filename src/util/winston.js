@@ -1,5 +1,5 @@
 const { createLogger, format, transports, } = require('winston');
-const { combine, timestamp, printf, } = format;
+const { combine, printf, } = format;
 
 const moment = require('moment');
 
@@ -49,7 +49,7 @@ const logger = createLogger({
 
 // create a stream object with a 'write' function that will be used by `morgan`
 logger.stream = {
-    write: function(message, encoding) {
+    write: function(message) {
         logger.info(message);
     },
 };
