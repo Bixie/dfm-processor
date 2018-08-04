@@ -10,12 +10,17 @@ const bodyParser = require('body-parser');
 const {IMAGEFILES_PATH,} = require('./config');
 const fileWatcher = require('./src/file-watcher');
 const imageHandler = require('./src/image-handler');
+const api = require('./src/util/api-request');
 
 fileWatcher.watch(IMAGEFILES_PATH, filepath => {
     imageHandler(filepath)
         .then(({preview_id, imageData,}) => {
             logger.info('Preview ID %s result fetched.', preview_id);
-            logger.silly('Preview ID %s image data: %s', imageData);
+            //send to webserver API
+            return api.postToApi(`/preview/${preview_id}`, {imageData,});
+        })
+        .then(res => {
+            logger.info('Preview ID %s succesfully sent to the webserver', res.preview_id);
         })
         .catch(err => logger.error(err));
 });

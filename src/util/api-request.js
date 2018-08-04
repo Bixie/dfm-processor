@@ -15,7 +15,7 @@ class ApiRequest {
             let cookie = new tough.Cookie({
                 key: 'XDEBUG_SESSION',
                 value: 'PHPSTORM',
-                domain: server_url.replace(/(https?:\/\/)/, ''),
+                domain: server_url.replace(/(https?:\/\/)/, '.').replace(/\/index.php/, ''),
                 httpOnly: true,
                 maxAge: 31536000,
             });
