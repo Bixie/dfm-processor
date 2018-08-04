@@ -5,8 +5,18 @@ const morgan = require('morgan');
 const winston = require('./src/util/winston');
 const bodyParser = require('body-parser');
 
-const app = express();
+//setup filewatcher
+const {IMAGEFILES_PATH,} = require('./config');
+const fileWatcher = require('./src/file-watcher');
 
+fileWatcher.watch(IMAGEFILES_PATH, (path, stats) => {
+    winston.logger.info(`File ${path} has been added`);
+    if (stats) {
+        winston.logger.info(`File ${path} has a size of ${stats.size}`);
+    }
+});
+
+const app = express();
 
 app.use(morgan('combined', {stream: winston.stream,}));
 app.use(bodyParser.json());

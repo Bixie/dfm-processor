@@ -6,8 +6,16 @@ const ApiToken = require('./api-token');
 const {PARAMSFILES_PATH,} = require('../config');
 
 const ParamsFile = require('./params-file');
+const {getWatcher,} = require('./file-watcher');
 
 router.use(ApiToken.middleware);
+
+router.get('/status', (req, res) => {
+    logger.info('Status request.');
+    const watchedPaths = getWatcher().getWatched();
+    res.send({watchedPaths,});
+});
+
 /**
  * Request processing preview for a parameter set
  * @param string preview_id Unique ID to tag images
