@@ -3,6 +3,9 @@ const {logger,} = require('../src/util/winston');
 const express = require('express');
 const router = express.Router();
 const ApiToken = require('./api-token');
+const {PARAMSFILES_PATH,} = require('../config');
+
+const ParamsFile = require('./params-file');
 
 router.use(ApiToken.middleware);
 /**
@@ -14,12 +17,13 @@ router.use(ApiToken.middleware);
 router.post('/preview/:preview_id', (req, res) => {
     const {preview_id,} = req.params;
     const {params, options,} = req.body;
-    //todo validate params?
     logger.info('Incoming request for preview for %s', preview_id);
     let result = false;
-
-
-    res.send({result, preview_id,});
+    const paramsFile = new ParamsFile(preview_id, params, options);
+    paramsFile.write(PARAMSFILES_PATH).then(result => {
+        logger.info('Parameterfile %s/%s.txt saved.', PARAMSFILES_PATH, preview_id);
+        res.send({result, preview_id,});
+    }).catch(error => res.send({result, preview_id, error,}));
 });
 
 module.exports = router;
