@@ -2,18 +2,22 @@ const {logger,} = require('../src/util/winston');
 
 const express = require('express');
 const router = express.Router();
+const ServerStatus = require('../src/util/server-status');
 const ApiToken = require('./api-token');
 const {PARAMSFILES_PATH,} = require('../config');
 
 const ParamsFile = require('./params-file');
 const {getWatcher,} = require('./file-watcher');
 
+const stats = new ServerStatus();
+
 router.use(ApiToken.middleware);
 
 router.get('/status', (req, res) => {
     logger.info('Status request.');
     const watchedPaths = getWatcher().getWatched();
-    res.send({watchedPaths,});
+    const status = stats.getStatus();
+    res.send({status, watchedPaths,});
 });
 
 /**
