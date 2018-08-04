@@ -49,9 +49,9 @@ class ParamsFile {
         return output;
     }
 
-    write(path) {
+    write(folderpath) {
         return new Promise((resolve, reject) => {
-            const filename = `${path}/${this.id}.txt`;
+            const filename = `${folderpath}/${this.id}.txt`;
             fs.writeFile(filename, this.render(), err => {
                 if (err) {
                     reject(err);
