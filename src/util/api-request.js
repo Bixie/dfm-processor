@@ -14,11 +14,12 @@ class ApiRequest {
         this.server_url = server_url;
         this.api_key = api_key;
         this.cookiejar = rp.jar();
+        const domain = this.server_url.replace(/(https?:\/\/)/, '.').split('/')[0];
         if (process.env.NODE_ENV === 'development') {
             let cookie = new tough.Cookie({
                 key: 'XDEBUG_SESSION',
                 value: 'PHPSTORM',
-                domain: server_url.replace(/(https?:\/\/)/, '.').replace(/\/index.php/, ''),
+                domain,
                 httpOnly: true,
                 maxAge: 31536000,
             });
@@ -73,10 +74,6 @@ class ApiRequest {
      */
     putFile(url, filepath, headers = {}) {
         url = `${this.server_url}/${url}`;
-        if (process.env.NODE_ENV === 'development') {
-            const cookie_domain = this.server_url.replace(/(https?:\/\/)/, '.').replace(/\/index.php/, '');
-            headers.Cookie = `XDEBUG_SESSION=XDEBUG_ECLIPSE; path=/; domain=${cookie_domain};`;
-        }
         return new Promise((resolve, reject) => {
             fs.readFile(filepath, (err, buffer) => {
                 if (err) {
@@ -86,7 +83,7 @@ class ApiRequest {
                 headers['Content-type'] = 'application/zip';
                 headers['Content-length'] = buffer.length;
                 headers = this.getHeaders(headers);
-                request.put({url, headers, body: buffer,}, (err, {statusCode, body,}) => {
+                request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, {statusCode, body,}) => {
                     if (err) {
                         reject(err);
                     } else {
