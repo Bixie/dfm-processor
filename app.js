@@ -13,19 +13,25 @@ const fileWatcher = require('./src/file-watcher');
 const zipHandler = require('./src/zip-handler');
 const api = require('./src/util/api-request');
 
+/**
+ * Watch the output directory and send files to webserver. Move files when sent
+ */
 fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, filepath => {
     const preview_id = path.basename(filepath, '.zip');
-    api.putToApi(`/preview/${preview_id}`, zipHandler.getZipStream(filepath), (err, res, body) => {
-        if (err) {
+    logger.info('Preview ID %s output file found.', preview_id);
+    api.putToApi(`/preview/${preview_id}`, filepath)
+        .then(data => {
+            logger.info('Preview ID %s successfully sent to the webserver', data.preview_id);
+            return zipHandler.moveZip(filepath);
+        })
+        .then(res => {
+            if (!res) {
+                logger.error('Error moving zip to sent folder!');
+            }
+        })
+        .catch(err => {
             logger.error('Error in zip submit request: %s', err);
-        }
-        const data = JSON.parse(body);
-        if (res.statusCode === 200) {
-            logger.info('Preview ID %s succesfully sent to the webserver', data.preview_id);
-        } else {
-            logger.error('Submit zip %s returned %d: %s', preview_id, res.statusCode, data.error);
-        }
-    });
+        });
 });
 
 const app = express();

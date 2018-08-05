@@ -8,10 +8,12 @@ function setupWatcher (path, onAddCallback) {
     watcher = chokidar.watch(path, {
         ignored: /(^|[\/\\])\../, //ignores .dotfiles
         persistent: true,
+        awaitWriteFinish: {
+            stabilityThreshold: 500,
+            pollInterval: 100,
+        },
     });
-
-    // 'add', 'addDir' and 'change' events also receive stat() results as second
-    // argument when available: http://nodejs.org/api/fs.html#fs_class_fs_stats
+    //bind listener for new files
     watcher.on('add', onAddCallback);
     return watcher;
 }

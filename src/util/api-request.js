@@ -1,6 +1,8 @@
-const rp = require('request-promise-native');
+const rp = require('request-promise');
+const fs = require('fs');
 const tough = require('tough-cookie');
 const request = require('request');
+const Promise = require('bluebird');
 
 let apiRequest;
 
@@ -29,18 +31,18 @@ class ApiRequest {
      * Get message to server. Returns Promise that resolves in the results data Object
      * @param url
      * @param data
+     * @param headers
      * @returns {Promise}
      */
-    get(url, data) {
+    get(url, data, headers = {}) {
         const options = {
             method: 'GET',
             uri: `${this.server_url}/${url}`,
             jar: this.cookiejar,
             body: data,
             json: true,
+            headers: this.getHeaders(headers),
         };
-        options.headers = this.getHeaders();
-
         return rp(options);
     }
 
@@ -58,21 +60,46 @@ class ApiRequest {
             jar: this.cookiejar,
             body: data,
             json: true,
+            headers: this.getHeaders(headers),
         };
-        options.headers = this.getHeaders(headers);
-
         return rp(options);
     }
 
-    putToApi(url, body, callback) {
-        let headers = {};
+    /**
+     * Post message to server. Returns Promise that resolves in the results data Object
+     * @param url
+     * @param filepath
+     * @param headers
+     */
+    putFile(url, filepath, headers = {}) {
         url = `${this.server_url}/${url}`;
         if (process.env.NODE_ENV === 'development') {
             const cookie_domain = this.server_url.replace(/(https?:\/\/)/, '.').replace(/\/index.php/, '');
             headers.Cookie = `XDEBUG_SESSION=XDEBUG_ECLIPSE; path=/; domain=${cookie_domain};`;
         }
-        headers = this.getHeaders(headers);
-        return request.put({url, headers, body,}, callback);
+        return new Promise((resolve, reject) => {
+            fs.readFile(filepath, (err, buffer) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                headers['Content-type'] = 'application/zip';
+                headers['Content-length'] = buffer.length;
+                headers = this.getHeaders(headers);
+                request.put({url, headers, body: buffer,}, (err, {statusCode, body,}) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const data = JSON.parse(body);
+                        if (statusCode === 200) {
+                            resolve(data);
+                        } else {
+                            reject(`Status ${statusCode}: ${data.error || body}`);
+                        }
+                    }
+                });
+            });
+        });
     }
 
     /**
@@ -104,11 +131,11 @@ module.exports = {
         }
         return apiRequest.post(url, data);
     },
-    putToApi(url, body, callback) {
+    putToApi(url, filepath, headers = {}) {
         if (!apiRequest) {
             throw Error('ApiRequest has not been set up!');
         }
-        return apiRequest.putToApi(url, body, callback);
+        return apiRequest.putFile(url, filepath, headers);
     },
 };
 
