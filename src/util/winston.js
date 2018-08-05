@@ -1,5 +1,6 @@
 const { createLogger, format, transports, } = require('winston');
 const { combine, printf, } = format;
+require('winston-daily-rotate-file');
 
 const moment = require('moment');
 
@@ -18,16 +19,28 @@ function timestampDiff() {
     return moment.duration(diff).asMilliseconds() + 'ms';
 }
 
-const myFormat = printf(info => {
+const difftimeFormat = printf(info => {
     return `${timestampDiff()} ${info.level}: ${info.message}`;
+});
+
+const filelogFormat = printf(info => {
+    return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
 //set up transports
 const transportsArr = [
-    new (transports.File)({
-        name: 'error-file',
-        filename: __dirname + '/../../../logs/dfm-proc-error.log',
-        level: 'error',
+    new (transports.DailyRotateFile)({
+        name: 'log-file',
+        level: 'info',
+        format: combine(
+            format.timestamp(),
+            filelogFormat
+        ),
+        filename: __dirname + '/../../../logs/dfm-processor-%DATE%.log',
+        datePattern: 'YYYY-MM-DD',
+        zippedArchive: true,
+        maxSize: '20m',
+        maxFiles: '14d',
     }),
 ];
 
@@ -35,14 +48,17 @@ const transportsArr = [
 if (process.env.NODE_ENV !== 'production') {
     transportsArr.push(new transports.Console({
         level: 'silly',
+        format: combine(
+            format.colorize(),
+            difftimeFormat
+        ),
     }));
 }
 
 //create logger
 const logger = createLogger({
     format: combine(
-        format.splat(),
-        myFormat
+        format.splat()
     ),
     transports: transportsArr,
 });
@@ -50,7 +66,7 @@ const logger = createLogger({
 // create a stream object with a 'write' function that will be used by `morgan`
 logger.stream = {
     write: function(message) {
-        logger.info(message);
+        logger.verbose(message);
     },
 };
 

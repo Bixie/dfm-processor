@@ -14,7 +14,7 @@ const stats = new ServerStatus();
 router.use(ApiToken.middleware);
 
 router.get('/status', (req, res) => {
-    logger.info('Status request.');
+    logger.verbose('Status request.');
     const watchedPaths = getWatcher().getWatched();
     const status = stats.getStatus();
     res.send({status, watchedPaths,});
@@ -29,7 +29,7 @@ router.get('/status', (req, res) => {
 router.post('/preview/:preview_id', (req, res) => {
     const {preview_id,} = req.params;
     const {params, options,} = req.body;
-    logger.info('Incoming request for preview for %s', preview_id);
+    logger.verbose('Incoming request for preview for %s', preview_id);
     let result = false;
     const paramsFile = new ParamsFile(preview_id, params, options);
     paramsFile.write(PARAMSFILES_PATH).then(result => {

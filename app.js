@@ -18,7 +18,7 @@ const api = require('./src/util/api-request');
  */
 fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, filepath => {
     const preview_id = path.basename(filepath, '.zip');
-    logger.info('Preview ID %s output file found.', preview_id);
+    logger.verbose('Preview ID %s output file found.', preview_id);
     api.putToApi(`/preview/${preview_id}`, filepath)
         .then(data => {
             logger.info('Preview ID %s successfully sent to the webserver', data.preview_id);
