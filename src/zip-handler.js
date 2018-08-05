@@ -10,14 +10,14 @@ const {IMAGEFILES_SENT_PATH,} = require('../config');
  * @param filepath
  * @returns {string}
  */
-function prepareImage(filepath) {
+function prepareZip(filepath) {
     // read binary data
-    const bitmap = fs.readFileSync(filepath);
+    const bin = fs.readFileSync(filepath);
     // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
+    return new Buffer(bin).toString('base64');
 }
 
-function moveImage(filepath) {
+function moveZip(filepath) {
     return new Promise((resolve, reject) => {
         const basename = path.basename(filepath);
         fs.rename(filepath, `${IMAGEFILES_SENT_PATH}/${basename}`, err => {
@@ -36,10 +36,10 @@ function moveImage(filepath) {
  */
 module.exports = function (filepath) {
     return new Promise((resolve, reject) => {
-        const preview_id = path.basename(filepath, '.png');
-        const imageData = prepareImage(filepath);
-        moveImage(filepath)
-            .then(() => resolve({preview_id, imageData,}))
+        const preview_id = path.basename(filepath, '.zip');
+        const zipData = prepareZip(filepath);
+        moveZip(filepath)
+            .then(() => resolve({preview_id, zipData,}))
             .catch(err => reject(err));
     });
 };

@@ -7,17 +7,17 @@ const logger = winston.logger;
 const bodyParser = require('body-parser');
 
 //setup filewatcher
-const {IMAGEFILES_PATH,} = require('./config');
+const {IMAGEFILES_OUTPUT_PATH,} = require('./config');
 const fileWatcher = require('./src/file-watcher');
-const imageHandler = require('./src/image-handler');
+const zipHandler = require('./src/zip-handler');
 const api = require('./src/util/api-request');
 
-fileWatcher.watch(IMAGEFILES_PATH, filepath => {
-    imageHandler(filepath)
-        .then(({preview_id, imageData,}) => {
+fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, filepath => {
+    zipHandler(filepath)
+        .then(({preview_id, zipData,}) => {
             logger.info('Preview ID %s result fetched.', preview_id);
             //send to webserver API
-            return api.postToApi(`/preview/${preview_id}`, {imageData,});
+            return api.postToApi(`/preview/${preview_id}`, {zipData,});
         })
         .then(res => {
             logger.info('Preview ID %s succesfully sent to the webserver', res.preview_id);

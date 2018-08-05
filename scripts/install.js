@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-const {IMAGEFILES_SENT_PATH, IMAGEFILES_PATH,} = require('../config');
+const {IMAGEFILES_SENT_PATH, IMAGEFILES_OUTPUT_PATH,} = require('../config');
 
 //check needed folders
 try {
@@ -15,11 +15,11 @@ try {
 }
 
 try {
-    fs.statSync(IMAGEFILES_PATH);
+    fs.statSync(IMAGEFILES_OUTPUT_PATH);
 } catch (e) {
     if (e.code === 'ENOENT') {
-        fs.mkdirSync(IMAGEFILES_PATH, 755);
-        console.log('Created listener images path ' + IMAGEFILES_PATH);
+        fs.mkdirSync(IMAGEFILES_OUTPUT_PATH, 755);
+        console.log('Created listener images path ' + IMAGEFILES_OUTPUT_PATH);
     }
 }
 

@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "install": "node ./scripts/install.js",
-    "test-dfm": "node ./scripts/test-dfm.js",
+    "test-dfm": "node %NODE_DEBUG_OPTION% ./scripts/test-dfm.js",
     "start": "node %NODE_DEBUG_OPTION% ./bin/www",
     "mon": "nodemon %NODE_DEBUG_OPTION% ./bin/www"
   },
   "author": "Matthijs Alles - Bixie",
   "license": "MIT",
   "dependencies": {
+    "archiver": "^2.1.1",
     "bluebird": "^3.5.1",
     "chokidar": "^2.0.4",
     "express": "^4.16.3",
