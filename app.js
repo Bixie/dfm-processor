@@ -1,3 +1,4 @@
+const path = require('path');
 
 const express = require('express');
 
@@ -13,16 +14,18 @@ const zipHandler = require('./src/zip-handler');
 const api = require('./src/util/api-request');
 
 fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, filepath => {
-    zipHandler(filepath)
-        .then(({preview_id, zipData,}) => {
-            logger.info('Preview ID %s result fetched.', preview_id);
-            //send to webserver API
-            return api.postToApi(`/preview/${preview_id}`, {zipData,});
-        })
-        .then(res => {
-            logger.info('Preview ID %s succesfully sent to the webserver', res.preview_id);
-        })
-        .catch(err => logger.error(err));
+    const preview_id = path.basename(filepath, '.zip');
+    api.putToApi(`/preview/${preview_id}`, zipHandler.getZipStream(filepath), (err, res, body) => {
+        if (err) {
+            logger.error('Error in zip submit request: %s', err);
+        }
+        const data = JSON.parse(body);
+        if (res.statusCode === 200) {
+            logger.info('Preview ID %s succesfully sent to the webserver', data.preview_id);
+        } else {
+            logger.error('Submit zip %s returned %d: %s', preview_id, res.statusCode, data.error);
+        }
+    });
 });
 
 const app = express();
