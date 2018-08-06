@@ -10,7 +10,7 @@ const archiver = require('../src/util/archiver');
 function getTimoutTime() {
     let toss = Math.random();
     //try to get some granular RNG, tending to shorter times
-    if (toss < 0.4) {
+    if (toss < 0.2) {
         toss = toss * 0.2;
     } else if (toss < 0.5) {
         toss = toss * 0.25;
