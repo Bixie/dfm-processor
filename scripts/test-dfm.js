@@ -3,6 +3,10 @@
 const path = require('path');
 const fs = require('fs');
 
+const scriptArgs = process.argv.slice(2);
+
+const quickRespond = scriptArgs[0] === '-qr';
+
 const {PARAMSFILES_PATH, IMAGEFILES_OUTPUT_PATH,} = require('../config');
 const fileWatcher = require('../src/file-watcher');
 const archiver = require('../src/util/archiver');
@@ -23,7 +27,7 @@ function getTimoutTime() {
 //setup filewatcher
 fileWatcher.watch(PARAMSFILES_PATH, filepath => {
     const preview_id = path.basename(filepath, '.txt');
-    const timeoutTime = getTimoutTime();
+    const timeoutTime = quickRespond ? 5 : getTimoutTime();
     console.log(`Creating ${preview_id}.zip in ${Math.round(timeoutTime/1000)} seconds`);
     setTimeout(() => {
         const filename = `${IMAGEFILES_OUTPUT_PATH}/${preview_id}.zip`;
