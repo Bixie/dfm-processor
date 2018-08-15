@@ -30,12 +30,15 @@ class ParamsFile {
 
     constructor(id, params, options = {}) {
         this.id = id;
-        this.params = {...defaultParams, ...params,};
+        this.params = {};
+        //we can just test for falsy value, since the indices are 1 based
+        Object.entries(defaultParams)
+            .forEach(([key, defaultValue,]) => this.params[key] = params[key] || defaultValue);
         this.options = options;
     }
 
     render() {
-        let output = LF;
+        let output = '';
         output += Object.keys(this.params).map(key => {
             return formatLine(this.params[key]);
         }).join('');
