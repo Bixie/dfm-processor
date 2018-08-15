@@ -40,12 +40,22 @@ Use git/yarn to install the client.
 git clone https://github.com/Bixie/dfm-processor
 cd dfm-processor
 yarn install
-yarn run install
 ```
 
 ## Run as Windows Service
 
 Install [node-windows](https://www.npmjs.com/package/node-windows) globally.
+
+Link the package to the install directory. First create the link in the global package:
+```
+cd %USERPROFILE%/AppData/Roaming/npm/node_modules/node-windows
+yarn link
+```
+Then activate the link in the application folder
+```
+cd /path/to/dfm-processor
+yarn link node-windows
+```
 
 Run service installer.
 
