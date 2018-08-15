@@ -2,29 +2,28 @@ const fs = require('fs');
 const Promise = require('bluebird');
 
 const LF = '\n';
-const TAB = '\t';
-
-const PREVIEW_ID_KEY = 'ClientName';
 
 const defaultParams = {
-    Investment: 48,
-    PortfolioSize: 12,
-    HoldingPeriod: 13,
-    ValidationPeriod: 30,
-    PennyStocks: 'No',
-    GrowthPotential: 'Yes',
-    HedgePercentage: 0,
-    BalanceRR: 'MinimizeRisk/Reward',
-    Watchlists: 'Safe',
-    TransactionCosts: 0,
-    LoanPercentage: 0,
-    DividendTax: 15,
-    DataProvider: 'CSI',
+    Investment: 5,
+    PortfolioSize: 3,
+    HoldingPeriod: 3,
+    ValidationPeriod: 8,
+    PennyStocks: 2,
+    GrowthPotential: 1,
+    HedgePercentage: 3,
+    BalanceRR: 1,
+    Watchlists: 4,
+    TransactionCosts: 1,
+    LoanPercentage: 1,
+    DividendTax: 3,
+    DataProvider: 1,
 };
 
-function formatLine(key, value) {
-    const tabs = key.length > 15 ? TAB : TAB + TAB;
-    return `${key}${tabs}${value}${LF}`;
+function formatLine(value, key) {
+    if (key) {
+        return `${key}:${value}${LF}`;
+    }
+    return `${value}${LF}`;
 }
 
 class ParamsFile {
@@ -37,14 +36,12 @@ class ParamsFile {
 
     render() {
         let output = LF;
-        output += formatLine(PREVIEW_ID_KEY, this.id);
-        output += LF;
         output += Object.keys(this.params).map(key => {
-            return formatLine(key, this.params[key]);
+            return formatLine(this.params[key]);
         }).join('');
         output += LF;
         output += Object.keys(this.options).map(key => {
-            return formatLine(key, this.options[key]);
+            return formatLine(this.options[key], key);
         }).join('');
         return output;
     }
