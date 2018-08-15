@@ -11,8 +11,6 @@ const {getWatcher,} = require('./file-watcher');
 
 const stats = new ServerStatus();
 
-router.use(ApiToken.middleware);
-
 router.get('/status', (req, res) => {
     logger.verbose('Status request.');
     const watchedPaths = getWatcher().getWatched();
@@ -26,7 +24,7 @@ router.get('/status', (req, res) => {
  * @param object params Params for MFD calculations
  * @param object options View options for rendering
  */
-router.post('/preview/:preview_id', (req, res) => {
+router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
     const {preview_id,} = req.params;
     const {params, options,} = req.body;
     logger.verbose('Incoming request for preview for %s', preview_id);
