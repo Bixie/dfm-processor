@@ -28,6 +28,7 @@ DFM_APP_PATH                //Path where the processor is installed
 DFM_PARAMSFILES_PATH        //Path where DFM application will listen for params files
 DFM_IMAGEFILES_OUTPUT_PATH  //Path where DFM application outputs the files
 DFM_IMAGEFILES_SENT_PATH    //Path to backup sent files to
+DFM_WEBSERVER_LOCAL_PATH    //Path of images-folder of webserver when webserver runs on the same machine. False otherwise
 DFM_INTERNAL_API_HOST       //URL of Internal API on webserver
 DFM_INTERNAL_API_KEY        //API key used for Internal API
 ```

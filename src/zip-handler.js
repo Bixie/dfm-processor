@@ -3,21 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const Promise = require('bluebird');
 
-const {IMAGEFILES_SENT_PATH,} = require('../config');
 
-/**
- * https://gist.github.com/inadarei/4465153
- * @param filepath
- * @returns {ReadStream}
- */
-function getZipStream(filepath) {
-    return fs.createReadStream(filepath);
-}
-
-function moveZip(filepath) {
+function moveZip(filepath, destinationpath) {
     return new Promise((resolve, reject) => {
         const basename = path.basename(filepath);
-        fs.rename(filepath, `${IMAGEFILES_SENT_PATH}/${basename}`, err => {
+        fs.rename(filepath, `${destinationpath}/${basename}`, err => {
             if (err) {
                 reject(err);
             }
@@ -27,6 +17,5 @@ function moveZip(filepath) {
 }
 
 module.exports = {
-    getZipStream,
     moveZip,
 };
