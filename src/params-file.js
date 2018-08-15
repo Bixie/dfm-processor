@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Promise = require('bluebird');
 
-const LF = '\n';
+const LF = '\r\n';
 
 const defaultParams = {
     Investment: 5,
