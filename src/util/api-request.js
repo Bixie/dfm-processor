@@ -85,13 +85,13 @@ class ApiRequest {
                 headers = this.getHeaders(headers);
                 request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, {statusCode, body,}) => {
                     if (err) {
-                        reject(err);
+                        reject(new Error(err));
                     } else {
                         const data = JSON.parse(body);
                         if (statusCode === 200) {
                             resolve(data);
                         } else {
-                            reject(`Status ${statusCode}: ${data.error || body}`);
+                            reject(new Error(`Status ${statusCode}: ${data.error || body}`));
                         }
                     }
                 });
