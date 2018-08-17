@@ -31,7 +31,7 @@ fileWatcher.watch(PARAMSFILES_PATH, filepath => {
     console.log(`Creating ${preview_id}.zip in ${Math.round(timeoutTime/1000)} seconds`);
     setTimeout(() => {
         const filename = `${IMAGEFILES_OUTPUT_PATH}/${preview_id}.zip`;
-        const sourcePath = 'C:/Projects/DFM/dfm-processor/scripts/test-images';
+        const sourcePath = path.join(__dirname, 'test-images');
         const files = [
             {name: 'sample_1.png', filepath: `${sourcePath}/sample_1.png`,},
             {name: 'sample_2.png', filepath: `${sourcePath}/sample_2.png`,},
