@@ -43,6 +43,7 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
                 fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}.png`, err => {
                     if (err) {
                         console.log('ERROR: ', err.message);
+                        return;
                     }
                     console.log(`File ${filename}.png added with ${fileTimeoutTime} delay for ${preview_id}`);
                 });
@@ -52,6 +53,7 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
     fs.rename(filepath, path.join(PARAMSFILES_ARCHIVE_PATH, path.basename(filepath)), err => {
         if (err) {
             console.log('ERROR: ', err.message);
+            return;
         }
         console.log(`Paramfile ${preview_id}.txt moved to archive`);
     })
