@@ -1,2 +1,3 @@
-node_modules
-bin/deamon/*
+/node_modules
+/bin
+!/bin/www
