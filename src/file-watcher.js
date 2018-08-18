@@ -131,6 +131,7 @@ function storeZipAndRemoveSources (zipFilepath, buffer, files) {
 
 module.exports = {
     getWatcher: () => watcher,
+    getGroupQueues: () => groupQueues,
     watch: (path, onAddCallback) => setupWatcher(path, true, onAddCallback),
     watchSingle: (path, onAddCallback) => setupWatcher(path, false, onAddCallback),
     stop: () => watcher.close(),

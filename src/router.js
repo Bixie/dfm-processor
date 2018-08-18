@@ -7,15 +7,24 @@ const ApiToken = require('./api-token');
 const {PARAMSFILES_PATH,} = require('../config');
 
 const ParamsFile = require('./params-file');
-const {getWatcher,} = require('./file-watcher');
+const {getWatcher, getGroupQueues,} = require('./file-watcher');
 
 const stats = new ServerStatus();
 
+function getWatchedPaths() {
+    //flatten the arrays of paths to single string
+    return Object.values(getWatcher().getWatched())
+        .map(paths => paths.join(', '))
+        .filter(paths => paths !== '')
+        .join(', ');
+}
+
 router.get('/status', (req, res) => {
     logger.verbose('Status request.');
-    const watchedPaths = getWatcher().getWatched();
+    const groupQueue = getGroupQueues();
+    const watchedPaths = getWatchedPaths();
     const status = stats.getStatus();
-    res.send({status, watchedPaths,});
+    res.send({status, watchedPaths, groupQueue,});
 });
 
 /**
