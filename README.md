@@ -11,6 +11,7 @@ Process param and output files of DFM
     - Bash
     - Tools
 - (Notepad++)
+- (FileZilla)
 
 Global NPM packages 
 
@@ -53,7 +54,7 @@ yarn link
 ```
 Then activate the link in the application folder
 ```
-cd /path/to/dfm-processor
+cd %DFM_APP_PATH%
 yarn link node-windows
 ```
 
@@ -74,3 +75,16 @@ These scripts may ask for user-permissions multiple times.
 ### Logs
 
 Logs will be stored in the `../logs` folder (one up from the appliciations directory).
+
+### Updating
+
+Update the processor via Git.
+
+```
+cd %DFM_APP_PATH%
+git fetch origin master
+git reset --hard FETCH_HEAD
+git clean -df
+```
+
+Restart the service after updating!
