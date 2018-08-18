@@ -7,7 +7,7 @@ const scriptArgs = process.argv.slice(2);
 
 const quickRespond = scriptArgs[0] === '-qr';
 
-const {PARAMSFILES_PATH, IMAGEFILES_OUTPUT_PATH,} = require('../config');
+const {PARAMSFILES_PATH, IMAGEFILES_OUTPUT_PATH, PARAMSFILES_ARCHIVE_PATH,} = require('../config');
 const fileWatcher = require('../src/file-watcher');
 
 function getTimoutTime() {
@@ -49,5 +49,12 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
             }, fileTimeoutTime);
         });
     }, timeoutTime);
+    fs.rename(filepath, path.join(PARAMSFILES_ARCHIVE_PATH, path.basename(filepath)), err => {
+        if (err) {
+            console.log('ERROR: ', err.message);
+        }
+        console.log(`Paramfile ${preview_id}.txt moved to archive`);
+    })
 });
+//log that we're ready
 console.log('Watching files...');
