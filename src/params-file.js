@@ -19,11 +19,13 @@ const defaultParams = {
     DataProvider: 1,
 };
 
+const safeValues = [5, 5, 3, 8, 2, 1, 5, 1, 2, 1, 1, 4, 1,];
+
 function formatLine(value, key) {
     if (key) {
-        return `${key}:${value}${LF}`;
+        return `${key}:${value}`;
     }
-    return `${value}${LF}`;
+    return value;
 }
 
 class ParamsFile {
@@ -38,14 +40,17 @@ class ParamsFile {
     }
 
     render() {
+        //for now return a file with values DFM won't crash on
+        return safeValues.map(val =>formatLine(val)).join(LF);
+
         let output = '';
         output += Object.keys(this.params).map(key => {
             return formatLine(this.params[key]);
-        }).join('');
+        }).join(LF);
         output += LF;
         output += Object.keys(this.options).map(key => {
             return formatLine(this.options[key], key);
-        }).join('');
+        }).join(LF);
         return output;
     }
 
