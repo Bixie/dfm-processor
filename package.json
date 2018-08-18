@@ -8,8 +8,8 @@
     "install:service": "node ./scripts/install-service.js",
     "uninstall:service": "node ./scripts/uninstall-service.js",
     "test-dfm": "node ./scripts/test-dfm.js",
-    "start": "node %NODE_DEBUG_OPTION% ./bin/www",
-    "mon": "nodemon %NODE_DEBUG_OPTION% ./bin/www"
+    "start": "node ./bin/www",
+    "mon": "nodemon ./bin/www"
   },
   "author": "Matthijs Alles - Bixie",
   "license": "MIT",
