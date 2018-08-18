@@ -59,14 +59,19 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+//fourth argument next needed to register as error handler
+app.use((error, req, res, next) => {
+    // set vars, only providing error in development
+    const {message,} = error;
+    const isDevelopment = req.app.get('env') === 'development';
+    //request-errors get a status and are regular or logged
+    if (error.status === undefined) {
+        logger.error('Uncaught error: %s', error.message);
+        // eslint-disable-next-line no-console
+        console.error(error);
+    }
     // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+    res.status(error.status || 500).send({message, error: isDevelopment ? error : {},});
 });
 
 module.exports = app;
