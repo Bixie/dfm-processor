@@ -69,32 +69,29 @@ class ApiRequest {
     /**
      * Post message to server. Returns Promise that resolves in the results data Object
      * @param url
-     * @param filepath
+     * @param buffer
      * @param headers
      */
-    putFile(url, filepath, headers = {}) {
+    putFile(url, buffer, headers = {}) {
         url = `${this.server_url}/${url}`;
         return new Promise((resolve, reject) => {
-            fs.readFile(filepath, (err, buffer) => {
+            headers['Content-type'] = 'application/zip';
+            headers['Content-length'] = buffer.length;
+            headers = this.getHeaders(headers);
+            request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, {statusCode, body,}) => {
                 if (err) {
-                    reject(err);
-                    return;
-                }
-                headers['Content-type'] = 'application/zip';
-                headers['Content-length'] = buffer.length;
-                headers = this.getHeaders(headers);
-                request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, {statusCode, body,}) => {
-                    if (err) {
-                        reject(new Error(err));
+                    reject(new Error(err));
+                } else  if (body.substr(0, 1) === '<') {
+                    //error html response
+                    reject(new Error(`Error response from server: ${body.substr(0, 1500)}`));
+                } else {
+                    const data = JSON.parse(body);
+                    if (statusCode === 200) {
+                        resolve(data);
                     } else {
-                        const data = JSON.parse(body);
-                        if (statusCode === 200) {
-                            resolve(data);
-                        } else {
-                            reject(new Error(`Status ${statusCode}: ${data.error || body}`));
-                        }
+                        reject(new Error(`Status ${statusCode}: ${data.error || body}`));
                     }
-                });
+                }
             });
         });
     }
@@ -128,11 +125,11 @@ module.exports = {
         }
         return apiRequest.post(url, data);
     },
-    putToApi(url, filepath, headers = {}) {
+    putToApi(url, buffer, headers = {}) {
         if (!apiRequest) {
             throw Error('ApiRequest has not been set up!');
         }
-        return apiRequest.putFile(url, filepath, headers);
+        return apiRequest.putFile(url, buffer, headers);
     },
 };
 

@@ -14,11 +14,11 @@
   "author": "Matthijs Alles - Bixie",
   "license": "MIT",
   "dependencies": {
-    "archiver": "^2.1.1",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
     "chokidar": "^2.0.4",
     "express": "^4.16.3",
+    "jszip": "^3.1.5",
     "moment": "^2.22.2",
     "morgan": "^1.9.0",
     "request": "^2.87.0",

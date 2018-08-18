@@ -1,4 +1,3 @@
-const path = require('path');
 
 const express = require('express');
 
@@ -10,44 +9,37 @@ const bodyParser = require('body-parser');
 //setup filewatcher
 const {IMAGEFILES_OUTPUT_PATH, WEBSERVER_LOCAL_PATH, IMAGEFILES_SENT_PATH,} = require('./config');
 const fileWatcher = require('./src/file-watcher');
-const zipHandler = require('./src/zip-handler');
+const archiver = require('./src/util/archiver');
 const api = require('./src/util/api-request');
 
 /**
  * Watch the output directory and send files to webserver. Move files when sent
  */
-fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, filepath => {
-    const preview_id = path.basename(filepath, '.zip');
-    logger.verbose('Preview ID %s output file found.', preview_id);
+fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, ({preview_id, total, files,}) => {
     if (WEBSERVER_LOCAL_PATH) {
         //copy to webservers path directly
-        zipHandler.moveZip(filepath, WEBSERVER_LOCAL_PATH)
-            .then(res => {
-                if (!res) {
-                    logger.error('Error moving zip to webserver folder!');
-                    return;
-                }
-                logger.info('Preview ID %s successfully moved to webserver folder', preview_id);
-            })
-            .catch(err => {
-                logger.error('Error in moving zipfile: %s', err);
-            });
-    } else {
-        //put file via API
-        api.putToApi(`preview/${preview_id}`, filepath)
-            .then(data => {
-                logger.info('Preview ID %s successfully sent to the webserver', data.preview_id);
-                return zipHandler.moveZip(filepath, IMAGEFILES_SENT_PATH);
-            })
-            .then(res => {
-                if (!res) {
-                    logger.error('Error moving zip to sent folder!');
-                }
-            })
-            .catch(err => {
-                logger.error('Error in zip submit request: %s', err);
-            });
+        //todo if needed
     }
+    //create zip blob
+    archiver.createZipBuffer(files)
+        .then(buffer => {
+            logger.verbose('Zip blob created with %d files for %s', total, preview_id);
+            return api.putToApi(`preview/${preview_id}`, buffer);
+        })
+        .then(data => {
+            logger.info('Preview ID %s successfully sent to the webserver', data.preview_id);
+            //todo clean up images
+            //return zipHandler.moveZip(filepath, IMAGEFILES_SENT_PATH);
+        })
+        // .then(res => {
+        //     if (!res) {
+        //         logger.error('Error moving zip to sent folder!');
+        //     }
+        // })
+        .catch(err => {
+            logger.error('Error sending zipfile for %s: %s', preview_id, err.message);
+        });
+
 });
 
 const app = express();
