@@ -1,4 +1,6 @@
 const path = require('path');
+const Promise = require('bluebird');
+const fs = require('fs');
 const {logger,} = require('../src/util/winston');
 
 const chokidar = require('chokidar');
@@ -97,9 +99,40 @@ function setupWatcher (path, grouped, onAddCallback) {
     return watcher;
 }
 
+function remove (filepath) {
+    return new Promise((resolve, reject) => {
+        fs.unlink(filepath, err => {
+            if (err) {
+                reject(new Error(err));
+                return;
+            }
+            resolve();
+        })
+    });
+}
+
+function storeZipAndRemoveSources (zipFilepath, buffer, files) {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(zipFilepath, buffer, err => {
+            if (err) {
+                reject(new Error(err));
+                return;
+            }
+            const promises = [];
+            files.forEach(({filepath,}) => {
+                promises.push(remove(filepath));
+            });
+            Promise.all(promises)
+                .then(() => resolve())
+                .catch(err => reject(err));
+        });
+    });
+}
+
 module.exports = {
     getWatcher: () => watcher,
     watch: (path, onAddCallback) => setupWatcher(path, true, onAddCallback),
     watchSingle: (path, onAddCallback) => setupWatcher(path, false, onAddCallback),
     stop: () => watcher.close(),
+    cleanup: (filepath, buffer, files) => storeZipAndRemoveSources(filepath, buffer, files),
 };

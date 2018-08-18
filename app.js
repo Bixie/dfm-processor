@@ -20,22 +20,22 @@ fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, ({preview_id, total, files,}) => {
         //copy to webservers path directly
         //todo if needed
     }
+    let zipBuffer;
     //create zip blob
     archiver.createZipBuffer(files)
         .then(buffer => {
+            zipBuffer = buffer;
             logger.verbose('Zip blob created with %d files for %s', total, preview_id);
-            return api.putToApi(`preview/${preview_id}`, buffer);
+            return api.putToApi(`preview/${preview_id}`, zipBuffer);
         })
         .then(data => {
             logger.info('Preview ID %s successfully sent to the webserver', data.preview_id);
-            //todo clean up images
-            //return zipHandler.moveZip(filepath, IMAGEFILES_SENT_PATH);
+            //clean up images
+            return fileWatcher.cleanup(`${IMAGEFILES_SENT_PATH}/${preview_id}.zip`, zipBuffer, files);
         })
-        // .then(res => {
-        //     if (!res) {
-        //         logger.error('Error moving zip to sent folder!');
-        //     }
-        // })
+        .then(() => {
+            logger.verbose('Zipfile for %s moved to archive', preview_id);
+        })
         .catch(err => {
             logger.error('Error sending zipfile for %s: %s', preview_id, err.message);
         });
