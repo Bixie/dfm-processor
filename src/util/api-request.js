@@ -78,10 +78,13 @@ class ApiRequest {
             headers['Content-type'] = 'application/zip';
             headers['Content-length'] = buffer.length;
             headers = this.getHeaders(headers);
-            request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, {statusCode, body,}) => {
+            request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, res) => {
                 if (err) {
                     reject(new Error(err));
-                } else  if (body.substr(0, 1) === '<') {
+                    return;
+                }
+                const {statusCode, body,} = res;
+                if (body.substr(0, 1) === '<') {
                     //error html response
                     reject(new Error(`Error response from server: ${body.substr(0, 1500)}`));
                 } else {
