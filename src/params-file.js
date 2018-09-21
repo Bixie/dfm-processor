@@ -10,7 +10,7 @@ const defaultParams = {
     ValidationPeriod: 8,
     PennyStocks: 2,
     GrowthPotential: 1,
-    HedgePercentage: 3,
+    HedgePercentage: 1,
     BalanceRR: 1,
     Watchlists: 4,
     TransactionCosts: 1,
@@ -18,8 +18,6 @@ const defaultParams = {
     DividendTax: 3,
     DataProvider: 1,
 };
-
-const safeValues = [5, 5, 3, 8, 2, 1, 5, 1, 2, 1, 1, 4, 1,];
 
 function formatLine(value, key) {
     if (key) {
@@ -40,9 +38,6 @@ class ParamsFile {
     }
 
     render() {
-        //for now return a file with values DFM won't crash on
-        return safeValues.map(val =>formatLine(val)).join(LF);
-
         let output = '';
         output += Object.keys(this.params).map(key => {
             return formatLine(this.params[key]);
