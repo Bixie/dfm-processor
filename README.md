@@ -4,7 +4,7 @@ Process param and output files of DFM
 
 ### Install
 
-**Dependancies**
+**Dependencies**
 
 - NodeJs 8.x
 - Git 8.2
