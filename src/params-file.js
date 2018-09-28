@@ -15,7 +15,7 @@ const defaultParams = {
     Watchlists: 4,
     TransactionCosts: 1,
     LoanPercentage: 1,
-    DividendTax: 3,
+    DividendTax: 4,
     DataProvider: 1,
 };
 
