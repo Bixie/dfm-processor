@@ -40,7 +40,7 @@ router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
     let result = false;
     const paramsFile = new ParamsFile(preview_id, params, options);
     paramsFile.write(PARAMSFILES_PATH).then(result => {
-        logger.info('Parameterfile %s/%s.txt saved.', PARAMSFILES_PATH, preview_id);
+        logger.info('Parameterfile for %s saved in %s.', preview_id, PARAMSFILES_PATH);
         res.send({result, preview_id,});
     }).catch(error => res.send({result, preview_id, error,}));
 });
