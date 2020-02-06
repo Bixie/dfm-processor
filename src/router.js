@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 const ServerStatus = require('../src/util/server-status');
 const ApiToken = require('./api-token');
-const {PARAMSFILES_PATH,} = require('../config');
+const {PARAMSFILES_PATH, LICENSEFILES_PATH,} = require('../config');
 
 const ParamsFile = require('./params-file');
+const LicenseFile = require('./license-file');
 const {getWatcher, getGroupQueues,} = require('./file-watcher');
 
 const stats = new ServerStatus();
@@ -43,6 +44,22 @@ router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
         logger.info('Parameterfile for %s (%s) saved in %s.', preview_id, options.locale, PARAMSFILES_PATH);
         res.send({result, preview_id,});
     }).catch(error => res.send({result, preview_id, error,}));
+});
+
+/**
+ * Send license data to License Application
+ * @param object data Data from Digital River
+ * @param string key Generated key
+ */
+router.post('/license', ApiToken.middleware, (req, res) => {
+    const {data, key,} = req.body;
+    logger.verbose('Incoming registration for license %s', key);
+    let result = false;
+    const licenseFile = new LicenseFile(key, data);
+    licenseFile.write(LICENSEFILES_PATH).then(result => {
+        logger.info('Licensefile for %s saved in %s.', key, LICENSEFILES_PATH);
+        res.send({result,});
+    }).catch(error => res.send({result, error,}));
 });
 
 module.exports = router;
