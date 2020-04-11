@@ -17,7 +17,7 @@ md += 'Alle parameters en opties voor berekeningen met de DigifundManager' + DLF
 
 md += '### Bestandsformaat' + DLF;
 md += '*Bestandsnaam*: `dfm_preview[uniek_id]_[EN|NL].txt`' + DLF;
-md += 'Het bestand is een standaard text-file met windows regeleinden. Per regel staat een key=value paar.' + DLF;
+md += 'Het bestand is een standaard text-file met windows regeleinden. Per regel staat een `key=value` paar.' + DLF;
 md += 'Eerst staat de gebruikersinformatie vermeld:' + DLF;
 md += '```' + LF;
 md += userInfo;
