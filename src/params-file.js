@@ -43,7 +43,7 @@ const defaultOptions = {
 
 function formatLine(value, key) {
     if (key) {
-        return `${key}:${value}`;
+        return `${key}=${value}`;
     }
     return value;
 }
