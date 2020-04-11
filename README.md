@@ -110,11 +110,11 @@ Restart the service after updating!
 ### Filename formats
 
 Processing requests have an unique ID that comes together with the paramater-set from the webserver. The ID has a
-static prefix (`dfm_preview`) and a random string of length 13 following that. The parameters are stored in a file
-named `<prefix><id>.txt` (eg `dfm_preview5b785cb49b952.txt`). The combination `<prefix><id>` is the _preview_id_.
+static prefix (`dfm_preview`) and a random string of length 13 following that. The requested language is added after that. The parameters are stored in a file
+named `<prefix><id>_[EN|NL].txt` (eg `dfm_preview5b785cb49b952.txt`). The combination `<prefix><id>` is the _preview_id_.
 
-Output files need to be named starting with the _preview_id_, with a suffix indicating the number of outputfiles
+Output files need to be named starting with the input filename, with a suffix indicating the number of outputfiles
 in the set. Suffix can be `_%d_%d`, where first number is index of outputfile (1 based), and the second the total 
 number of outputfiles for the _preview_id_. 
-Example: `dfm_preview5b785cb49b952_1_3.png`, `dfm_preview5b785cb49b952_2_3.png`, `dfm_preview5b785cb49b952_3_3.png` 
+Example: `dfm_preview5b785cb49b952_EN_1_3.png`, `dfm_preview5b785cb49b952_EN_2_3.png`, `dfm_preview5b785cb49b952_EN_3_3.png` 
 as a set for _preview_id_ `dfm_preview5b785cb49b952`.
