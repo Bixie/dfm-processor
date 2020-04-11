@@ -39,6 +39,8 @@ const defaultOptions = {
     layout: 'default',
     locale: 'nl-NL',
     licenseKey: '',
+    userId: '',
+    email: '',
 };
 
 function formatLine(value, key) {
@@ -58,20 +60,21 @@ class ParamsFile {
 
     render() {
         let output = '';
+        output += ['licenseKey', 'userId', 'email',].map(key => {
+            return formatLine(this.options[key], key);
+        }).join(LF);
+        output += LF;
+        output += LF;
         output += Object.keys(this.params).map(key => {
             return formatLine(this.params[key], key);
         }).join(LF);
-        // output += LF;
-        // output += Object.keys(this.options).map(key => {
-        //     return formatLine(this.options[key], key);
-        // }).join(LF);
         return output;
     }
 
     write(folderpath) {
         const language = this.options.locale === 'nl-NL' ? 'NL' : 'EN';
         return new Promise((resolve, reject) => {
-            const filename = `${folderpath}/${this.id}_${language}_${this.options.licenseKey}.txt`;
+            const filename = `${folderpath}/${this.id}_${language}.txt`;
             fs.writeFile(filename, this.render(), err => {
                 if (err) {
                     reject(err);
