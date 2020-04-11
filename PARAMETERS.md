@@ -6,7 +6,7 @@ Alle parameters en opties voor berekeningen met de DigifundManager
 
 *Bestandsnaam*: `dfm_preview[uniek_id]_[EN|NL].txt`
 
-Het bestand is een standaard text-file met windows regeleinden. Per regel staat een key=value paar.
+Het bestand is een standaard text-file met windows regeleinden. Per regel staat een `key=value` paar.
 
 Eerst staat de gebruikersinformatie vermeld:
 
