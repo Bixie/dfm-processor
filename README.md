@@ -4,6 +4,8 @@ Process param and output files of DFM
 
 [Web Client](https://github.com/Bixie/dfm-app) - [Server API](https://github.com/Bixie/dfm-api) - [Nodejs Processor](https://github.com/Bixie/dfm-processor)
 
+See [PARAMETER.md](PARAMETER.md) for details on DFM parameters.
+
 ### Install
 
 **Dependencies**
