@@ -43,7 +43,7 @@ router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
     paramsFile.write(PARAMSFILES_PATH).then(result => {
         logger.info('Parameterfile for %s (%s) saved in %s.', preview_id, options.locale, PARAMSFILES_PATH);
         res.send({result, preview_id,});
-    }).catch(error => res.send({result, preview_id, error,}));
+    }).catch(error => res.send({result, preview_id, error: error.message || error,}));
 });
 
 /**
