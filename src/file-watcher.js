@@ -8,7 +8,8 @@ const {OUTPUT_FILENAME_PREFIX, OUTPUT_FILENAME_SUFFIX,} = require('../config');
 
 //prepare regex
 const replacedSuffix = OUTPUT_FILENAME_SUFFIX.replace(/%d/g, '(\\d{1,2})');
-const filenameRegex = new RegExp(`^${OUTPUT_FILENAME_PREFIX}(.*)_(?:EN|NL)${replacedSuffix}$`);
+const licenseKeyRegex = '[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}';
+const filenameRegex = new RegExp(`^${OUTPUT_FILENAME_PREFIX}(.*)_(?:EN|NL)_(?:${licenseKeyRegex})${replacedSuffix}$`);
 
 //the filewatcher instance
 let watcher;

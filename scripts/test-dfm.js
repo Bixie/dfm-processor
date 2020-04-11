@@ -25,9 +25,9 @@ function getTimoutTime() {
 
 //setup filewatcher
 fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
-    const preview_id = path.basename(filepath, '.txt');
+    const fileBase = path.basename(filepath, '.txt');
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
-    console.log(`Creating files for ${preview_id} in ${Math.round(timeoutTime/1000)} seconds`);
+    console.log(`Creating files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
     setTimeout(() => {
         const sourcePath = path.join(__dirname, 'test-images');
         const files = [
@@ -37,7 +37,7 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
         ];
         files.forEach(({name, filepath,}) => {
             const fileIndex = name.replace('sample_', '').replace('.png', '');
-            const filename = `${preview_id}_${fileIndex}_3`;
+            const filename = `${fileBase}_${fileIndex}_3`;
             const fileTimeoutTime = Math.round(Math.random() * 500);
             setTimeout(() => {
                 fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}.png`, err => {
@@ -45,7 +45,7 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
                         console.log('ERROR: ', err.message);
                         return;
                     }
-                    console.log(`File ${filename}.png added with ${fileTimeoutTime} delay for ${preview_id}`);
+                    console.log(`File ${filename}.png added with ${fileTimeoutTime}ms delay for ${fileBase}`);
                 });
             }, fileTimeoutTime);
         });
@@ -55,7 +55,7 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
             console.log('ERROR: ', err.message);
             return;
         }
-        console.log(`Paramfile ${preview_id}.txt moved to archive`);
+        console.log(`Paramfile ${fileBase}.txt moved to archive`);
     })
 });
 //log that we're ready
