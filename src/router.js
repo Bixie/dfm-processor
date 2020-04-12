@@ -52,10 +52,10 @@ router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
  * @param string key Generated key
  */
 router.post('/license', ApiToken.middleware, (req, res) => {
-    const {data, key,} = req.body;
+    const {data, key, userId,} = req.body;
     logger.verbose('Incoming registration for license %s', key);
     let result = false;
-    const licenseFile = new LicenseFile(key, data);
+    const licenseFile = new LicenseFile(key, data, userId);
     licenseFile.write(LICENSEFILES_PATH).then(result => {
         logger.info('Licensefile for %s saved in %s.', key, LICENSEFILES_PATH);
         res.send({result,});

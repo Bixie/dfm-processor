@@ -5,13 +5,15 @@ const LF = '\r\n';
 
 class LicenseFile {
 
-    constructor(key, data) {
+    constructor(key, data, userId) {
         this.key = key;
         this.data = data;
+        this.userId = userId;
     }
 
     render() {
         let output = '';
+        output += `userId=${this.userId}${LF}`;
         output += Object.keys(this.data).map(key => {
             return `${key}=${this.data[key]}`;
         }).join(LF);
