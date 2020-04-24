@@ -40,12 +40,12 @@ Vervolgens na een lege regel de waarden van de parameters
 |LongShort|Long|`Long`, `Short`, `Long/short`|
 |HoldingPeriod|13|`1`, `4`, `13`, `26`, `52`, `hold`|
 |ValidationPeriod|30|`1`, `5`, `10`, `20`, `30`|
-|InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`, `NoOptimization`|
-|PriceWeighing|Adjusted|`N/A`, `Adjusted`, `Historical`|
-|HedgePercentage|35%|`N/A`, `0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
+|InvestementObjective|MaxMAR|`MaxMAR`, `MinRisk`, `MaxProfits`, `NoOptimization`|
+|PriceWeighing|Adjusted|`Adjusted`, `Historical`|
+|HedgePercentage|35%|`0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
 |LowerBound|10%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
 |SetupPeriod|9|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
-|WeightInterval|1|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
+|WeightInterval|1|`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
 |OptimalizationTechnique|LongThenShort|`N/A`, `LongThenShort`, `RankByRank`|
 |TransactionCosts|$4.00|`$0.00`, `$0.50`, `$4.00`, `$5.00`, `$7.50`, `$9.50`, `$12.00`|
 |LoanPercentage|0.5%|`0%`, `0.5%`, `0.6%`, `0.7%`, `0.8%`, `0.9%`, `1%`|
