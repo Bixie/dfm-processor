@@ -55,7 +55,7 @@ function getOutputFileInfo (filepath) {
 }
 
 function groupedCallback (filepath, onAddCallback) {
-    const {basename, group, fileIndex,} = getOutputFileInfo(filepath);
+    const {basename, group, fileIndex, extension,} = getOutputFileInfo(filepath);
     if (group.preview_id) {
         //add group if needed
         if (groupQueues[group.preview_id] === undefined) {
@@ -63,7 +63,7 @@ function groupedCallback (filepath, onAddCallback) {
             groupQueues[group.preview_id] = group;
         }
         //add file to group
-        groupQueues[group.preview_id].files.push({name: `output_${fileIndex}`, filepath,});
+        groupQueues[group.preview_id].files.push({name: `output_${fileIndex}.${extension}`, filepath,});
         logger.verbose('File index %d, %s added to group %s', fileIndex, basename, group.preview_id);
         //check if group is complete
         if (groupQueues[group.preview_id].files.length === groupQueues[group.preview_id].total) {

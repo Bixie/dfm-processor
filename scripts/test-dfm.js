@@ -29,18 +29,20 @@ fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
     console.log(`Creating files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
     setTimeout(() => {
-        const sourcePath = path.join(__dirname, 'test-images');
+        const sourcePath = path.join(__dirname, 'test-data');
         const files = [
             {name: 'sample_1.png', filepath: `${sourcePath}/sample_1.png`,},
             {name: 'sample_2.png', filepath: `${sourcePath}/sample_2.png`,},
             {name: 'sample_3.png', filepath: `${sourcePath}/sample_3.png`,},
+            {name: 'data_1.csv', filepath: `${sourcePath}/data_1.csv`,},
         ];
-        files.forEach(({name, filepath,}) => {
-            const fileIndex = name.replace('sample_', '').replace('.png', '');
-            const filename = `${fileBase}_${fileIndex}_3`;
+        files.forEach(({name, filepath,}, index) => {
+            const fileIndex = index + 1;
+            const [base, extension,] = name.split('.');
+            const filename = `${fileBase}_${fileIndex}_${files.length}.${extension}`;
             const fileTimeoutTime = Math.round(Math.random() * 500);
             setTimeout(() => {
-                fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}.png`, err => {
+                fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}`, err => {
                     if (err) {
                         console.log('ERROR: ', err.message);
                         return;
