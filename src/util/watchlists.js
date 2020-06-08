@@ -56,6 +56,10 @@ function getWatchlistsForUser(userId) {
         .where('user_id', userId);
 }
 
+function getWatchlistForUser(user_id, id) {
+    return knex('watchlists').where({id, user_id,}).first('id', 'label', 'items');
+}
+
 function saveWatchlistForUser(user_id, id, watchlist) {
     watchlist = validWatchlistData(user_id, watchlist);
     if (id > 0) {
@@ -80,6 +84,7 @@ module.exports = {
     knex,
     setup,
     getWatchlistsForUser,
+    getWatchlistForUser,
     saveWatchlistForUser,
     removeWatchlistFromUser,
 };

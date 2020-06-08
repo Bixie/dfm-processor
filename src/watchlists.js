@@ -1,6 +1,6 @@
 const {logger,} = require('./util/winston');
 const watchlists = require('./util/watchlists');
-const {errorResponse,} = require('./util/http-error');
+const HttpError = require('./util/http-error');
 
 const express = require('express');
 const router = express.Router();
@@ -14,6 +14,22 @@ router.get('/:user_id', ApiToken.middleware, (req, res, next) => {
         })
         .catch(err => {
             logger.error('Error get watchlists for user: %s', err.message);
+            next(err);
+        })
+});
+
+router.get('/:user_id/:id', ApiToken.middleware, (req, res, next) => {
+    const {user_id, id,} = req.params;
+    watchlists.getWatchlistForUser(user_id, Number(id))
+        .then(watchlist => {
+            if (!watchlist) {
+                next(new HttpError('Watchlist not found', 404));
+            } else {
+                res.send({watchlist,});
+            }
+        })
+        .catch(err => {
+            logger.error('Error getting watchlist for user: %s', err.message);
             next(err);
         })
 });
