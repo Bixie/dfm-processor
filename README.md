@@ -30,6 +30,7 @@ The program need the following global enviromental variables to be set.
 NODE_ENV                    //Set to 'production' or 'development'
 DFM_APP_PORT                //Port the server will be listening
 DFM_APP_PATH                //Path where the processor is installed
+DFM_DB_PATH                 //Path where the sqlite3 data file is stored
 DFM_PARAMSFILES_PATH        //Path where DFM application will listen for params files
 DFM_LICENSEFILES_PATH       //Path where License application will listen for license files
 DFM_PARAMSFILES_ARCHIVE_PATH//Path where params files will be archived

@@ -1,6 +1,7 @@
 
 exports.APP_PORT = process.env.DFM_APP_PORT || '3000';
 exports.DFM_APP_PATH = process.env.DFM_APP_PATH || 'C:/Projects/DFM/dfm-processor';
+exports.DFM_DB_PATH = process.env.DFM_DB_PATH || 'C:/Projects/DFM/db';
 exports.PARAMSFILES_PATH = process.env.DFM_PARAMSFILES_PATH || 'C:/Projects/DFM/params-in';
 exports.LICENSEFILES_PATH = process.env.DFM_LICENSEFILES_PATH || 'C:/Projects/DFM/license-in';
 exports.PARAMSFILES_ARCHIVE_PATH = process.env.DFM_PARAMSFILES_ARCHIVE_PATH || 'C:\\Projects\\DFM\\params-archive';

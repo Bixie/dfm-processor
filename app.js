@@ -12,6 +12,16 @@ const fileWatcher = require('./src/file-watcher');
 const archiver = require('./src/util/archiver');
 const api = require('./src/util/api-request');
 
+//watchlists db
+const watchlists = require('./src/util/watchlists');
+watchlists.setup()
+    .then(() => {
+        logger.verbose('Watchlist database ready');
+    })
+    .catch(err => {
+        logger.error('Error setting up watchlist database: %s', err.message);
+        process.exit(1);
+    })
 /**
  * Watch the output directory and send files to webserver. Move files when sent
  */
@@ -47,8 +57,10 @@ const app = express();
 app.use(morgan('combined', {stream: winston.stream,}));
 app.use(bodyParser.json());
 
+const watchlistRoutes = require('./src/watchlists');
 const router = require('./src/router');
 app.use('/', router);
+app.use('/watchlists', watchlistRoutes);
 
 
 // catch 404 and forward to error handler
