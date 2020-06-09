@@ -17,8 +17,10 @@ function setup() {
             return knex.schema.createTable('watchlists', function(t) {
                 t.increments('id').primary();
                 t.integer('user_id');
-                t.string('label', 128);
+                t.string('name', 128);
+                t.integer('item_count');
                 t.text('items');
+                t.integer('ordering');
             });
         }
     });
@@ -35,29 +37,35 @@ function ensureUserOwnsWatchlist(user_id, id) {
 }
 
 function validWatchlistData(user_id, watchlist) {
-    const {label, items,} = watchlist;
-
+    const {name, items, ordering,} = watchlist;
+    let item_count = 0;
     try {
         const test = JSON.parse(items);
-        test.map(i => !!i);
+        test.find(() => true); //simple test for array
+        item_count = test.length;
     } catch (e) {
         throw new HttpError('List is not a valid JSON array', 422);
     }
     return {
         user_id: Number(user_id),
-        label: String(label).substr(0, 128),
+        name: String(name).substr(0, 128),
+        item_count,
         items: String(items),
+        ordering: Number(ordering),
     }
 }
 
 function getWatchlistsForUser(userId) {
-    return knex.select('id', 'label', 'items')
-        .from('watchlists')
-        .where('user_id', userId);
+    return knex('watchlists')
+        .where('user_id', userId)
+        .orderBy('ordering')
+        .select('id', 'name', 'item_count', 'ordering');
 }
 
 function getWatchlistForUser(user_id, id) {
-    return knex('watchlists').where({id, user_id,}).first('id', 'label', 'items');
+    return knex('watchlists')
+        .where({id, user_id,})
+        .first('id', 'name', 'item_count', 'items', 'ordering');
 }
 
 function saveWatchlistForUser(user_id, id, watchlist) {
