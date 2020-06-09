@@ -20,7 +20,6 @@ function setup() {
                 t.string('name', 128);
                 t.integer('item_count');
                 t.text('items');
-                t.integer('ordering');
             });
         }
     });
@@ -37,7 +36,7 @@ function ensureUserOwnsWatchlist(user_id, id) {
 }
 
 function validWatchlistData(user_id, watchlist) {
-    const {name, items, ordering,} = watchlist;
+    const {name, items,} = watchlist;
     let item_count = 0;
     try {
         const test = JSON.parse(items);
@@ -51,21 +50,20 @@ function validWatchlistData(user_id, watchlist) {
         name: String(name).substr(0, 128),
         item_count,
         items: String(items),
-        ordering: Number(ordering),
     }
 }
 
 function getWatchlistsForUser(userId) {
     return knex('watchlists')
         .where('user_id', userId)
-        .orderBy('ordering')
-        .select('id', 'name', 'item_count', 'ordering');
+        .orderBy('name')
+        .select('id', 'name', 'item_count');
 }
 
 function getWatchlistForUser(user_id, id) {
     return knex('watchlists')
         .where({id, user_id,})
-        .first('id', 'name', 'item_count', 'items', 'ordering');
+        .first('id', 'name', 'item_count', 'items');
 }
 
 function saveWatchlistForUser(user_id, id, watchlist) {
