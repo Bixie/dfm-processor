@@ -119,3 +119,18 @@ in the set. Suffix can be `_%d_%d`, where first number is index of outputfile (1
 number of outputfiles for the _preview_id_. 
 Example: `dfm_preview5b785cb49b952_EN_1_3.png`, `dfm_preview5b785cb49b952_EN_2_3.png`, `dfm_preview5b785cb49b952_EN_3_3.png` 
 as a set for _preview_id_ `dfm_preview5b785cb49b952`.
+
+### Watchlists
+
+Stored in Sqlite3 database file at location specified in `DFM_DB_PATH`.
+
+#### Records
+
+```
+id: integer
+user_id: integer
+name: string
+item_count: integer
+items: JSON text
+```
+
