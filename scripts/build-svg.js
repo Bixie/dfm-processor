@@ -9,7 +9,6 @@ const graphDefinitions = {
     ChartCompound: {
         viewBox: {width: 975, height: 500,},
         margin: {top: 10, right: 10, bottom: 30, left: 50,},
-        outSvg: path.join(DFM_APP_PATH, 'import', 'ChartCompound.svg'),
         srcPath: path.join(DFM_APP_PATH, 'import', 'ChartCompound'),
         dataSets: [
             {
@@ -42,7 +41,6 @@ const graphDefinitions = {
     ChartConstant: {
         viewBox: {width: 975, height: 500,},
         margin: {top: 10, right: 10, bottom: 30, left: 50,},
-        outSvg: path.join(DFM_APP_PATH, 'import', 'ChartConstant.svg'),
         srcPath: path.join(DFM_APP_PATH, 'import', 'ChartConstant'),
         dataSets: [
             {
@@ -85,7 +83,6 @@ const graphDefinitions = {
     ChartMiscellaneous: {
         viewBox: {width: 975, height: 500,},
         margin: {top: 10, right: 10, bottom: 30, left: 50,},
-        outSvg: path.join(DFM_APP_PATH, 'import', 'ChartMiscellaneous.svg'),
         srcPath: path.join(DFM_APP_PATH, 'import', 'ChartMiscellaneous'),
         dataSets: [
             {
@@ -111,6 +108,6 @@ const graphDefinitions = {
 //run it
 generateSvgsFromDefinitions(graphDefinitions)
     .then(results => {
-        results.forEach(({name, svg,}) => fs.writeFileSync(graphDefinitions[name].outSvg, svg));
+        results.forEach(({name, svg,}) => fs.writeFileSync(path.join(DFM_APP_PATH, 'import', `${name}.svg`), svg));
     })
     .catch(e => console.error(e));

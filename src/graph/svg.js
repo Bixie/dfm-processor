@@ -75,8 +75,8 @@ class Svg {
         const height = this.viewBox.height - this.margin.top - this.margin.bottom;
         //this is where d3 maps the x/y values to the actual svg grid position
         return d3.line()
-            .x(d => (this.margin.left + ((d.x - graph.minmax.minX) / rangeX) * width))
-            .y(d => ((this.margin.top + height) +((d.y - graph.minmax.minY) / rangeY) * -1 * height));
+            .x(d => Math.round((this.margin.left + ((d.x - graph.minmax.minX) / rangeX) * width) * 1000) / 1000)
+            .y(d => Math.round(((this.margin.top + height) +((d.y - graph.minmax.minY) / rangeY) * -1 * height) * 1000) / 1000);
 
     }
 
