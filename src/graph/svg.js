@@ -6,9 +6,10 @@ const {getJsDateFromExcel,} = require('../util/date');
 
 class Svg {
 
-    constructor({viewBox, margin,}) {
+    constructor({viewBox, margin,}, name) {
         this.viewBox = viewBox;
         this.margin = margin;
+        this.name = name;
         this.svg = this.setSvgBase();
         this.container = this.getGraphContainer();
     }
@@ -45,6 +46,7 @@ class Svg {
         svg.attr('width', '100%')
             .attr('height', '100%')
             .attr('viewBox', `0 0 ${this.viewBox.width} ${this.viewBox.height}`)
+            .attr('class', this.name)
             .attr('style', 'background-color: transparent; vector-effect: non-scaling-stroke;')
             .attr('xmlns', 'http://www.w3.org/2000/svg');
         return svg;

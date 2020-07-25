@@ -1,7 +1,5 @@
 const fs = require('fs');
-const path = require('path');
 const Papa = require('papaparse');
-const {groupBy,} = require('lodash');
 
 const graphDefinitions = require('./definitions');
 const GraphFromCsvs = require('./from-csvs');
@@ -34,7 +32,7 @@ function createSvgFromCsv(name, graphDefinition, filemap) {
                 //get the data from the csv files
                 const graph = new GraphFromCsvs(results, graphDefinition);
                 //build the svg
-                const svg = (new Svg(graphDefinition))
+                const svg = (new Svg(graphDefinition, name))
                     .addAxes(graph)
                     .addGraphData(graph);
 
