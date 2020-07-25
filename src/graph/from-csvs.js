@@ -5,7 +5,7 @@ class GraphFromCsvs {
     constructor(parse_results, graphDefinition) {
 
         this.graphDefinition = graphDefinition;
-        this.dataSets = parse_results.map(({results, file,}) => this.parseCsvResults(results, file));
+        this.dataSets = parse_results.map(({results, filename,}) => this.parseCsvResults(results, filename));
         this.minmax = this.getMinMaxValues();
     }
 

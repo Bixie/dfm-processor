@@ -11,6 +11,7 @@ const {IMAGEFILES_OUTPUT_PATH, WEBSERVER_LOCAL_PATH, IMAGEFILES_SENT_PATH,} = re
 const fileWatcher = require('./src/file-watcher');
 const archiver = require('./src/util/archiver');
 const api = require('./src/util/api-request');
+const {prepareDfmOutput,} = require('./src/graph/generator');
 
 //watchlists db
 const watchlists = require('./src/util/watchlists');
@@ -25,17 +26,23 @@ watchlists.setup()
 /**
  * Watch the output directory and send files to webserver. Move files when sent
  */
-fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, ({preview_id, total, files,}) => {
+fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, ({preview_id, files,}) => {
     if (WEBSERVER_LOCAL_PATH) {
         //copy to webservers path directly
         //todo if needed
     }
     let zipBuffer;
-    //create zip blob
-    archiver.createZipBuffer(files)
+    let nrFiles;
+    //prepare svg graphs
+    prepareDfmOutput(files)
+        .then(files => {
+            //create zip blob
+            nrFiles = files.length;
+            return archiver.createZipBuffer(files);
+        })
         .then(buffer => {
             zipBuffer = buffer;
-            logger.verbose('Zip blob created with %d files for %s', total, preview_id);
+            logger.verbose('Zip blob created with %d files for %s', nrFiles, preview_id);
             return api.putToApi(`preview/${preview_id}`, zipBuffer);
         })
         .then(data => {

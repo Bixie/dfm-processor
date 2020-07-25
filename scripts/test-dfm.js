@@ -2,12 +2,13 @@
 
 const path = require('path');
 const fs = require('fs');
+const {getFlattenedFiles,} = require('../src/util/filesystem');
 
 const scriptArgs = process.argv.slice(2);
 
 const quickRespond = scriptArgs[0] === '-qr';
 
-const {PARAMSFILES_PATH, IMAGEFILES_OUTPUT_PATH, PARAMSFILES_ARCHIVE_PATH,} = require('../config');
+const {PARAMSFILES_PATH_FULL, PARAMSFILES_PATH, IMAGEFILES_OUTPUT_PATH, PARAMSFILES_ARCHIVE_PATH,} = require('../config');
 const fileWatcher = require('../src/file-watcher');
 
 function getTimoutTime() {
@@ -23,34 +24,59 @@ function getTimoutTime() {
     return Math.round(toss * (2 * 60 * 1000));
 }
 
+function writeFiles(files, fileBase) {
+    files.forEach(({name, filepath,}, index) => {
+        const fileIndex = index + 1;
+        const [base, extension,] = name.split('.');
+        const filename = `${fileBase}_${fileIndex}_${files.length}_${base}.${extension}`;
+        const fileTimeoutTime = Math.round(Math.random() * 500);
+        setTimeout(() => {
+            fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}`, err => {
+                if (err) {
+                    console.log('ERROR: ', err.message);
+                    return;
+                }
+                console.log(`File ${filename} added with ${fileTimeoutTime}ms delay for ${fileBase}`);
+            });
+        }, fileTimeoutTime);
+    });
+}
+
 //setup filewatcher
+fileWatcher.watchSingle(PARAMSFILES_PATH_FULL, filepath => {
+    const sourcePath = path.join(__dirname, 'test-data', 'v2');
+    const fileBase = path.basename(filepath, '.txt');
+    const timeoutTime = quickRespond ? 5 : getTimoutTime();
+    getFlattenedFiles(sourcePath)
+        .then(files => {
+            console.log(files);
+            console.log(`Creating ${files.length} files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
+            setTimeout(() => {
+                writeFiles(files, fileBase);
+            }, timeoutTime);
+        })
+        .catch(e => console.error(e));
+    fs.rename(filepath, path.join(PARAMSFILES_ARCHIVE_PATH, path.basename(filepath)), err => {
+        if (err) {
+            console.log('ERROR: ', err.message);
+            return;
+        }
+        console.log(`Paramfile ${fileBase}.txt moved to archive`);
+    })
+
+});
+//@deprecated legacy v1
 fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
+    const sourcePath = path.join(__dirname, 'test-data');
     const fileBase = path.basename(filepath, '.txt');
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
     console.log(`Creating files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
     setTimeout(() => {
-        const sourcePath = path.join(__dirname, 'test-data');
-        const files = [
+        writeFiles([
             {name: 'sample_1.png', filepath: `${sourcePath}/sample_1.png`,},
             {name: 'sample_2.png', filepath: `${sourcePath}/sample_2.png`,},
             {name: 'sample_3.png', filepath: `${sourcePath}/sample_3.png`,},
-            {name: 'data_1.csv', filepath: `${sourcePath}/data_1.csv`,},
-        ];
-        files.forEach(({name, filepath,}, index) => {
-            const fileIndex = index + 1;
-            const [base, extension,] = name.split('.');
-            const filename = `${fileBase}_${fileIndex}_${files.length}.${extension}`;
-            const fileTimeoutTime = Math.round(Math.random() * 500);
-            setTimeout(() => {
-                fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}`, err => {
-                    if (err) {
-                        console.log('ERROR: ', err.message);
-                        return;
-                    }
-                    console.log(`File ${filename}.png added with ${fileTimeoutTime}ms delay for ${fileBase}`);
-                });
-            }, fileTimeoutTime);
-        });
+        ], fileBase);
     }, timeoutTime);
     fs.rename(filepath, path.join(PARAMSFILES_ARCHIVE_PATH, path.basename(filepath)), err => {
         if (err) {

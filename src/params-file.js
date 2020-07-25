@@ -1,51 +1,30 @@
 const fs = require('fs');
 const Promise = require('bluebird');
+/**
+ * @deprecated
+ */
 
 const LF = '\r\n';
 
 const defaultParams = {
-    DataProvider: 'CSI',
-    IncludeInactive: 1,
-    Benchmark: 'SP500',
-    Watchlists: 'Safe',
-    TradingLiquidity: '1',
-    HistoricalPrice: '5',
-    AdjustedPrice: '0.5',
-    MARRatio: 'N/A',
-    Trend: 'N/A',
-    TrendPeriod: 'N/A',
-    Ranking: 'reversing',
-    ShortCorrelation: 'N/A',
-    LongCorrelation: 'N/A',
-    Investment: 48,
-    PortfolioSize: 12,
-    LongShort: 'Long',
-    HoldingPeriod: '13',
-    ValidationPeriod: 30,
-    InvestementObjective: 'MaxMAR',
-    PriceWeighing: 'Adjusted',
-    HedgePercentage: 35,
-    LowerBound: '0.1',
-    SetupPeriod: 9,
-    WeightInterval: 1,
-    OptimalizationTechnique: 'LongThenShort',
-    TransactionCosts: '4',
-    LoanPercentage: '0.5',
-    DividendTax: '15'
-};
-
-const defaultOptions = {
-    width: 1200,
-    layout: 'default',
-    locale: 'nl-NL',
-    licenseKey: '',
-    userId: '',
-    email: '',
+    Investment: 5,
+    PortfolioSize: 3,
+    HoldingPeriod: 3,
+    ValidationPeriod: 8,
+    PennyStocks: 2,
+    GrowthPotential: 1,
+    HedgePercentage: 1,
+    BalanceRR: 1,
+    Watchlists: 4,
+    TransactionCosts: 1,
+    LoanPercentage: 1,
+    DividendTax: 4,
+    DataProvider: 1,
 };
 
 function formatLine(value, key) {
     if (key) {
-        return `${key}=${value}`;
+        return `${key}:${value}`;
     }
     return value;
 }
@@ -54,20 +33,22 @@ class ParamsFile {
 
     constructor(id, params, options = {}) {
         this.id = id;
-        this.params = {...defaultParams, ...params,};
-        this.options = {...defaultOptions, ...options,};
+        this.params = {};
+        //we can just test for falsy value, since the indices are 1 based
+        Object.entries(defaultParams)
+            .forEach(([key, defaultValue,]) => this.params[key] = params[key] || defaultValue);
+        this.options = options;
     }
 
     render() {
         let output = '';
-        output += ['licenseKey', 'userId', 'email',].map(key => {
-            return formatLine(this.options[key], key);
-        }).join(LF);
-        output += LF;
-        output += LF;
         output += Object.keys(this.params).map(key => {
-            return formatLine(this.params[key], key);
+            return formatLine(this.params[key]);
         }).join(LF);
+        // output += LF;
+        // output += Object.keys(this.options).map(key => {
+        //     return formatLine(this.options[key], key);
+        // }).join(LF);
         return output;
     }
 

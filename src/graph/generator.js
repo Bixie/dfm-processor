@@ -1,28 +1,35 @@
 const fs = require('fs');
 const path = require('path');
 const Papa = require('papaparse');
+const {groupBy,} = require('lodash');
+
+const graphDefinitions = require('./definitions');
 const GraphFromCsvs = require('./from-csvs');
 const Svg = require('./svg');
 
-function readFolderCsvs(srcPath, filenames = []) {
+const graphNames = Object.keys(graphDefinitions);
+const graphNamesRegex = new RegExp(`^(${graphNames.join('|')})_`);
+
+function readFolderCsvs(filemap, filenames = []) {
     const promises = [];
-    fs.readdirSync(srcPath)
-        .filter(f => (!filenames.length || filenames.includes(f)))
-        .forEach(file => {
-            promises.push(new Promise((resolve, reject) => {
-                Papa.parse(fs.createReadStream(path.join(srcPath, file)), {
-                    delimiter: "\t",
-                    complete: results => resolve({results, file,}),
-                    error: reject,
-                });
-            }));
-        });
+    filenames.forEach(filename => {
+        if (filemap[filename] === undefined) {
+            return;
+        }
+        promises.push(new Promise((resolve, reject) => {
+            Papa.parse(fs.createReadStream(filemap[filename]), {
+                delimiter: "\t",
+                complete: results => resolve({results, filename,}),
+                error: reject,
+            });
+        }));
+    });
     return promises;
 }
 
-function createSvgFromCsv(graphDefinition, name) {
+function createSvgFromCsv(name, graphDefinition, filemap) {
     return new Promise((resolve, reject) => {
-        Promise.all(readFolderCsvs(graphDefinition.srcPath, graphDefinition.dataSets.map(d => d.filename)))
+        Promise.all(readFolderCsvs(filemap, graphDefinition.dataSets.map(d => d.filename)))
             .then(results => {
                 //get the data from the csv files
                 const graph = new GraphFromCsvs(results, graphDefinition);
@@ -33,14 +40,49 @@ function createSvgFromCsv(graphDefinition, name) {
 
                 resolve({name, svg: svg.getHtml(),});
             })
-            .catch(reject)
+            .catch(reject);
     });
 }
 
-function generateSvgsFromDefinitions(graphDefinitions) {
-     return Promise.all(
-        Object.entries(graphDefinitions).map(([name, graphDefinition,]) => createSvgFromCsv(graphDefinition, name))
-     );
+function getFilemapsPerGraph(files) {
+    const filemapsPerGraph = {};
+    for (let i = 0; i < files.length; i++) {
+        let m = graphNamesRegex.exec(files[i].name);
+        if (m) {
+            filemapsPerGraph[m[1]] = filemapsPerGraph[m[1]] || {};
+            filemapsPerGraph[m[1]][files[i].name] = files[i].filepath;
+        }
+    }
+    return filemapsPerGraph;
 }
 
-module.exports = generateSvgsFromDefinitions;
+function generateSvgsFromFiles(files) {
+    //do we have graph files in the output?
+    const filemapsPerGraph = getFilemapsPerGraph(files);
+    return Promise.all(
+        Object.entries(filemapsPerGraph)
+            .map(([name, filemap,]) => createSvgFromCsv(name, graphDefinitions[name], filemap))
+    );
+}
+
+function prepareDfmOutput(files) {
+    //@legacy
+    if (files.every(({name}) => name.includes('.png'))) {
+        return Promise.resolve(files);
+    }
+    return new Promise((resolve, reject) => {
+        generateSvgsFromFiles(files)
+            .then(results => {
+                resolve(files
+                    .filter(f => !f.name.match(graphNamesRegex))
+                    .concat(results.map(({name, svg,}) => ({name: `${name}.svg`, contents: svg,})))
+                );
+            })
+            .catch(reject);
+    });
+}
+
+module.exports = {
+    generateSvgsFromFiles,
+    prepareDfmOutput,
+};

@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 const ServerStatus = require('../src/util/server-status');
 const ApiToken = require('./api-token');
-const {PARAMSFILES_PATH, LICENSEFILES_PATH,} = require('../config');
+const {PARAMSFILES_PATH, PARAMSFILES_PATH_FULL, LICENSEFILES_PATH,} = require('../config');
 
-const ParamsFile = require('./params-file');
+const ParamsFile = require('./params-file'); //@deprecated
+const ParamsFileFull = require('./params-file');
 const LicenseFile = require('./license-file');
 const {getWatcher, getGroupQueues,} = require('./file-watcher');
 
@@ -39,8 +40,17 @@ router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
     const {params, options,} = req.body;
     logger.verbose('Incoming request for preview for %s', preview_id);
     let result = false;
-    const paramsFile = new ParamsFile(preview_id, params, options);
-    paramsFile.write(PARAMSFILES_PATH).then(result => {
+    //@depricated legacy v1
+    if (options.licenseKey === undefined) {
+        const paramsFile = new ParamsFile(preview_id, params, options);
+        paramsFile.write(PARAMSFILES_PATH).then(result => {
+            logger.info('Legacy parameterfile for %s (%s) saved in %s.', preview_id, options.locale, PARAMSFILES_PATH);
+            res.send({result, preview_id,});
+        }).catch(error => res.send({result, preview_id, error: error.message || error,}));
+        return;
+    }
+    const paramsFile = new ParamsFileFull(preview_id, params, options);
+    paramsFile.write(PARAMSFILES_PATH_FULL).then(result => {
         logger.info('Parameterfile for %s (%s) saved in %s.', preview_id, options.locale, PARAMSFILES_PATH);
         res.send({result, preview_id,});
     }).catch(error => res.send({result, preview_id, error: error.message || error,}));

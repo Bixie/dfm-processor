@@ -1,14 +1,14 @@
-const path = require('path');
 const Promise = require('bluebird');
 const fs = require('fs');
-const {logger,} = require('../src/util/winston');
+const {logger,} = require('./util/winston');
+const {getFileParts,} = require('./util/filesystem');
 
 const chokidar = require('chokidar');
 const {OUTPUT_FILENAME_PREFIX, OUTPUT_FILENAME_SUFFIX,} = require('../config');
 
 //prepare regex
 const replacedSuffix = OUTPUT_FILENAME_SUFFIX.replace(/%d/g, '(\\d{1,2})');
-const filenameRegex = new RegExp(`^${OUTPUT_FILENAME_PREFIX}(.*)_(?:EN|NL)${replacedSuffix}$`);
+const filenameRegex = new RegExp(`^${OUTPUT_FILENAME_PREFIX}(.*)_(?:EN|NL)${replacedSuffix}_*(.*)$`);
 
 //the filewatcher instance
 let watcher;
@@ -16,18 +16,6 @@ let watcher;
 //place where files can wait to be sent out as group
 //todo do we want to invalidate groups that are waitting too long to get complete?
 const groupQueues = {};
-
-function getFileParts (filepath) {
-    const basename = path.basename(filepath);
-    const parts = basename.split('.');
-    const extension = parts.pop();
-    const filename = parts.join('.');
-    return {
-        basename,
-        extension,
-        filename,
-    };
-}
 
 function getOutputFileInfo (filepath) {
     const {basename, extension, filename,} = getFileParts(filepath);
@@ -47,6 +35,7 @@ function getOutputFileInfo (filepath) {
     return {
         filepath,
         basename,
+        orig_name: m[4] || basename,
         extension,
         filename,
         fileIndex,
@@ -55,7 +44,7 @@ function getOutputFileInfo (filepath) {
 }
 
 function groupedCallback (filepath, onAddCallback) {
-    const {basename, group, fileIndex, extension,} = getOutputFileInfo(filepath);
+    const {basename, orig_name, group, fileIndex, extension,} = getOutputFileInfo(filepath);
     if (group.preview_id) {
         //add group if needed
         if (groupQueues[group.preview_id] === undefined) {
@@ -63,7 +52,7 @@ function groupedCallback (filepath, onAddCallback) {
             groupQueues[group.preview_id] = group;
         }
         //add file to group
-        groupQueues[group.preview_id].files.push({name: `output_${fileIndex}.${extension}`, filepath,});
+        groupQueues[group.preview_id].files.push({name: `${orig_name}.${extension}`, filepath,});
         logger.verbose('File index %d, %s added to group %s', fileIndex, basename, group.preview_id);
         //check if group is complete
         if (groupQueues[group.preview_id].files.length === groupQueues[group.preview_id].total) {

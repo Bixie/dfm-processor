@@ -9,8 +9,8 @@ const fs = require('fs');
  */
 function createZipBuffer(files) {
     const zip = new JSZip();
-    files.forEach(({name, filepath,}) => {
-        zip.file(name, fs.createReadStream(filepath));
+    files.forEach(({name, filepath, contents,}) => {
+        zip.file(name, contents || fs.createReadStream(filepath));
     });
     return zip.generateAsync({type: 'nodebuffer',});
 }
