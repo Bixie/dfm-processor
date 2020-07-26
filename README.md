@@ -31,7 +31,8 @@ NODE_ENV                    //Set to 'production' or 'development'
 DFM_APP_PORT                //Port the server will be listening
 DFM_APP_PATH                //Path where the processor is installed
 DFM_DB_PATH                 //Path where the sqlite3 data file is stored
-DFM_PARAMSFILES_PATH        //Path where DFM application will listen for params files
+DFM_PARAMSFILES_PATH        //Path where DFM application will listen for params files (deprecated v1)
+DFM_PARAMSFILES_PATH_FULL   //Path where DFM application will listen for params files (full version)
 DFM_LICENSEFILES_PATH       //Path where License application will listen for license files
 DFM_PARAMSFILES_ARCHIVE_PATH//Path where params files will be archived
 DFM_OUTPUT_FILENAME_PREFIX  //Prefix in front of the unique preview ID in the file
