@@ -5,14 +5,11 @@ const transforms = {
         format: firstAsCapital,
     },
     IncludeInactive: {
-        key: () => 'DINA',
+        key: () => 'DINA', //unknown
     },
     Benchmark: {
-        key: () => 'DBEN',
+        key: () => 'DBEN', //unknown
         format: firstAsCapital,
-    },
-    Watchlists: {
-        key: () => 'WLID',
     },
     TradingLiquidity: {
         key: () => 'STLI',
@@ -35,7 +32,7 @@ const transforms = {
         format: minMaxValues,
     },
     TrendPeriod: {
-        key: () => 'STRP',
+        key: () => 'STRP', //unknown
         format: zeroForNA,
     },
     Ranking: {
@@ -43,20 +40,23 @@ const transforms = {
         format: value => zeroOrFormatted(value, firstAsCapital),
     },
     ShortCorrelation: {
-        key: () => 'SSCO',
+        key: () => 'SRNK',
         format: zeroForNA,
     },
     LongCorrelation: {
-        key: () => 'SLCO',
+        key: () => 'SRNK',
         format: zeroForNA,
-    },
-    Investment: {
-        key: () => 'BINV',
-        format: cleanNumber,
     },
     PortfolioSize: {
         key: () => 'RPFS',
         format: cleanNumber,
+    },
+    HoldingPeriod: {
+        key: () => 'RHPD',
+        format: value => {
+            value = value === 'hold' ? '-1' : value; //unknown hold value
+            return cleanNumber(value);
+        },
     },
     LongShort: {
         key: () => 'RTRD',
@@ -65,19 +65,20 @@ const transforms = {
             return firstAsCapital(value);
         },
     },
-    HoldingPeriod: {
-        key: () => 'RHPD',
-        format: value => {
-            value = value === 'hold' ? '9999' : value;
-            return cleanNumber(value);
-        },
+    HedgePercentage: {
+        key: () => 'RTRD',
+        format: value => zeroOrFormatted(value, cleanNumber),
     },
     ValidationPeriod: {
-        key: () => 'RVAL',
+        key: () => 'RVLP', //unknown
         format: cleanNumber,
     },
+    PriceWeighing: {
+        key: () => 'RPWT',
+        format: value => zeroOrFormatted(value, firstAsCapital),
+    },
     InvestementObjective: {
-        key: () => 'RIOB',
+        key: () => 'ROWT',
         format: value => {
             return {
                 'N/A': '0',
@@ -88,40 +89,40 @@ const transforms = {
             }[value];
         },
     },
-    PriceWeighing: {
-        key: () => 'RPWE',
-        format: value => zeroOrFormatted(value, firstAsCapital),
-    },
-    HedgePercentage: {
-        key: () => 'RHED',
-        format: value => zeroOrFormatted(value, cleanNumber),
-    },
-    LowerBound: {
-        key: () => 'RLBO',
-        format: value => zeroOrFormatted(value, cleanNumber),
-    },
     SetupPeriod: {
-        key: () => 'RSET',
+        key: () => 'ROWT',
         format: zeroForNA,
     },
     WeightInterval: {
-        key: () => 'RINT',
+        key: () => 'ROWT',
         format: zeroForNA,
     },
+    LowerBound: {
+        key: () => 'ROWT',
+        format: value => zeroOrFormatted(value, cleanNumber),
+    },
     OptimalizationTechnique: {
-        key: () => 'ROPT',
+        key: () => 'ROWT',
         format: value => zeroOrFormatted(value, firstAsCapital),
     },
+    Watchlists: {
+        key: () => 'WLID',
+        format: value => value,
+    },
     TransactionCosts: {
-        key: () => 'BRTC',
+        key: () => 'BROK',
         format: cleanNumber,
     },
     LoanPercentage: {
-        key: () => 'BLOA',
+        key: () => 'BROK',
         format: cleanNumber,
     },
     DividendTax: {
-        key: () => 'BDIV',
+        key: () => 'BROK',
+        format: cleanNumber,
+    },
+    Investment: {
+        key: () => 'BINV',
         format: cleanNumber,
     },
 };
@@ -138,7 +139,7 @@ function minMaxValues(value) {
     return [
         cleanNumber(min),
         cleanNumber(max),
-        zeroOrFormatted(value, firstAsCapital),
+        zeroOrFormatted(sort, firstAsCapital),
         zeroForNA(nr),
     ].join(';');
 }
@@ -157,8 +158,8 @@ function cleanNumber(value) {
 
 function transformParameter(name, value) {
     const key = transforms[name] && transforms[name].key ? transforms[name].key(name) : name;
-    const format = transforms[name] && transforms[name].format ? transforms[name].format(value, name) : value;
-    return `${key}=${format}`;
+    const formatted = transforms[name] && transforms[name].format ? transforms[name].format(value, name) : value;
+    return {key, formatted,};
 }
 
 module.exports = {

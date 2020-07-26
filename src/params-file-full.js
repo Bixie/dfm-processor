@@ -1,6 +1,8 @@
 const fs = require('fs');
+const {keyBy, groupBy, mapValues,} = require('lodash');
 const Promise = require('bluebird');
 const {transformParameter,} = require('./params-transform');
+const outputFormats = require('./params-outputformat');
 
 const LF = '\r\n';
 
@@ -44,29 +46,36 @@ const defaultOptions = {
     email: '',
 };
 
+function formatLine(key, value) {
+    return `${key}=${value}${LF}`;
+}
+
 class ParamsFileFull {
 
     constructor(id, params, options = {}) {
         this.id = id;
         this.params = {...defaultParams, ...params,};
         this.options = {...defaultOptions, ...options,};
+        this.data = this.transformData();
+    }
+
+    transformData() {
+        const transformed = [
+            ...Object.entries(this.params),
+            ...Object.entries(this.options),
+        ].map(([name, value,]) => {
+            const {key, formatted,} = transformParameter(name, value);
+            return {name, key, formatted,}
+        });
+        return mapValues(groupBy(transformed, 'key'), v => keyBy(v,'name'));
     }
 
     render() {
-        const keys = Object.keys(this.params);
-        //first key, provider, needs to be on top of file
-        const [provider,] = keys;
-        let output = transformParameter(provider, this.params[provider]);
-        output += LF;
-        output += ['licenseKey', 'userId', 'email',].map(key => {
-            return transformParameter(key, this.options[key]);
-        }).join(LF);
-        output += LF;
-        output += LF;
-        //first key was already placed on top
-        output += keys.slice(1).map(key => {
-            return transformParameter(key, this.params[key]);
-        }).join(LF);
+        let output = '';
+        Object.entries(outputFormats).forEach(([key, formatter,]) => {
+            console.log(this.data[key]);
+            output += formatLine(key, formatter(this.data[key]));
+        });
         return output;
     }
 
