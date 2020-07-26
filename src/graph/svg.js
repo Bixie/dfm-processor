@@ -54,17 +54,17 @@ class Svg {
 
     getGraphContainer() {
         return this.svg.append('g')
+            .attr('stroke', '#bababa')
             .attr('stroke-width', 1)
             .attr('stroke-linejoin', 'square')
             .attr('stroke-linecap', 'square')
             .attr('fill', 'none');
     }
 
-    addPathGraph(graph, {data, color, className,}) {
+    addPathGraph(graph, {data, className,}) {
         this.container.append('path')
             .attr('d', this.lineFunction(graph)(data))
-            .attr('class', className)
-            .attr('stroke', color || 'black')
+            .attr('class', `graph ${className}`)
             .attr('stroke-width', 1)
             .attr('fill', 'none')
     }
@@ -100,7 +100,7 @@ class Svg {
         this.svg.selectAll('.xaxis text')  // select all the text elements for the xaxis
             .attr(
                 'transform',
-                `translate(${(this.margin.bottom / 3 )* -2}, ${(this.margin.bottom / 2) + 3}) rotate(-45)`
+                `translate(${((this.margin.bottom / 2 )* -1)}, ${(this.margin.bottom / 2) - 5}) rotate(-45)`
             );
     }
 }
