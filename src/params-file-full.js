@@ -73,7 +73,6 @@ class ParamsFileFull {
     render() {
         let output = '';
         Object.entries(outputFormats).forEach(([key, formatter,]) => {
-            console.log(this.data[key]);
             output += formatLine(key, formatter(this.data[key]));
         });
         return output;
