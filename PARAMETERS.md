@@ -8,9 +8,10 @@ Alle parameters en opties voor berekeningen met de DigifundManager
 
 Het bestand is een standaard text-file met windows regeleinden. Per regel staat een `key=value` paar.
 
-Eerst staat de gebruikersinformatie vermeld:
+Eerst staat de provider en gebruikersinformatie vermeld:
 
 ```
+PROV=Y
 licenseKey=DUMMY-12345-ABCDE-FGHIJ-67890
 userId=999
 email=user@example.com
@@ -40,12 +41,12 @@ Vervolgens na een lege regel de waarden van de parameters
 |LongShort|Long|`Long`, `Short`, `Long/short`|
 |HoldingPeriod|13|`1`, `4`, `13`, `26`, `52`, `hold`|
 |ValidationPeriod|30|`1`, `5`, `10`, `20`, `30`|
-|InvestementObjective|MaxMAR|`MaxMAR`, `MinRisk`, `MaxProfits`, `NoOptimization`|
-|PriceWeighing|Adjusted|`Adjusted`, `Historical`|
-|HedgePercentage|35%|`0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
+|InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`, `NoOptimization`|
+|PriceWeighing|Adjusted|`N/A`, `Adjusted`, `Historical`|
+|HedgePercentage|35%|`N/A`, `0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
 |LowerBound|20%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
 |SetupPeriod|9|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
-|WeightInterval|1|`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
+|WeightInterval|1|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
 |OptimalizationTechnique|LongThenShort|`N/A`, `LongThenShort`, `RankByRank`|
 |TransactionCosts|$0.00|`$0.00`, `$0.50`, `$4.00`, `$5.00`, `$7.50`, `$9.50`, `$12.00`|
 |LoanPercentage|0%|`0%`, `0.5%`, `0.6%`, `0.7%`, `0.8%`, `0.9%`, `1%`|
@@ -55,37 +56,25 @@ Vervolgens na een lege regel de waarden van de parameters
 `dfm_preview5e91eab7ab8f0_NL.txt`
 
 ```
+PROV=C
 licenseKey=DUMMY-12345-ABCDE-FGHIJ-67890
 userId=999
 email=user@example.com
-
-DataProvider=CSI
-IncludeInactive=1
-Benchmark=SP500
-Watchlists=Safe
-TradingLiquidity=1.00;100000;N/A;N/A
-HistoricalPrice=5.00;100;N/A;N/A
-AdjustedPrice=0.50;200;N/A;N/A
-MARRatio=N/A
-Trend=N/A
-TrendPeriod=N/A
-Ranking=Trend-reversing
-ShortCorrelation=13
-LongCorrelation=26
-Investment=$48
-PortfolioSize=24
-LongShort=Long
-HoldingPeriod=13
-ValidationPeriod=30
-InvestementObjective=MaxMAR
-PriceWeighing=Adjusted
-HedgePercentage=35%
-LowerBound=20%
-SetupPeriod=9
-WeightInterval=1
-OptimalizationTechnique=LongThenShort
-TransactionCosts=$0.00
-LoanPercentage=0%
-DividendTax=15%
+STLI=1.00;100000;0;0
+SHSP=5.00;100;0;0
+SASP=0.50;200;0;0
+SMAR=0;0;0;0
+STRD=0;0;0;0
+SRNK=T;13;26;0
+RPFS=24
+RHPD=13
+RTRD=L;0
+RPWT=A
+ROWT=M;9;1;20;L
+WLID=Safe
+BROK=0.00;0;15
+BINV=48
+STRP=0
+RVLP=30
 ```
 
