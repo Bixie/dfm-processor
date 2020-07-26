@@ -6,10 +6,12 @@ const {getFlattenedFiles,} = require('../src/util/filesystem');
 
 const scriptArgs = process.argv.slice(2);
 
-const quickRespond = scriptArgs[0] === '-qr';
+const quickRespond = scriptArgs.includes('-qr');
 
 const {PARAMSFILES_PATH_FULL, PARAMSFILES_PATH, IMAGEFILES_OUTPUT_PATH, PARAMSFILES_ARCHIVE_PATH,} = require('../config');
 const fileWatcher = require('../src/file-watcher');
+
+const watchV1 = scriptArgs.includes('-v1');
 
 function getTimoutTime() {
     let toss = Math.random();
@@ -66,25 +68,27 @@ fileWatcher.watchSingle(PARAMSFILES_PATH_FULL, filepath => {
 
 });
 //@deprecated legacy v1
-fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
-    const sourcePath = path.join(__dirname, 'test-data');
-    const fileBase = path.basename(filepath, '.txt');
-    const timeoutTime = quickRespond ? 5 : getTimoutTime();
-    console.log(`Creating files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
-    setTimeout(() => {
-        writeFiles([
-            {name: 'sample_1.png', filepath: `${sourcePath}/sample_1.png`,},
-            {name: 'sample_2.png', filepath: `${sourcePath}/sample_2.png`,},
-            {name: 'sample_3.png', filepath: `${sourcePath}/sample_3.png`,},
-        ], fileBase);
-    }, timeoutTime);
-    fs.rename(filepath, path.join(PARAMSFILES_ARCHIVE_PATH, path.basename(filepath)), err => {
-        if (err) {
-            console.log('ERROR: ', err.message);
-            return;
-        }
-        console.log(`Paramfile ${fileBase}.txt moved to archive`);
-    })
-});
+if (watchV1) {
+    fileWatcher.watchSingle(PARAMSFILES_PATH, filepath => {
+        const sourcePath = path.join(__dirname, 'test-data');
+        const fileBase = path.basename(filepath, '.txt');
+        const timeoutTime = quickRespond ? 5 : getTimoutTime();
+        console.log(`Creating files for ${fileBase} in ${Math.round(timeoutTime / 1000)} seconds`);
+        setTimeout(() => {
+            writeFiles([
+                {name: 'sample_1.png', filepath: `${sourcePath}/sample_1.png`},
+                {name: 'sample_2.png', filepath: `${sourcePath}/sample_2.png`},
+                {name: 'sample_3.png', filepath: `${sourcePath}/sample_3.png`},
+            ], fileBase);
+        }, timeoutTime);
+        fs.rename(filepath, path.join(PARAMSFILES_ARCHIVE_PATH, path.basename(filepath)), err => {
+            if (err) {
+                console.log('ERROR: ', err.message);
+                return;
+            }
+            console.log(`Paramfile ${fileBase}.txt moved to archive`);
+        })
+    });
+}
 //log that we're ready
 console.log('Watching files...');
