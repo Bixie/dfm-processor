@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Promise = require('bluebird');
+const {transformParameter,} = require('./params-transform');
 
 const LF = '\r\n';
 
@@ -43,13 +44,6 @@ const defaultOptions = {
     email: '',
 };
 
-function formatLine(value, key) {
-    if (key) {
-        return `${key}=${value}`;
-    }
-    return value;
-}
-
 class ParamsFileFull {
 
     constructor(id, params, options = {}) {
@@ -59,14 +53,19 @@ class ParamsFileFull {
     }
 
     render() {
-        let output = '';
+        const keys = Object.keys(this.params);
+        //first key, provider, needs to be on top of file
+        const [provider,] = keys;
+        let output = transformParameter(provider, this.params[provider]);
+        output += LF;
         output += ['licenseKey', 'userId', 'email',].map(key => {
-            return formatLine(this.options[key], key);
+            return transformParameter(key, this.options[key]);
         }).join(LF);
         output += LF;
         output += LF;
-        output += Object.keys(this.params).map(key => {
-            return formatLine(this.params[key], key);
+        //first key was already placed on top
+        output += keys.slice(1).map(key => {
+            return transformParameter(key, this.params[key]);
         }).join(LF);
         return output;
     }

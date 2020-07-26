@@ -7,7 +7,7 @@ const ApiToken = require('./api-token');
 const {PARAMSFILES_PATH, PARAMSFILES_PATH_FULL, LICENSEFILES_PATH,} = require('../config');
 
 const ParamsFile = require('./params-file'); //@deprecated
-const ParamsFileFull = require('./params-file');
+const ParamsFileFull = require('./params-file-full');
 const LicenseFile = require('./license-file');
 const {getWatcher, getGroupQueues,} = require('./file-watcher');
 
