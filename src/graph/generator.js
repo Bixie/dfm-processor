@@ -66,6 +66,7 @@ function generateSvgsFromFiles(files) {
 function prepareDfmOutput(files) {
     //@legacy
     if (files.every(({name}) => name.includes('.png'))) {
+        files = files.map((f, index) => ({...f, name: `output_${index + 1}`,}));
         return Promise.resolve(files);
     }
     return new Promise((resolve, reject) => {
