@@ -10,6 +10,8 @@ const fs = require('fs');
 function createZipBuffer(files) {
     const zip = new JSZip();
     files.forEach(({name, filepath, contents,}) => {
+        //legacy
+        name = name.replace('.png.png', '.png');
         zip.file(name, contents || fs.createReadStream(filepath));
     });
     return zip.generateAsync({type: 'nodebuffer',});
