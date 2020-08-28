@@ -46,12 +46,13 @@ function writeFiles(files, fileBase) {
 
 //setup filewatcher
 fileWatcher.watchSingle(PARAMSFILES_PATH_FULL, filepath => {
-    const sourcePath = path.join(__dirname, 'test-data', 'v2');
+    // const sourcePath = path.join(__dirname, 'test-data', 'v2');
+    const sourcePath = path.join(__dirname, 'test-data', 'v2-flat');
     const fileBase = path.basename(filepath, '.txt');
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
     getFlattenedFiles(sourcePath)
         .then(files => {
-            console.log(files);
+            // console.log(files);
             console.log(`Creating ${files.length} files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
             setTimeout(() => {
                 writeFiles(files, fileBase);
@@ -65,7 +66,6 @@ fileWatcher.watchSingle(PARAMSFILES_PATH_FULL, filepath => {
         }
         console.log(`Paramfile ${fileBase}.txt moved to archive`);
     })
-
 });
 //@deprecated legacy v1
 if (watchV1) {

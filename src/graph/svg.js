@@ -11,22 +11,40 @@ class Svg {
         this.margin = margin;
         this.name = name;
         this.svg = this.setSvgBase();
-        this.container = this.getGraphContainer();
     }
 
     addAxes(graph) {
-        const xScale = d3.scaleTime()
-            .domain([getJsDateFromExcel(graph.minmax.minX), getJsDateFromExcel(graph.minmax.maxX),])
-            .range([this.margin.left, this.viewBox.width - this.margin.right]);
-        const yScale = d3.scaleLinear()
-            .domain([graph.minmax.minY, graph.minmax.maxY,])
-            .range([this.viewBox.height - this.margin.bottom, this.margin.top]);
-
+        this.xScale = this.getAxisScale(graph.graphDefinition.axes.x.type, 'x', graph.minmax.minX, graph.minmax.maxX);
+        this.yScale = this.getAxisScale(graph.graphDefinition.axes.y.type, 'y', graph.minmax.minY, graph.minmax.maxY);
+        const height = this.viewBox.height - this.margin.bottom - this.margin.top;
+        const width = this.viewBox.width - this.margin.left - this.margin.right;
+        console.log(width, height);
+        const make_x_gridlines = () => d3.axisBottom(this.xScale)
+            .ticks(5);
+        const make_y_gridlines = () => d3.axisLeft(this.yScale)
+            .ticks(5);
         this.svg.append('g')
-            .call(g => this.xAxis(g, xScale));
+            .call(g => this.xAxis(g, this.xScale));
         this.svg.append('g')
-            .call(g => this.yAxis(g, yScale));
+            .call(g => this.yAxis(g, this.yScale));
         this.rotateXAxisTicks();
+        // add the X gridlines
+        this.svg.append('g')
+            .attr('class', 'grid')
+            .attr('transform', `translate(0, ${height + this.margin.top})`)
+            .call(make_x_gridlines()
+                .tickSize(-height)
+                .tickFormat('')
+            );
+        // add the y gridlines
+        this.svg.append('g')
+            .attr('class', 'grid')
+            .attr('transform', `translate(${this.margin.left}, 0)`)
+            .call(make_y_gridlines()
+                .tickSize(-width)
+                .tickFormat('')
+            );
+        this.container = this.getGraphContainer();
         return this;
     }
 
@@ -70,16 +88,42 @@ class Svg {
     }
 
     lineFunction(graph) {
-        //prepare the x/y coordinates within the svg line container
-        const rangeX = graph.minmax.maxX - graph.minmax.minX;
-        const rangeY = graph.minmax.maxY - graph.minmax.minY;
-        const width = this.viewBox.width - this.margin.left - this.margin.right;
-        const height = this.viewBox.height - this.margin.top - this.margin.bottom;
         //this is where d3 maps the x/y values to the actual svg grid position
+        const xScale = graph.graphDefinition.axes.x.type === 'time' ?
+            this.getAxisScale('linear', 'x', graph.minmax.minX, graph.minmax.maxX) :
+            this.xScale;
         return d3.line()
-            .x(d => Math.round((this.margin.left + ((d.x - graph.minmax.minX) / rangeX) * width) * 1000) / 1000)
-            .y(d => Math.round(((this.margin.top + height) +((d.y - graph.minmax.minY) / rangeY) * -1 * height) * 1000) / 1000);
+            .x(d => xScale(d.x))
+            .y(d => this.yScale(d.y));
 
+    }
+
+    getAxisScale(type, axis, min, max) {
+        let scale;
+        const range = axis === 'x' ?
+            [this.margin.left, this.viewBox.width - this.margin.right]:
+            [this.viewBox.height - this.margin.bottom, this.margin.top];
+        switch (type) {
+            case 'time':
+                scale = d3.scaleTime()
+                    .domain([getJsDateFromExcel(min), getJsDateFromExcel(max),])
+                    .range(range);
+                break;
+            case 'linear':
+                scale = d3.scaleLinear()
+                    .domain([min, max,])
+                    .range(range);
+                break;
+            case 'log':
+                scale = d3.scaleLog()
+                    .domain([Math.max(0.0000001, min), max,])
+                    .range(range);
+                break;
+            default:
+                break;
+        }
+
+        return scale;
     }
 
     xAxis(g, scale) {
@@ -93,7 +137,10 @@ class Svg {
     yAxis(g, scale) {
         g.attr('transform', `translate(${this.margin.left},0)`)
             .attr('class', 'yaxis')
-            .call(d3.axisLeft(scale));
+            .call(
+                d3.axisLeft(scale)
+                    .tickFormat(d => scale.tickFormat(4,d3.format(",d"))(d))
+            );
     }
 
     rotateXAxisTicks() {

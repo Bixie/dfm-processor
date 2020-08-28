@@ -1,7 +1,8 @@
 module.exports = {
     chart_compound: {
-        viewBox: {width: 455, height: 225,},
+        viewBox: {width: 750, height: 400,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
                 filename: 'chart_compound_equ_w_f.txt',
@@ -33,6 +34,7 @@ module.exports = {
     chart_constant: {
         viewBox: {width: 750, height: 400,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
                 filename: 'chart_constant_equ_w_m_cashflow.txt',
@@ -74,6 +76,7 @@ module.exports = {
     chart_miscellaneous: {
         viewBox: {width: 455, height: 225,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
                 filename: 'chart_miscellaneous_stocks_before_ranking.txt',
