@@ -46,7 +46,6 @@ function writeFiles(files, fileBase) {
 
 //setup filewatcher
 fileWatcher.watchSingle(PARAMSFILES_PATH_FULL, filepath => {
-    // const sourcePath = path.join(__dirname, 'test-data', 'v2');
     const sourcePath = path.join(__dirname, 'test-data', 'v2-flat');
     const fileBase = path.basename(filepath, '.txt');
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
