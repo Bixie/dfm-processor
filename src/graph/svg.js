@@ -18,7 +18,6 @@ class Svg {
         this.yScale = this.getAxisScale(graph.graphDefinition.axes.y.type, 'y', graph.minmax.minY, graph.minmax.maxY);
         const height = this.viewBox.height - this.margin.bottom - this.margin.top;
         const width = this.viewBox.width - this.margin.left - this.margin.right;
-        console.log(width, height);
         const make_x_gridlines = () => d3.axisBottom(this.xScale)
             .ticks(5);
         const make_y_gridlines = () => d3.axisLeft(this.yScale)
