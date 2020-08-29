@@ -37,8 +37,7 @@ function createSvgFromCsv(name, graphDefinition, filemap) {
                 const graph = new GraphFromCsvs(results, graphDefinition);
                 //build the svg
                 const svg = (new Svg(graphDefinition, name))
-                    .addAxes(graph)
-                    .addGraphData(graph);
+                    .setGraphData(graph);
 
                 resolve({name, svg: svg.getHtml(),});
             })

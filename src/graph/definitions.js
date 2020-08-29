@@ -237,7 +237,7 @@ module.exports = {
     chart_return_distribution_equ_w: {
         viewBox: {width: 455, height: 225,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
-        axes: {x: {type: 'linear',}, y: {type: 'linear',},},
+        axes: {x: {type: 'band',}, y: {type: 'linear',},},
         dataSets: [
             {
                 filename: 'chart_return_distribution_equ_w_return_distribution_equ_w.txt',
@@ -249,7 +249,7 @@ module.exports = {
     chart_return_distribution_pr_w: {
         viewBox: {width: 455, height: 225,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
-        axes: {x: {type: 'linear',}, y: {type: 'linear',},},
+        axes: {x: {type: 'band',}, y: {type: 'linear',},},
         dataSets: [
             {
                 filename: 'chart_return_distribution_pr_w_return_distribution_pr_w.txt',
@@ -261,7 +261,7 @@ module.exports = {
     chart_return_distribution_opt_w: {
         viewBox: {width: 455, height: 225,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
-        axes: {x: {type: 'linear',}, y: {type: 'linear',},},
+        axes: {x: {type: 'band',}, y: {type: 'linear',},},
         dataSets: [
             {
                 filename: 'chart_return_distribution_opt_w_return_distribution_opt_w.txt',

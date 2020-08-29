@@ -2,58 +2,112 @@ const d3 = require('d3');
 const jsdom = require('jsdom');
 const {JSDOM,} = jsdom;
 
-const {getJsDateFromExcel,} = require('../util/date');
-
 class Svg {
 
-    constructor({viewBox, margin,}, name) {
+    constructor({viewBox, margin, axes,}, name) {
+        this.name = name;
         this.viewBox = viewBox;
         this.margin = margin;
-        this.name = name;
+        this.axes = axes;
+
+        this.height = this.viewBox.height - this.margin.bottom - this.margin.top;
+        this.width = this.viewBox.width - this.margin.left - this.margin.right;
+        //get svg base and container
         this.svg = this.setSvgBase();
-    }
-
-    addAxes(graph) {
-        this.xScale = this.getAxisScale(graph.graphDefinition.axes.x.type, 'x', graph.minmax.minX, graph.minmax.maxX);
-        this.yScale = this.getAxisScale(graph.graphDefinition.axes.y.type, 'y', graph.minmax.minY, graph.minmax.maxY);
-        const height = this.viewBox.height - this.margin.bottom - this.margin.top;
-        const width = this.viewBox.width - this.margin.left - this.margin.right;
-        const make_x_gridlines = () => d3.axisBottom(this.xScale)
-            .ticks(5);
-        const make_y_gridlines = () => d3.axisLeft(this.yScale)
-            .ticks(5);
-        this.svg.append('g')
-            .call(g => this.xAxis(g, this.xScale));
-        this.svg.append('g')
-            .call(g => this.yAxis(g, this.yScale));
-        this.rotateXAxisTicks();
-        // add the X gridlines
-        this.svg.append('g')
-            .attr('class', 'grid')
-            .attr('transform', `translate(0, ${height + this.margin.top})`)
-            .call(make_x_gridlines()
-                .tickSize(-height)
-                .tickFormat('')
-            );
-        // add the y gridlines
-        this.svg.append('g')
-            .attr('class', 'grid')
-            .attr('transform', `translate(${this.margin.left}, 0)`)
-            .call(make_y_gridlines()
-                .tickSize(-width)
-                .tickFormat('')
-            );
         this.container = this.getGraphContainer();
-        return this;
+        //set needed scales
+        this.xScale = this.getAxisScale(axes.x.type, 'x');
+        this.yScale = this.getAxisScale(axes.y.type, 'y');
     }
 
-    addGraphData(graph) {
-        graph.dataSets.forEach(dataSet => this.addPathGraph(graph, dataSet));
+    setGraphData(graph) {
+        //set domains on scales
+        if (this.axes.x.type === 'band') {
+            const [first,] = graph.dataSets;
+            this.xScale.domain(first.data.map(d => d.x));
+        } else {
+            this.xScale.domain([graph.minmax.minX, graph.minmax.maxX]);
+        }
+        this.yScale.domain([graph.minmax.minY, graph.minmax.maxY,]);
+        //draw axis and grids
+        this.drawAxes(this.xScale, this.yScale, graph);
+        this.drawGrids(this.xScale, this.yScale);
+        //draw dataSets
+        graph.dataSets.forEach(dataSet => this.drawDataSet(graph, dataSet, this.xScale, this.yScale));
         return this;
     }
 
     getHtml() {
         return this.body.html();
+    }
+
+    drawAxes(xScale, yScale, graph) {
+        this.container.append('g').call(g => this.xAxis(g, xScale, graph));
+        this.container.append('g').call(g => this.yAxis(g, yScale, graph));
+        if (this.axes.x.type === 'time') {
+            this.rotateXAxisTicks();
+        }
+    }
+
+    drawGrids(xScale, yScale) {
+        if (this.axes.x.type !== 'band') {
+            this.container.append('g').call(g => this.xGrid(g, xScale));
+        }
+        this.container.append('g').call(g => this.yGrid(g, yScale));
+    }
+
+    drawDataSet(graph, {data, className, type,}, xScale, yScale) {
+        switch (type) {
+            case 'line':
+                const line_function = () => d3.line()
+                    .x(d => xScale(d.x))
+                    .y(d => yScale(d.y));
+                this.container.append('path')
+                    .attr('d', line_function()(data))
+                    .attr('class', `graph ${className}`)
+                    .attr('stroke-width', 1)
+                    .attr('fill', 'none')
+                break;
+            case 'bar':
+                this.container.selectAll('bar')
+                    .data(data)
+                    .enter().append('rect')
+                    .attr('class', `graph ${className}`)
+                    .attr('x', d => xScale(d.x))
+                    .attr('y', d => yScale(d.y))
+                    .attr('width', xScale.bandwidth())
+                    .attr('height', d => this.height - yScale(d.y));
+                break;
+            default:
+                break;
+        }
+    }
+
+    getAxisScale(type, axis) {
+        let scale;
+        const range = axis === 'x' ? [0, this.width] : [this.height, 0];
+        switch (type) {
+            case 'time':
+                scale = d3.scaleTime()
+                    .range(range);
+                break;
+            case 'linear':
+                scale = d3.scaleLinear()
+                    .range(range);
+                break;
+            case 'log':
+                scale = d3.scaleLog()
+                    .range(range);
+                break;
+            case 'band':
+                scale = d3.scaleBand()
+                    .range(range)
+                    .padding(0.3);
+                break;
+            default:
+                break;
+        }
+        return scale;
     }
 
     setSvgBase() {
@@ -71,74 +125,38 @@ class Svg {
 
     getGraphContainer() {
         return this.svg.append('g')
-            .attr('stroke', '#bababa')
-            .attr('stroke-width', 1)
-            .attr('stroke-linejoin', 'square')
-            .attr('stroke-linecap', 'square')
-            .attr('fill', 'none');
+            .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
     }
 
-    addPathGraph(graph, {data, className,}) {
-        this.container.append('path')
-            .attr('d', this.lineFunction(graph)(data))
-            .attr('class', `graph ${className}`)
-            .attr('stroke-width', 1)
-            .attr('fill', 'none')
-    }
-
-    lineFunction(graph) {
-        //this is where d3 maps the x/y values to the actual svg grid position
-        const xScale = graph.graphDefinition.axes.x.type === 'time' ?
-            this.getAxisScale('linear', 'x', graph.minmax.minX, graph.minmax.maxX) :
-            this.xScale;
-        return d3.line()
-            .x(d => xScale(d.x))
-            .y(d => this.yScale(d.y));
-
-    }
-
-    getAxisScale(type, axis, min, max) {
-        let scale;
-        const range = axis === 'x' ?
-            [this.margin.left, this.viewBox.width - this.margin.right]:
-            [this.viewBox.height - this.margin.bottom, this.margin.top];
-        switch (type) {
-            case 'time':
-                scale = d3.scaleTime()
-                    .domain([getJsDateFromExcel(min), getJsDateFromExcel(max),])
-                    .range(range);
-                break;
-            case 'linear':
-                scale = d3.scaleLinear()
-                    .domain([min, max,])
-                    .range(range);
-                break;
-            case 'log':
-                scale = d3.scaleLog()
-                    .domain([Math.max(0.0000001, min), max,])
-                    .range(range);
-                break;
-            default:
-                break;
-        }
-
-        return scale;
-    }
-
-    xAxis(g, scale) {
-        g.attr('transform', `translate(0,${this.viewBox.height - this.margin.bottom})`)
+    xAxis(g, scale, graph) {
+        g.attr('transform', `translate(0, ${this.height})`)
             .attr('class', 'xaxis')
-            .call(d3.axisBottom(scale)
-                .tickFormat(d3.timeFormat('%b %Y'))
-            );
+            .call(d => {
+                const axis = d3.axisBottom(scale);
+                switch (this.axes.x.type) {
+                    case 'time':
+                        axis.tickFormat(d3.timeFormat('%b %Y'));
+                        break;
+                    case 'linear':
+                    case 'log':
+                        axis.tickFormat(d => scale.tickFormat(4, d3.format(',d'))(d));
+                        break;
+                    case 'band':
+                        const [first,] = graph.dataSets;
+                        axis.tickValues(first.data.map(d => d.x).filter(x => x%5 === 0));
+                        break;
+                    default:
+                        break;
+                }
+                return axis(d);
+            });
     }
 
     yAxis(g, scale) {
-        g.attr('transform', `translate(${this.margin.left},0)`)
-            .attr('class', 'yaxis')
+        g.attr('class', 'yaxis')
             .call(
                 d3.axisLeft(scale)
-                    .tickFormat(d => scale.tickFormat(4,d3.format(",d"))(d))
+                    .tickFormat(d => scale.tickFormat(4,d3.format(',d'))(d))
             );
     }
 
@@ -147,6 +165,27 @@ class Svg {
             .attr(
                 'transform',
                 `translate(${((this.margin.bottom / 2 )* -1)}, ${(this.margin.bottom / 2) - 5}) rotate(-45)`
+            );
+    }
+
+    xGrid(g, scale) {
+        const make_x_gridlines = () => d3.axisBottom(scale)
+            .ticks(5);
+        g.attr('class', 'grid')
+            .attr('transform', `translate(0, ${this.height})`)
+            .call(make_x_gridlines()
+                .tickSize(-this.height)
+                .tickFormat('')
+            );
+    }
+
+    yGrid(g, scale) {
+        const make_y_gridlines = () => d3.axisLeft(scale)
+            .ticks(5);
+        g.attr('class', 'grid')
+            .call(make_y_gridlines()
+                .tickSize(-this.width)
+                .tickFormat('')
             );
     }
 }
