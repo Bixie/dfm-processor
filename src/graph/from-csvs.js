@@ -20,14 +20,14 @@ class GraphFromCsvs {
 
     parseCsvResults({data,}, filename) {
         data = data.filter(r => r.length === 2).map(this.recordValues);
-        const {className, color,} = this.graphDefinition.dataSets.find(d => d.filename === filename);
+        const {className,} = this.graphDefinition.dataSets.find(d => d.filename === filename);
         const stats = {
             minX: minBy(data, r => r.x).x,
             minY: minBy(data, r => r.y).y,
             maxX: maxBy(data, r => r.x).x,
             maxY: maxBy(data, r => r.y).y,
         };
-        return {data, stats, filename, className, color,};
+        return {data, stats, filename, className,};
     }
 
     recordValues(row) {
