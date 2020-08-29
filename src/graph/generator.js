@@ -29,6 +29,10 @@ function createSvgFromCsv(name, graphDefinition, filemap) {
     return new Promise((resolve, reject) => {
         Promise.all(readFolderCsvs(filemap, graphDefinition.dataSets.map(d => d.filename)))
             .then(results => {
+                if (!results.length) {
+                    reject(`No data for graph ${name}`);
+                    return;
+                }
                 //get the data from the csv files
                 const graph = new GraphFromCsvs(results, graphDefinition);
                 //build the svg
