@@ -10,13 +10,8 @@ module.exports = {
                 type: 'line',
             },
             {
-                filename: 'chart_compound_equ_w_m.txt',
-                className: 'equ_w_m',
-                type: 'line',
-            },
-            {
-                filename: 'chart_compound_pr_w_asp_m.txt',
-                className: 'pr_w_asp_m',
+                filename: 'chart_compound_s_p_500.txt',
+                className: 's_p_500',
                 type: 'line',
             },
             {
@@ -25,8 +20,13 @@ module.exports = {
                 type: 'line',
             },
             {
-                filename: 'chart_compound_s_p_500.txt',
-                className: 's_p_500',
+                filename: 'chart_compound_equ_w_m.txt',
+                className: 'equ_w_m',
+                type: 'line',
+            },
+            {
+                filename: 'chart_compound_pr_w_asp_m.txt',
+                className: 'pr_w_asp_m',
                 type: 'line',
             },
         ],
@@ -47,16 +47,6 @@ module.exports = {
                 type: 'line',
             },
             {
-                filename: 'chart_constant_opt_w_cashflow.txt',
-                className: 'opt_w_cashflow',
-                type: 'line',
-            },
-            {
-                filename: 'chart_constant_opt_w_net_liquidation_value.txt',
-                className: 'opt_w_net_liquidation_value',
-                type: 'line',
-            },
-            {
                 filename: 'chart_constant_pr_w_asp_m_cashflow.txt',
                 className: 'pr_w_asp_m_cashflow',
                 type: 'line',
@@ -64,6 +54,16 @@ module.exports = {
             {
                 filename: 'chart_constant_pr_w_asp_m_net_liquidation_value.txt',
                 className: 'prw_m_net_liquidation',
+                type: 'line',
+            },
+            {
+                filename: 'chart_constant_opt_w_cashflow.txt',
+                className: 'opt_w_cashflow',
+                type: 'line',
+            },
+            {
+                filename: 'chart_constant_opt_w_net_liquidation_value.txt',
+                className: 'opt_w_net_liquidation_value',
                 type: 'line',
             },
             {
