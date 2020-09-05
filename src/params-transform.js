@@ -66,6 +66,10 @@ const transforms = {
             return firstAsCapital(value);
         },
     },
+    AdaptiveStockCounting: {
+        key: () => 'ASC',
+        format: value => value,
+    },
     HedgePercentage: {
         key: () => 'RTRD',
         format: value => zeroOrFormatted(value, cleanNumber),
@@ -124,6 +128,18 @@ const transforms = {
     },
     Investment: {
         key: () => 'BINV',
+        format: cleanNumber,
+    },
+    RiskFreeRate: {
+        key: () => 'RFR',
+        format: cleanNumber, //unknown //missing 8% option on purpose?
+    },
+    InitialMarginRequirement: {
+        key: () => 'BROK',
+        format: cleanNumber,
+    },
+    ShareCollateral: {
+        key: () => 'BROK',
         format: cleanNumber,
     },
 };

@@ -50,6 +50,8 @@ module.exports = {
             values.TransactionCosts.formatted,
             values.LoanPercentage.formatted,
             values.DividendTax.formatted,
+            values.InitialMarginRequirement.formatted,
+            values.ShareCollateral.formatted,
         ].join(';')
     },
     BINV: values => values.Investment.formatted,
@@ -60,4 +62,7 @@ module.exports = {
             values.IncludeInactive.formatted,
         ].join(';')
     },
+    //unknown
+    RFR: values => values.RiskFreeRate.formatted,
+    ASC: values => values.AdaptiveStockCounting.formatted,
 };
