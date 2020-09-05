@@ -53,6 +53,11 @@ module.exports = {
         ].join(';')
     },
     BINV: values => values.Investment.formatted,
-    //unknown
-    RVLP: values => values.ValidationPeriod.formatted,
+    BVAL: values => {
+        return [
+            values.ValidationPeriod.formatted,
+            values.Benchmark.formatted,
+            values.IncludeInactive.formatted,
+        ].join(';')
+    },
 };

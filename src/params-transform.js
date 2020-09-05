@@ -5,10 +5,10 @@ const transforms = {
         format: firstAsCapital,
     },
     IncludeInactive: {
-        key: () => 'DINA', //unknown
+        key: () => 'BVAL',
     },
     Benchmark: {
-        key: () => 'DBEN', //unknown
+        key: () => 'BVAL',
         format: firstAsCapital,
     },
     TradingLiquidity: {
@@ -70,7 +70,7 @@ const transforms = {
         format: value => zeroOrFormatted(value, cleanNumber),
     },
     ValidationPeriod: {
-        key: () => 'RVLP', //unknown
+        key: () => 'BVAL',
         format: cleanNumber,
     },
     PriceWeighing: {
