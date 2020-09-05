@@ -40,7 +40,7 @@ module.exports = {
             values.InvestementObjective.formatted,
             values.SetupPeriod.formatted,
             values.WeightInterval.formatted,
-            values.LowerBound.formatted,
+            values.IncludeWeightingLargerThan.formatted,
             values.OptimalizationTechnique.formatted,
         ].join(';')
     },

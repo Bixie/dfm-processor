@@ -44,7 +44,7 @@ Vervolgens na een lege regel de waarden van de parameters
 |InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`, `NoOptimization`|
 |PriceWeighing|Adjusted|`N/A`, `Adjusted`, `Historical`|
 |HedgePercentage|35%|`N/A`, `0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
-|LowerBound|20%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
+|IncludeWeightingLargerThan|20%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
 |SetupPeriod|9|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
 |WeightInterval|1|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
 |OptimalizationTechnique|LongThenShort|`N/A`, `LongThenShort`, `RankByRank`|

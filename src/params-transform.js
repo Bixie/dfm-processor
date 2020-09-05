@@ -97,7 +97,7 @@ const transforms = {
         key: () => 'ROWT',
         format: zeroForNA,
     },
-    LowerBound: {
+    IncludeWeightingLargerThan: {
         key: () => 'ROWT',
         format: value => zeroOrFormatted(value, cleanNumber),
     },

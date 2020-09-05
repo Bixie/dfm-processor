@@ -28,7 +28,7 @@ const defaultParams = {
     InvestementObjective: 'MaxMAR',
     PriceWeighing: 'Adjusted',
     HedgePercentage: 35,
-    LowerBound: '0.1',
+    IncludeWeightingLargerThan: '0.1',
     SetupPeriod: 9,
     WeightInterval: 1,
     OptimalizationTechnique: 'LongThenShort',
