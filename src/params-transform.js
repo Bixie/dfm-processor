@@ -32,7 +32,7 @@ const transforms = {
         format: minMaxValues,
     },
     TrendPeriod: {
-        key: () => 'STRP', //unknown
+        key: () => 'STRD',
         format: zeroForNA,
     },
     Ranking: {
@@ -133,10 +133,11 @@ function firstAsCapital(value) {
 
 function minMaxValues(value) {
     if (zeroForNA(value) === 0) {
-        return '0;0;0;0';
+        return '0;0;0;0;0';
     }
     const [min, max, sort, nr,] = value.split(';');
     return [
+        1,
         cleanNumber(min),
         cleanNumber(max),
         zeroOrFormatted(sort, firstAsCapital),

@@ -8,10 +8,16 @@ module.exports = {
     SHSP: values => values.HistoricalPrice.formatted,
     SASP: values => values.AdjustedPrice.formatted,
     SMAR: values => values.MARRatio.formatted,
-    STRD: values => values.Trend.formatted,
+    STRD: values => {
+        return [
+            values.Trend.formatted,
+            values.TrendPeriod.formatted,
+        ].join(';')
+    },
     //ranking
     SRNK: values => {
         return [
+            values.Ranking.raw === 'N/A' ? 0 : 1,
             values.Ranking.formatted,
             values.ShortCorrelation.formatted,
             values.LongCorrelation.formatted,
@@ -30,6 +36,7 @@ module.exports = {
     RPWT: values => values.PriceWeighing.formatted,
     ROWT: values => {
         return [
+            values.InvestementObjective.raw === 'N/A' ? 0 : 1,
             values.InvestementObjective.formatted,
             values.SetupPeriod.formatted,
             values.WeightInterval.formatted,
@@ -47,6 +54,5 @@ module.exports = {
     },
     BINV: values => values.Investment.formatted,
     //unknown
-    STRP: values => values.TrendPeriod.formatted,
     RVLP: values => values.ValidationPeriod.formatted,
 };
