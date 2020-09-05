@@ -63,6 +63,7 @@ module.exports = {
         ].join(';')
     },
     //unknown
-    RFR: values => values.RiskFreeRate.formatted,
-    ASC: values => values.AdaptiveStockCounting.formatted,
+    BTIM: () => '// No input known for BTIM',
+    RFR: values => values.RiskFreeRate.formatted + ' // No output known for RiskFreeRate',
+    ASC: values => values.AdaptiveStockCounting.formatted + ' // No output known for AdaptiveStockCounting',
 };

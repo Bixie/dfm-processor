@@ -42,6 +42,7 @@ Object.entries(parameters).forEach(([key, field,]) => {
     }
     md += `|${key}|${field.default}|${options}|${LF}`;
 });
+md += LF;
 
 md += '### Voorbeeld met standaardwaarden' + DLF;
 md += '`dfm_preview5e91eab7ab8f0_NL.txt`' + DLF;
