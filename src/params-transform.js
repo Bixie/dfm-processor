@@ -6,6 +6,7 @@ const transforms = {
     },
     IncludeInactive: {
         key: () => 'BVAL',
+        format: value => value ? 'I' : '',
     },
     Benchmark: {
         key: () => 'BVAL',
