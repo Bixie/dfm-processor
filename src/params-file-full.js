@@ -65,7 +65,7 @@ class ParamsFileFull {
             ...Object.entries(this.options),
         ].map(([name, value,]) => {
             const {key, formatted,} = transformParameter(name, value);
-            return {name, key, formatted,}
+            return {name, key, formatted, raw: value,}
         });
         return mapValues(groupBy(transformed, 'key'), v => keyBy(v,'name'));
     }
