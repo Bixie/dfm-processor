@@ -68,7 +68,7 @@ const transforms = {
     },
     AdaptiveStockCounting: {
         key: () => 'ASC',
-        format: value => value,
+        format: value => value, //unknown
     },
     HedgePercentage: {
         key: () => 'RTRD',
@@ -112,7 +112,19 @@ const transforms = {
     },
     Watchlists: {
         key: () => 'WLID',
-        format: value => value,
+        format: value => {
+            return {
+                'Safe': 'V',
+                'T: ETF-collection': 'T:E',
+                'T: Best_EPS_Collection': 'T:B',
+                'T: Twenty_Analysts': 'T:T',
+                'T: DivStocks': 'T:D',
+                'T: SnP500': 'T:S',
+            }[value] || firstAsCapital(value);
+        },
+    },
+    ownWatchlistId: {
+        key: () => 'WLID',
     },
     TransactionCosts: {
         key: () => 'BROK',

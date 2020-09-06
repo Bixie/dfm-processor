@@ -44,6 +44,7 @@ const defaultOptions = {
     licenseKey: '',
     userId: '',
     email: '',
+    ownWatchlistId: 0,
 };
 
 function formatLine(key, value) {

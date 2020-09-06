@@ -44,7 +44,15 @@ module.exports = {
             values.OptimalizationTechnique.formatted,
         ].join(';')
     },
-    WLID: values => values.Watchlists.formatted,
+    WLID: values => {
+        if (values.Watchlists.formatted === 'O') {
+            return [
+                values.Watchlists.formatted,
+                values.ownWatchlistId.formatted,
+            ].join(';');
+        }
+        return values.Watchlists.formatted;
+    },
     BROK: values => {
         return [
             values.TransactionCosts.formatted,
