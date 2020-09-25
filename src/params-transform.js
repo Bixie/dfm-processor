@@ -67,8 +67,8 @@ const transforms = {
         },
     },
     AdaptiveStockCounting: {
-        key: () => 'ASC',
-        format: value => value, //unknown
+        key: () => 'SRNK',
+        format: value => value,
     },
     HedgePercentage: {
         key: () => 'RTRD',
@@ -143,8 +143,8 @@ const transforms = {
         format: cleanNumber,
     },
     RiskFreeRate: {
-        key: () => 'RFR',
-        format: cleanNumber, //unknown //missing 8% option on purpose?
+        key: () => 'BROK',
+        format: cleanNumber,
     },
     InitialMarginRequirement: {
         key: () => 'BROK',

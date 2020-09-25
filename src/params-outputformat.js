@@ -21,7 +21,7 @@ module.exports = {
             values.Ranking.formatted,
             values.ShortCorrelation.formatted,
             values.LongCorrelation.formatted,
-            0, //unknown! 1(adaptive stock counting), 0(not)
+            values.AdaptiveStockCounting.formatted,
         ].join(';')
     },
     //risks
@@ -60,6 +60,7 @@ module.exports = {
             values.DividendTax.formatted,
             values.InitialMarginRequirement.formatted,
             values.ShareCollateral.formatted,
+            values.RiskFreeRate.formatted
         ].join(';')
     },
     BINV: values => values.Investment.formatted,
@@ -72,6 +73,4 @@ module.exports = {
     },
     //unknown
     BTIM: () => '// No input known for BTIM',
-    RFR: values => values.RiskFreeRate.formatted + ' // No output known for RiskFreeRate',
-    ASC: values => values.AdaptiveStockCounting.formatted + ' // No output known for AdaptiveStockCounting',
 };
