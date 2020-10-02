@@ -7,11 +7,9 @@ const logger = winston.logger;
 const bodyParser = require('body-parser');
 
 //setup filewatcher
-const {IMAGEFILES_OUTPUT_PATH, WEBSERVER_LOCAL_PATH, IMAGEFILES_SENT_PATH,} = require('./config');
+const {IMAGEFILES_OUTPUT_PATH, ZIPFILES_OUTPUT_PATH, IMAGEFILES_SENT_PATH, OUTPUT_FILENAME_PREFIX,} = require('./config');
 const fileWatcher = require('./src/file-watcher');
-const archiver = require('./src/util/archiver');
-const api = require('./src/util/api-request');
-const {prepareDfmOutput,} = require('./src/graph/generator');
+const {prepareOutput, prepareLegacyOutput,} = require('./src/dfm-response');
 
 //watchlists db
 const watchlists = require('./src/util/watchlists');
@@ -26,37 +24,19 @@ watchlists.setup()
 /**
  * Watch the output directory and send files to webserver. Move files when sent
  */
-fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, ({preview_id, files,}) => {
-    if (WEBSERVER_LOCAL_PATH) {
-        //copy to webservers path directly
-        //todo if needed
+const zipfileRegex = new RegExp(`${OUTPUT_FILENAME_PREFIX}([^\\\\].*)\.zip$`);
+fileWatcher.watchSingle(ZIPFILES_OUTPUT_PATH, async zipFilepath => {
+    const m = zipFilepath.match(zipfileRegex);
+    if (!m) {
+        return;
     }
-    let zipBuffer;
-    let nrFiles;
-    //prepare svg graphs
-    prepareDfmOutput(files)
-        .then(files => {
-            //create zip blob
-            nrFiles = files.length;
-            return archiver.createZipBuffer(files);
-        })
-        .then(buffer => {
-            zipBuffer = buffer;
-            logger.verbose('Zip blob created with %d files for %s', nrFiles, preview_id);
-            return api.putToApi(`preview/${preview_id}`, zipBuffer);
-        })
-        .then(data => {
-            logger.info('Preview ID %s successfully sent to the webserver', data.preview_id);
-            //clean up images
-            return fileWatcher.cleanup(`${IMAGEFILES_SENT_PATH}/${preview_id}.zip`, zipBuffer, files);
-        })
-        .then(() => {
-            logger.verbose('Zipfile for %s moved to archive', preview_id);
-        })
-        .catch(err => {
-            logger.error('Error sending zipfile for %s: %s', preview_id, err.message);
-        });
+    const preview_id = `${OUTPUT_FILENAME_PREFIX}${m[1]}`;
+    await prepareOutput(preview_id, zipFilepath);
+});
 
+// @deprecated v1
+fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, async ({preview_id, files,}) => {
+    await prepareLegacyOutput(preview_id, files);
 });
 
 const app = express();

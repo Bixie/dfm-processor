@@ -11,6 +11,7 @@ exports.PARAMSFILES_ARCHIVE_PATH = process.env.DFM_PARAMSFILES_ARCHIVE_PATH || '
 exports.OUTPUT_FILENAME_PREFIX = process.env.DFM_OUTPUT_FILENAME_PREFIX || 'dfm_preview';
 exports.OUTPUT_FILENAME_SUFFIX = process.env.DFM_OUTPUT_FILENAME_SUFFIX || '_%d_%d';
 exports.IMAGEFILES_OUTPUT_PATH = process.env.DFM_IMAGEFILES_OUTPUT_PATH || 'C:/Projects/DFM/image-out';
+exports.ZIPFILES_OUTPUT_PATH = process.env.ZIPFILES_OUTPUT_PATH || 'C:/Projects/DFM/zip-out';
 exports.IMAGEFILES_SENT_PATH = process.env.DFM_IMAGEFILES_SENT_PATH || 'C:/Projects/DFM/image-sent';
 exports.WEBSERVER_LOCAL_PATH = process.env.DFM_WEBSERVER_LOCAL_PATH !== 'false' ? process.env.DFM_WEBSERVER_LOCAL_PATH : false;
 

@@ -7,9 +7,9 @@ const ApiToken = require('./api-token');
 const {PARAMSFILES_PATH, DFM_INPUT_PORT, LICENSEFILES_PATH,} = require('../config');
 const request = require('request');
 
-const ParamsFile = require('./params-file'); //@deprecated
-const ParamsFileFull = require('./params-file-full');
-const LicenseFile = require('./license-file');
+const ParamsFile = require('./params/params-file'); //@deprecated
+const ParamsFileFull = require('./params/params-file-full');
+const LicenseFile = require('./license/license-file');
 const {getWatcher, getGroupQueues,} = require('./file-watcher');
 
 const stats = new ServerStatus();

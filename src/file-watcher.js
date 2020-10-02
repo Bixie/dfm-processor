@@ -108,7 +108,7 @@ function storeZipAndRemoveSources (zipFilepath, buffer, files) {
                 return;
             }
             const promises = [];
-            files.forEach(({filepath,}) => {
+            files.forEach(filepath => {
                 promises.push(remove(filepath));
             });
             Promise.all(promises)

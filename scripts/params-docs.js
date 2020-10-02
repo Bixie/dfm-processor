@@ -3,7 +3,7 @@ const path = require('path');
 
 const LF = '\n';
 const DLF = LF + LF;
-const ParamsFileFull = require('../src/params-file-full');
+const ParamsFileFull = require('../src/params/params-file-full');
 const parameters = require('../../dfm-app/data/parameter-fields.json');
 const params = {};
 Object.entries(parameters).forEach(([key, field,]) => {

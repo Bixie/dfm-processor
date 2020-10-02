@@ -39,7 +39,8 @@ DFM_LICENSEFILES_PATH       //Path where License application will listen for lic
 DFM_PARAMSFILES_ARCHIVE_PATH//Path where params files will be archived
 DFM_OUTPUT_FILENAME_PREFIX  //Prefix in front of the unique preview ID in the file
 DFM_OUTPUT_FILENAME_SUFFIX  //Suffix for outputfiles default `_%d_%d` where first number is index of outputfile (1 based), and the second the total number of outputfiles
-DFM_IMAGEFILES_OUTPUT_PATH  //Path where DFM application outputs the files
+DFM_IMAGEFILES_OUTPUT_PATH  //Path where DFM application outputs the image files
+ZIPFILES_OUTPUT_PATH        //Path where DFM application outputs the zip files
 DFM_IMAGEFILES_SENT_PATH    //Path to backup sent files to
 DFM_WEBSERVER_LOCAL_PATH    //Path of images-folder of webserver when webserver runs on the same machine. False otherwise
 DFM_INTERNAL_API_HOST       //URL of Internal API on webserver

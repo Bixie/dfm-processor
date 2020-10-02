@@ -1,4 +1,3 @@
-const fs = require('fs');
 const Papa = require('papaparse');
 
 const graphDefinitions = require('./definitions');
@@ -8,14 +7,14 @@ const Svg = require('./svg');
 const graphNames = Object.keys(graphDefinitions);
 const graphNamesRegex = new RegExp(`^(${graphNames.join('|')})_`);
 
-function readFolderCsvs(filemap, filenames = []) {
+function readCsvs(filemap, filenames = []) {
     const promises = [];
     filenames.forEach(filename => {
         if (filemap[filename] === undefined) {
             return;
         }
         promises.push(new Promise((resolve, reject) => {
-            Papa.parse(fs.createReadStream(filemap[filename]), {
+            Papa.parse(filemap[filename], {
                 delimiter: "\t",
                 complete: results => resolve({results, filename,}),
                 error: reject,
@@ -27,7 +26,7 @@ function readFolderCsvs(filemap, filenames = []) {
 
 function createSvgFromCsv(name, graphDefinition, filemap) {
     return new Promise((resolve, reject) => {
-        Promise.all(readFolderCsvs(filemap, graphDefinition.dataSets.map(d => d.filename)))
+        Promise.all(readCsvs(filemap, graphDefinition.dataSets.map(d => d.filename)))
             .then(results => {
                 if (!results.length) {
                     reject(`No data for graph ${name}`);
@@ -51,7 +50,7 @@ function getFilemapsPerGraph(files) {
         let m = graphNamesRegex.exec(files[i].name);
         if (m) {
             filemapsPerGraph[m[1]] = filemapsPerGraph[m[1]] || {};
-            filemapsPerGraph[m[1]][files[i].name] = files[i].filepath;
+            filemapsPerGraph[m[1]][files[i].name] = files[i].contents;
         }
     }
     return filemapsPerGraph;
@@ -67,11 +66,6 @@ function generateSvgsFromFiles(files) {
 }
 
 function prepareDfmOutput(files) {
-    //@legacy
-    if (files.every(({name}) => name.includes('.png'))) {
-        files = files.map((f, index) => ({...f, name: `output_${index + 1}`,}));
-        return Promise.resolve(files);
-    }
     return new Promise((resolve, reject) => {
         generateSvgsFromFiles(files)
             .then(results => {

@@ -3,7 +3,7 @@ const {keyBy, groupBy, mapValues,} = require('lodash');
 const Promise = require('bluebird');
 const {transformParameter,} = require('./params-transform');
 const outputFormats = require('./params-outputformat');
-const {DFM_INPUT_PATH_CSI, DFM_INPUT_PATH_YAHOO,} = require('../config');
+const {DFM_INPUT_PATH_CSI, DFM_INPUT_PATH_YAHOO,} = require('../../config');
 
 const LF = '\r\n';
 
@@ -80,12 +80,11 @@ class ParamsFileFull {
     }
 
     queryString() {
-        const language = this.options.locale === 'nl-NL' ? 'NL' : 'EN';
-        const params = [`id=${this.id}_${language}`];//new URLSearchParams();
+        const params = [`id=${this.id}`];
         Object.entries(outputFormats).forEach(([key, formatter,]) => {
-            params.push(`${key}=${formatter(this.data[key])}`);//.set(key, formatter(this.data[key]));
+            params.push(`${key}=${formatter(this.data[key])}`);
         });
-        return params.join('&');//.toString();
+        return params.join('&');
     }
 
     render() {

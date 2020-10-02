@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
-const {DFM_INPUT_PORT, IMAGEFILES_OUTPUT_PATH,} = require('../config');
+const {DFM_INPUT_PORT, ZIPFILES_OUTPUT_PATH,} = require('../config');
 
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const url = require('url');
 const {logger,} = require('../src/util/winston');
+const {createZipFile,} = require('../src/util/archiver');
 
 const {getFlattenedFiles,} = require('../src/util/filesystem');
 
@@ -26,39 +27,23 @@ function getTimoutTime() {
     return Math.round(toss * (2 * 60 * 1000));
 }
 
-function writeFiles(files, fileBase) {
-    files.forEach(({name, filepath,}, index) => {
-        const fileIndex = index + 1;
-        const [base, extension,] = name.split('.');
-        const filename = `${fileBase}_${fileIndex}_${files.length}_${base}.${extension}`;
-        const fileTimeoutTime = Math.round(Math.random() * 500);
-        setTimeout(() => {
-            fs.copyFile(filepath, `${IMAGEFILES_OUTPUT_PATH}/${filename}`, err => {
-                if (err) {
-                    console.log('ERROR: ', err.message);
-                    return;
-                }
-                console.log(`File ${filename} added with ${fileTimeoutTime}ms delay for ${fileBase}`);
-            });
-        }, fileTimeoutTime);
-    });
-}
-
 async function handleRequest(req) {
     let status = 200;
     let response = 'OK';
     const q = url.parse(req.url, true);
-    const fileBase = q.query.id;
-    if (!fileBase) {
+    const id = q.query.id;
+    if (!id) {
         return {status: 400, response: 'id param is required',};
     }
     const sourcePath = path.join(__dirname, 'test-data', 'v2-flat');
+    const filename = `${id}.zip`;
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
     try {
         const files = await getFlattenedFiles(sourcePath);
-        logger.info(`Creating ${files.length} files for ${fileBase} in ${Math.round(timeoutTime/1000)} seconds`);
-        setTimeout(() => {
-            writeFiles(files, fileBase);
+        logger.info(`Creating ${files.length} files for ${id} in ${Math.round(timeoutTime/1000)} seconds`);
+        setTimeout(async () => {
+           const zipPath = await createZipFile(files, `${ZIPFILES_OUTPUT_PATH}/${filename}`);
+           logger.info(`Zipfile ${zipPath} written`);
         }, timeoutTime);
     } catch (e) {
         logger.error(e);
