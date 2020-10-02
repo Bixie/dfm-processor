@@ -2,8 +2,10 @@
 exports.APP_PORT = process.env.DFM_APP_PORT || '3000';
 exports.DFM_APP_PATH = process.env.DFM_APP_PATH || 'C:/Projects/DFM/dfm-processor';
 exports.DFM_DB_PATH = process.env.DFM_DB_PATH || 'C:/Projects/DFM/db';
+exports.DFM_INPUT_PORT = process.env.DFM_INPUT_PORT || 3035;
+exports.DFM_INPUT_PATH_CSI = process.env.DFM_INPUT_PATH_CSI || '/csi';
+exports.DFM_INPUT_PATH_YAHOO = process.env.DFM_INPUT_PATH_YAHOO || '/yahoo';
 exports.PARAMSFILES_PATH = process.env.DFM_PARAMSFILES_PATH || 'C:/Projects/DFM/params-in';
-exports.PARAMSFILES_PATH_FULL = process.env.DFM_PARAMSFILES_PATH_FULL || 'C:/Projects/DFM/params-in-full';
 exports.LICENSEFILES_PATH = process.env.DFM_LICENSEFILES_PATH || 'C:/Projects/DFM/license-in';
 exports.PARAMSFILES_ARCHIVE_PATH = process.env.DFM_PARAMSFILES_ARCHIVE_PATH || 'C:\\Projects\\DFM\\params-archive';
 exports.OUTPUT_FILENAME_PREFIX = process.env.DFM_OUTPUT_FILENAME_PREFIX || 'dfm_preview';

@@ -9,8 +9,8 @@
     "uninstall:service": "node ./scripts/uninstall-service.js",
     "params-docs": "node ./scripts/params-docs.js",
     "build-svg": "node ./scripts/build-svg.js",
-    "test-dfm": "node ./scripts/test-dfm.js",
-    "test-dfm-quick": "node ./scripts/test-dfm.js -qr",
+    "test-dfm": "node ./scripts/test-dfm-http.js",
+    "test-dfm-quick": "node ./scripts/test-dfm-http.js -qr",
     "test-dfm-v1": "node ./scripts/test-dfm.js -v1",
     "start": "node ./bin/www",
     "mon": "nodemon ./bin/www"

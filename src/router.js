@@ -4,7 +4,8 @@ const express = require('express');
 const router = express.Router();
 const ServerStatus = require('../src/util/server-status');
 const ApiToken = require('./api-token');
-const {PARAMSFILES_PATH, PARAMSFILES_PATH_FULL, LICENSEFILES_PATH,} = require('../config');
+const {PARAMSFILES_PATH, DFM_INPUT_PORT, LICENSEFILES_PATH,} = require('../config');
+const request = require('request');
 
 const ParamsFile = require('./params-file'); //@deprecated
 const ParamsFileFull = require('./params-file-full');
@@ -35,7 +36,7 @@ router.get('/status', (req, res) => {
  * @param object params Params for MFD calculations
  * @param object options View options for rendering
  */
-router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
+router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
     const {preview_id,} = req.params;
     const {params, options,} = req.body;
     logger.verbose('Incoming request for preview for %s', preview_id);
@@ -50,10 +51,29 @@ router.post('/preview/:preview_id', ApiToken.middleware,(req, res) => {
         return;
     }
     const paramsFile = new ParamsFileFull(preview_id, params, options);
-    paramsFile.write(PARAMSFILES_PATH_FULL).then(result => {
-        logger.info('Parameterfile for %s (%s) saved in %s.', preview_id, options.locale, PARAMSFILES_PATH);
-        res.send({result, preview_id,});
-    }).catch(error => res.send({result, preview_id, error: error.message || error,}));
+
+    const errorResponse = (message, status = 500) => {
+        logger.error(`Error sending params to DFM: ${message}`);
+        res.status(status);
+        res.send({result: false, preview_id, error: message,});
+    }
+
+    const providerPath = paramsFile.getProviderPath();
+    if (!providerPath) {
+        return errorResponse(`Invalid dataprovider`, 422);
+    }
+
+    request.get({url: `http://localhost:${DFM_INPUT_PORT}${providerPath}?${paramsFile.queryString()}`,}, (err, response) => {
+        if (err) {
+            return errorResponse(err);
+        }
+        const {statusCode, body,} = response;
+        if (statusCode === 200) {
+            res.send({result: true, preview_id,});
+        } else {
+            return errorResponse(body, statusCode);
+        }
+    });
 });
 
 /**
