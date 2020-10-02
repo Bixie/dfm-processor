@@ -35,7 +35,7 @@ function getOutputFileInfo (filepath) {
     return {
         filepath,
         basename,
-        orig_name: m[4] || basename,
+        orig_name: m ? m[4] : basename,
         extension,
         filename,
         fileIndex,
