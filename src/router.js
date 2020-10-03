@@ -62,13 +62,15 @@ router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
     if (!providerPath) {
         return errorResponse(`Invalid dataprovider`, 422);
     }
+    const url = `http://localhost:${DFM_INPUT_PORT}${providerPath}`;
 
-    request.get({url: `http://localhost:${DFM_INPUT_PORT}${providerPath}?${paramsFile.queryString()}`,}, (err, response) => {
+    request.get({url: `${url}?${paramsFile.queryString()}`,}, (err, response) => {
         if (err) {
             return errorResponse(err);
         }
         const {statusCode, body,} = response;
         if (statusCode === 200) {
+            logger.info('Params for %s were sent to %s.', preview_id, url);
             res.send({result: true, preview_id,});
         } else {
             return errorResponse(body, statusCode);
