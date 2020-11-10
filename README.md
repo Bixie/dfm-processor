@@ -31,7 +31,8 @@ NODE_ENV                    //Set to 'production' or 'development'
 DFM_APP_PORT                //Port the server will be listening
 DFM_APP_PATH                //Path where the processor is installed
 DFM_DB_PATH                 //Path where the sqlite3 data file is stored
-DFM_INPUT_PORT              //Port where DFM is listening
+DFM_INPUT_PORT_CSI          //Port where DFM for CSI is listening
+DFM_INPUT_PORT_YAHOO        //Port where DFM for Yahoo is listening
 DFM_INPUT_PATH_CSI          //Path for CSI requests
 DFM_INPUT_PATH_YAHOO        //Path for Yahoo requests
 DFM_PARAMSFILES_PATH        //Path where DFM application will listen for params files (deprecated v1)

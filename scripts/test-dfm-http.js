@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const {DFM_INPUT_PORT, ZIPFILES_OUTPUT_PATH,} = require('../config');
+const {DFM_INPUT_PORT_CSI, ZIPFILES_OUTPUT_PATH,} = require('../config');
 
 const fs = require('fs');
 const path = require('path');
@@ -59,7 +59,7 @@ const server = http.createServer(async function (req, res) {
     res.writeHead(status, {'Content-Type': 'text/plain'});
     res.write(response);
     res.end();
-}).listen(DFM_INPUT_PORT);
+}).listen(DFM_INPUT_PORT_CSI);
 
 server.on('error', onError);
 server.on('listening', onListening);

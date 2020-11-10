@@ -3,7 +3,7 @@ const {keyBy, groupBy, mapValues,} = require('lodash');
 const Promise = require('bluebird');
 const {transformParameter,} = require('./params-transform');
 const outputFormats = require('./params-outputformat');
-const {DFM_INPUT_PATH_CSI, DFM_INPUT_PATH_YAHOO,} = require('../../config');
+const {DFM_INPUT_PORT_CSI, DFM_INPUT_PORT_YAHOO, DFM_INPUT_PATH_CSI, DFM_INPUT_PATH_YAHOO,} = require('../../config');
 
 const LF = '\r\n';
 
@@ -70,6 +70,13 @@ class ParamsFileFull {
             return {name, key, formatted, raw: value,}
         });
         return mapValues(groupBy(transformed, 'key'), v => keyBy(v,'name'));
+    }
+
+    getProviderPort() {
+        return  {
+            'CSI': DFM_INPUT_PORT_CSI,
+            'Yahoo': DFM_INPUT_PORT_YAHOO,
+        }[this.params['DataProvider']];
     }
 
     getProviderPath() {

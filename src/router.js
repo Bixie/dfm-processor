@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const ServerStatus = require('../src/util/server-status');
 const ApiToken = require('./api-token');
-const {PARAMSFILES_PATH, DFM_INPUT_PORT, LICENSEFILES_PATH,} = require('../config');
+const {PARAMSFILES_PATH, LICENSEFILES_PATH,} = require('../config');
 const request = require('request');
 
 const ParamsFile = require('./params/params-file'); //@deprecated
@@ -59,10 +59,10 @@ router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
     }
 
     const providerPath = paramsFile.getProviderPath();
-    if (!providerPath) {
+    if (providerPath === undefined) {
         return errorResponse(`Invalid dataprovider`, 422);
     }
-    const url = `http://localhost:${DFM_INPUT_PORT}${providerPath}`;
+    const url = `http://localhost:${paramsFile.getProviderPort()}${providerPath}`;
 
     request.get({url: `${url}?${paramsFile.queryString()}`,}, (err, response) => {
         if (err) {

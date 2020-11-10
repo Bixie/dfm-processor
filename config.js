@@ -2,7 +2,8 @@
 exports.APP_PORT = process.env.DFM_APP_PORT || '3000';
 exports.DFM_APP_PATH = process.env.DFM_APP_PATH || 'C:/Projects/DFM/dfm-processor';
 exports.DFM_DB_PATH = process.env.DFM_DB_PATH || 'C:/Projects/DFM/db';
-exports.DFM_INPUT_PORT = process.env.DFM_INPUT_PORT || 3035;
+exports.DFM_INPUT_PORT_CSI = process.env.DFM_INPUT_PORT_CSI || 3035;
+exports.DFM_INPUT_PORT_YAHOO = process.env.DFM_INPUT_PORT_YAHOO || 3035;
 exports.DFM_INPUT_PATH_CSI = process.env.DFM_INPUT_PATH_CSI || '/csi';
 exports.DFM_INPUT_PATH_YAHOO = process.env.DFM_INPUT_PATH_YAHOO || '/yahoo';
 exports.PARAMSFILES_PATH = process.env.DFM_PARAMSFILES_PATH || 'C:/Projects/DFM/params-in';
