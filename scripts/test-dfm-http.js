@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 const {DFM_INPUT_PORT_CSI, ZIPFILES_OUTPUT_PATH,} = require('../config');
 
-const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const url = require('url');
