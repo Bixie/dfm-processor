@@ -51,4 +51,10 @@ md += '```' + LF;
 md += paramsFile.render();
 md += '```' + DLF;
 
+md += 'As query string' + DLF;
+
+md += '```' + LF;
+md += paramsFile.queryString() + LF;
+md += '```' + DLF;
+
 fs.writeFileSync(path.resolve(__dirname, `../PARAMETERS.md`), md);
