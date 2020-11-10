@@ -115,6 +115,8 @@ Restart the service after updating!
 
 ### Filename formats
 
+#### Legacy application
+
 Processing requests have an unique ID that comes together with the paramater-set from the webserver. The ID has a
 static prefix (`dfm_preview`) and a random string of length 13 following that. The requested language is added after that. The parameters are stored in a file
 named `<prefix><id>_[EN|NL].txt` (eg `dfm_preview5b785cb49b952.txt`). The combination `<prefix><id>` is the _preview_id_.
@@ -124,6 +126,16 @@ in the set. Suffix can be `_%d_%d`, where first number is index of outputfile (1
 number of outputfiles for the _preview_id_. 
 Example: `dfm_preview5b785cb49b952_EN_1_3.png`, `dfm_preview5b785cb49b952_EN_2_3.png`, `dfm_preview5b785cb49b952_EN_3_3.png` 
 as a set for _preview_id_ `dfm_preview5b785cb49b952`.
+
+#### Full application
+
+Output files are zipfiles with all the response files. The name should be the `preview ID` that is given as `id` in the query
+string, eg `dfm_preview5b785cb49b952.zip`. ([parameters](https://github.com/Bixie/dfm-processor/blob/master/PARAMETERS.md#voorbeeld-met-standaardwaarden))
+
+Chart and data files can be nested in folders in the zip files.
+
+To return an error from the calculation, only return the file `error.txt` in the zip response. The message in the file will 
+be displayed to the user.
 
 ### Watchlists
 
