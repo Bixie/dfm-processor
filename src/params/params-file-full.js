@@ -26,6 +26,7 @@ const defaultParams = {
     LongShort: 'Long',
     HoldingPeriod: '13',
     ValidationPeriod: 30,
+    TimingInvestementObjective: 'MaxMAR',
     InvestementObjective: 'MaxMAR',
     PriceWeighing: 'Adjusted',
     HedgePercentage: 35,

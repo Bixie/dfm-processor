@@ -72,5 +72,10 @@ module.exports = {
         ].join(';')
     },
     //unknown
-    BTIM: () => '// No input known for BTIM',
+    BTIM: values => {
+        return [
+            values.TimingInvestementObjective.raw === 'N/A' ? 0 : 1,
+            values.TimingInvestementObjective.formatted,
+        ].join(';')
+    },
 };

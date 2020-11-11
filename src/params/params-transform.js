@@ -82,15 +82,23 @@ const transforms = {
         key: () => 'RPWT',
         format: value => zeroOrFormatted(value, firstAsCapital),
     },
+    TimingInvestementObjective: {
+        key: () => 'BTIM',
+        format: value => {
+            return {
+                'MaxMAR': 'M',
+                'MinRisk': 'K',
+                'MaxProfits': 'D',
+            }[value];
+        },
+    },
     InvestementObjective: {
         key: () => 'ROWT',
         format: value => {
             return {
-                'N/A': '0',
                 'MaxMAR': 'M',
                 'MinRisk': 'K',
                 'MaxProfits': 'D',
-                'NoOptimization': '0',
             }[value];
         },
     },
