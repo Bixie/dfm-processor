@@ -2,23 +2,6 @@
 
 Alle parameters en opties voor berekeningen met de DigifundManager
 
-### Bestandsformaat
-
-*Bestandsnaam*: `dfm_preview[uniek_id]_[EN|NL].txt`
-
-Het bestand is een standaard text-file met windows regeleinden. Per regel staat een `key=value` paar.
-
-Eerst staat de provider en gebruikersinformatie vermeld:
-
-```
-PROV=Y
-licenseKey=DUMMY-12345-ABCDE-FGHIJ-67890
-userId=999
-email=user@example.com
-```
-
-Vervolgens na een lege regel de waarden van de parameters
-
 ### Parameters
 
 |Key|Default|Options|
@@ -59,8 +42,6 @@ Vervolgens na een lege regel de waarden van de parameters
 |ShareCollateral|90%|`0%`, `10%`, `20%`, `30%`, `40%`, `50%`, `60%`, `70%`, `80%`, `90%`, `100%`|
 
 ### Voorbeeld met standaardwaarden
-
-`dfm_preview5e91eab7ab8f0_NL.txt`
 
 ```
 LKEY=DUMMY-12345-ABCDE-FGHIJ-67890

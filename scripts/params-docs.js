@@ -19,18 +19,6 @@ let md = '';
 md += '# Parameters DFM Applicatie' + DLF;
 md += 'Alle parameters en opties voor berekeningen met de DigifundManager' + DLF;
 
-md += '### Bestandsformaat' + DLF;
-md += '*Bestandsnaam*: `dfm_preview[uniek_id]_[EN|NL].txt`' + DLF;
-md += 'Het bestand is een standaard text-file met windows regeleinden. Per regel staat een `key=value` paar.' + DLF;
-md += 'Eerst staat de provider en gebruikersinformatie vermeld:' + DLF;
-md += '```' + LF;
-md += 'PROV=Y' + LF;
-md += 'licenseKey=DUMMY-12345-ABCDE-FGHIJ-67890' + LF;
-md += 'userId=999' + LF;
-md += 'email=user@example.com' + LF;
-md += '```' + DLF;
-md += 'Vervolgens na een lege regel de waarden van de parameters' + DLF;
-
 md += '### Parameters' + DLF;
 
 md += '|Key|Default|Options|' + LF;
@@ -45,7 +33,6 @@ Object.entries(parameters).forEach(([key, field,]) => {
 md += LF;
 
 md += '### Voorbeeld met standaardwaarden' + DLF;
-md += '`dfm_preview5e91eab7ab8f0_NL.txt`' + DLF;
 
 md += '```' + LF;
 md += paramsFile.render();
