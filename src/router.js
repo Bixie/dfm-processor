@@ -70,7 +70,7 @@ router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
         }
         const {statusCode, body,} = response;
         if (statusCode === 200) {
-            logger.info('Params for %s were sent to %s.', preview_id, url);
+            logger.info('Params for %s were sent to %s?%s.', preview_id, url, paramsFile.queryString());
             res.send({result: true, preview_id,});
         } else {
             return errorResponse(body, statusCode);
