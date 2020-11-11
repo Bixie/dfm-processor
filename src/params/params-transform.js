@@ -1,5 +1,22 @@
 
 const transforms = {
+    licenseKey: {
+        key: () => 'LKEY',
+        format: value => value,
+    },
+    email: {
+        key: () => 'EMAIL',
+        format: value => value,
+    },
+    locale: {
+        key: () => 'LANG',
+        format: value => {
+            return {
+                'nl-NL': 'NL',
+                'en-GB': 'EN',
+            }[value];
+        },
+    },
     DataProvider: {
         key: () => 'PROV',
         format: firstAsCapital,

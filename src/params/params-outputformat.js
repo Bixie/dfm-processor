@@ -1,8 +1,7 @@
 module.exports = {
-    PROV: values => values.DataProvider.formatted,
-    licenseKey: values => values.licenseKey.formatted,
-    userId: values => values.userId.formatted,
-    email: values => values.email.formatted,
+    LKEY: values => values.licenseKey.formatted,
+    EMAIL: values => values.email.formatted,
+    LANG: values => values.locale.formatted,
     //screening rules
     STLI: values => values.TradingLiquidity.formatted,
     SHSP: values => values.HistoricalPrice.formatted,
