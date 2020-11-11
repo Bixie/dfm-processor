@@ -1,0 +1,42 @@
+dfm_preview5e91eab7ab8f0: 1 May 1990-24 Sep 2020; HP=13
+Investment: 48000
+transaction costs: $5.00; tax: 15%
+General,F(riday),M(onday),Opt.W
+Average number of stocks,12.0,,12.0
+Stock turnover,60.6%,,60.6%
+Picking Accuracy,67.4%,67.6%,67.6%
+
+Compounded investment,Equ.W (F),S&P500,Random500,Equ.W (M),Pr.W[ASP] (M)
+MAR (reward/risk ratio),1.24,0.17,0.34,1.35,0.90
+CAGR,16.8%,7.8%,14.4%,15.9%,14.4%
+MDD (maximum drawdown),-14%,-45%,-42%,-12%,-16%
+YTD (year-to-date),-1.8%,1.8%,0.3%,0.2%,6.2%
+PWR (portfolio win ratio),86.1%,70.5%,71.3%,82.8%,80.3%
+
+Constant investment,Equ.W (M),Pr.W[ASP] (M),Opt.W,Opt.W; benchmark[S&P500],
+MAR (reward/risk ratio),1.05,0.72,1.13,Sharpe ratio,9.1 [2.6]
+EAGR,19.9%,18.5%,20.4%,alpha,15.4%
+MDD (maximum drawdown),-19%,-26%,-18%,beta,35.9%
+YTD (year-to-date),0.6%,5.5%,5.7%,VeV,28.4 [29.5] %
+PWR (portfolio win ratio),82.0%,78.7%,82.0%,Risk ind.,5 [5]
+,,,,Risk-free rate=2.70%
+
+Return curve,Timing,Date,Reward/risk,Reward,Risk
+Friday EquW comp.,Default,4 May 1990,1.24,16.8%,-14%
+,Worst,15 Jun 1990,0.87,12.6%,-15%
+,Best,20 Jul 1990,1.28,14.3%,-11%
+Monday EquW comp.,Default,4 May 1990,1.35,15.9%,-12%
+,Worst,22 Jun 1990,0.76,13.1%,-17%
+,Best,11 May 1990,1.36,14.3%,-10%
+Monday PrW comp.,Default,4 May 1990,0.90,14.4%,-16%
+,Worst,15 Jun 1990,0.37,9.2%,-25%
+,Best,27 Jul 1990,1.11,15.4%,-14%
+Monday EquW const.,Default,4 May 1990,1.05,19.9%,-19%
+,Worst,15 Jun 1990,0.67,15.8%,-24%
+,Best,13 Jul 1990,1.30,18.2%,-14%
+Monday PrW const.,Default,4 May 1990,0.72,18.5%,-26%
+,Worst,15 Jun 1990,0.37,12.5%,-34%
+,Best,13 Jul 1990,1.00,17.5%,-17%
+Monday OptW const.,Default,4 May 1990,1.13,20.4%,-18%
+,Worst,15 Jun 1990,0.61,15.8%,-26%
+,Best,18 May 1990,1.29,17.0%,-13%

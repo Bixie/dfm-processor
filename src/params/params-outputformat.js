@@ -70,7 +70,6 @@ module.exports = {
             values.IncludeInactive.formatted,
         ].join(';')
     },
-    //unknown
     BTIM: values => {
         return [
             values.Timing.formatted,

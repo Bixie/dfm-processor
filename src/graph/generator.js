@@ -4,8 +4,13 @@ const graphDefinitions = require('./definitions');
 const GraphFromCsvs = require('./from-csvs');
 const Svg = require('./svg');
 
-const graphNames = Object.keys(graphDefinitions);
-const graphNamesRegex = new RegExp(`^(${graphNames.join('|')})_`);
+const graphFiles = {};
+Object.entries(graphDefinitions).forEach(([name, definition,]) => {
+    definition.dataSets.forEach(ds => {
+        graphFiles[ds.filename] = graphFiles[ds.filename] || [];
+        graphFiles[ds.filename].push(name);
+    });
+});
 
 function readCsvs(filemap, filenames = []) {
     const promises = [];
@@ -46,11 +51,13 @@ function createSvgFromCsv(name, graphDefinition, filemap) {
 
 function getFilemapsPerGraph(files) {
     const filemapsPerGraph = {};
+    const filenames = Object.keys(graphFiles);
     for (let i = 0; i < files.length; i++) {
-        let m = graphNamesRegex.exec(files[i].name);
-        if (m) {
-            filemapsPerGraph[m[1]] = filemapsPerGraph[m[1]] || {};
-            filemapsPerGraph[m[1]][files[i].name] = files[i].contents;
+        if (filenames.includes(files[i].name)) {
+            graphFiles[files[i].name].forEach(name => {
+                filemapsPerGraph[name] = filemapsPerGraph[name] || {};
+                filemapsPerGraph[name][files[i].name] = files[i].contents;
+            });
         }
     }
     return filemapsPerGraph;
@@ -66,11 +73,12 @@ function generateSvgsFromFiles(files) {
 }
 
 function prepareDfmOutput(files) {
+    const filenames = Object.keys(graphFiles);
     return new Promise((resolve, reject) => {
         generateSvgsFromFiles(files)
             .then(results => {
                 resolve(files
-                    .filter(f => !f.name.match(graphNamesRegex))
+                    .filter(f => !filenames.includes(f.name))
                     .concat(results.map(({name, svg,}) => ({name: `${name}.svg`, contents: svg,})))
                 );
             })
