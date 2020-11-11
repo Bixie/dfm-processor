@@ -27,7 +27,12 @@ const transforms = {
     },
     Benchmark: {
         key: () => 'BVAL',
-        format: firstAsCapital,
+        format: value => {
+            return {
+                'SP500': '0',
+                'DJIA': '1',
+            }[value];
+        },
     },
     TradingLiquidity: {
         key: () => 'STLI',
@@ -79,8 +84,11 @@ const transforms = {
     LongShort: {
         key: () => 'RTRD',
         format: value => {
-            value = value === 'Long/short' ? 'H' : value;
-            return firstAsCapital(value);
+            return {
+                'Long': '0',
+                'Short': '1',
+                'Long/short': '2',
+            }[value];
         },
     },
     AdaptiveStockCounting: {
@@ -97,7 +105,12 @@ const transforms = {
     },
     PriceWeighing: {
         key: () => 'RPWT',
-        format: value => zeroOrFormatted(value, firstAsCapital),
+        format: value => {
+            return {
+                'Adjusted': '0',
+                'Historical': '1',
+            }[value];
+        },
     },
     Timing: {
         key: () => 'BTIM',
@@ -107,9 +120,9 @@ const transforms = {
         key: () => 'BTIM',
         format: value => {
             return {
-                'MaxMAR': 'M',
-                'MinRisk': 'K',
-                'MaxProfits': 'D',
+                'MaxMAR': '0',
+                'MaxProfits': '1',
+                'MinRisk': '2',
             }[value];
         },
     },
@@ -117,9 +130,9 @@ const transforms = {
         key: () => 'ROWT',
         format: value => {
             return {
-                'MaxMAR': 'M',
-                'MinRisk': 'K',
-                'MaxProfits': 'D',
+                'MaxMAR': '0',
+                'MaxProfits': '1',
+                'MinRisk': '2',
             }[value];
         },
     },
@@ -204,7 +217,7 @@ function minMaxValues(value) {
         1,
         cleanNumber(min),
         cleanNumber(max),
-        zeroOrFormatted(sort, firstAsCapital),
+        ordering(sort),
         zeroForNA(nr),
     ].join(';');
 }
@@ -215,6 +228,14 @@ function zeroOrFormatted(value, formatter) {
 
 function zeroForNA(value) {
     return value === 'N/A' ? 0 : value;
+}
+
+function ordering(value) {
+    return {
+        'N/A': 0,
+        'BOT#': 1,
+        'TOP#': 2,
+    }[value];
 }
 
 function cleanNumber(value) {
