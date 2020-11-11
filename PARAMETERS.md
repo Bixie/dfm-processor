@@ -9,7 +9,7 @@ Alle parameters en opties voor berekeningen met de DigifundManager
 |DataProvider|CSI|`CSI`, `Yahoo`|
 |IncludeInactive|0|`0`, `1`|
 |Benchmark|SP500|`SP500`, `DJIA`|
-|Watchlists|Safe|`All`, `Russell2000`, `SnP500`, `DJIA`, `Safe`, `Liquid`, `T: ETF-collection`, `T: Best_EPS_Collection`, `T: Twenty_Analysts`, `T: DivStocks`, `T: SnP500`, `Own`|
+|Watchlists|Safe|`All`, `SnP500`, `DJIA`, `ETF-collection`, `Best_EPS_Collection`, `Twenty_Analysts`, `DivStocks`, `HedgeFundStocks2020`, `Liquid`, `Russell2000`, `Safe`, `Own`|
 |TradingLiquidity|1.00;1000000;N/A;N/A|`0.00`, `0.05`, `0.10`, `0.50`, `1.00`, `1.50`, `2.00`, `2.50`, `5.00`, `7.50`, `10`, `15`, `20`, `25`, `50`, `75`, `100`, `250`, `500`, `1000`, `5000`, `10000`, `100000`, `1000000`|
 |HistoricalPrice|5.00;100;N/A;N/A|`0.10`, `0.25`, `0.50`, `0.75`, `1.00`, `1.25`, `1.50`, `1.75`, `2.00`, `2.50`, `3.00`, `5.00`, `7.50`, `10`, `15`, `20`, `25`, `30`, `50`, `75`, `100`, `125`, `150`, `200`, `500`, `750`, `1000`, `5000`, `10000`, `100000`, `500000`|
 |AdjustedPrice|0.50;200;N/A;N/A|`0.10`, `0.25`, `0.50`, `0.75`, `1.00`, `1.50`, `2.50`, `5.00`, `10.00`, `15`, `20`, `25`, `30`, `50`, `75`, `100`, `125`, `150`, `200`, `500`, `750`, `1000`, `5000`, `10000`, `100000`, `500000`|
@@ -28,7 +28,7 @@ Alle parameters en opties voor berekeningen met de DigifundManager
 |Timing|0|`0`, `1`|
 |TimingInvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`|
 |InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`|
-|PriceWeighing|Adjusted|`N/A`, `Adjusted`, `Historical`|
+|PriceWeighing|Adjusted|`Adjusted`, `Historical`|
 |HedgePercentage|35%|`N/A`, `0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
 |IncludeWeightingLargerThan|20%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
 |SetupPeriod|9|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
@@ -55,19 +55,19 @@ STRD=0;0;0;0;0;0
 SRNK=1;T;13;26;0
 RPFS=12
 RHPD=13
-RTRD=L;0
-RPWT=A
-ROWT=1;M;9;1;20;L
-WLID=V
+RTRD=0;0
+RPWT=0
+ROWT=1;0;9;1;20;L
+WLID=11
 BROK=0.00;0;15;50;90;2.5
 BINV=48
-BVAL=30;S;I
-BTIM=0;M
+BVAL=30;0;I
+BTIM=0;0
 ```
 
 As query string
 
 ```
-id=dfm_preview5e91eab7ab8f0&LKEY=DUMMY-12345-ABCDE-FGHIJ-67890&EMAIL=user@example.com&LANG=NL&STLI=1;1.00;1000000;0;0&SHSP=1;5.00;100;0;0&SASP=1;0.50;200;0;0&SMAR=0;0;0;0;0&STRD=0;0;0;0;0;0&SRNK=1;T;13;26;0&RPFS=12&RHPD=13&RTRD=L;0&RPWT=A&ROWT=1;M;9;1;20;L&WLID=V&BROK=0.00;0;15;50;90;2.5&BINV=48&BVAL=30;S;I&BTIM=0;M
+id=dfm_preview5e91eab7ab8f0&LKEY=DUMMY-12345-ABCDE-FGHIJ-67890&EMAIL=user@example.com&LANG=NL&STLI=1;1.00;1000000;0;0&SHSP=1;5.00;100;0;0&SASP=1;0.50;200;0;0&SMAR=0;0;0;0;0&STRD=0;0;0;0;0;0&SRNK=1;T;13;26;0&RPFS=12&RHPD=13&RTRD=0;0&RPWT=0&ROWT=1;0;9;1;20;L&WLID=11&BROK=0.00;0;15;50;90;2.5&BINV=48&BVAL=30;0;I&BTIM=0;0
 ```
 
