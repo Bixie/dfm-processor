@@ -42,7 +42,9 @@ Vervolgens na een lege regel de waarden van de parameters
 |AdaptiveStockCounting|0|`0`, `1`|
 |HoldingPeriod|13|`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `26`, `52`, `hold`|
 |ValidationPeriod|30|`1`, `5`, `10`, `20`, `30`|
-|InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`, `NoOptimization`|
+|Timing|0|`0`, `1`|
+|TimingInvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`|
+|InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`|
 |PriceWeighing|Adjusted|`N/A`, `Adjusted`, `Historical`|
 |HedgePercentage|35%|`N/A`, `0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
 |IncludeWeightingLargerThan|20%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
@@ -80,12 +82,12 @@ WLID=V
 BROK=0.00;0;15;50;90;2.5
 BINV=48
 BVAL=30;S;I
-BTIM=// No input known for BTIM
+BTIM=1;M
 ```
 
 As query string
 
 ```
-id=dfm_preview5e91eab7ab8f0&PROV=C&licenseKey=DUMMY-12345-ABCDE-FGHIJ-67890&userId=999&email=user@example.com&STLI=1;1.00;1000000;0;0&SHSP=1;5.00;100;0;0&SASP=1;0.50;200;0;0&SMAR=0;0;0;0;0&STRD=0;0;0;0;0;0&SRNK=1;T;13;26;0&RPFS=12&RHPD=13&RTRD=L;0&RPWT=A&ROWT=1;M;9;1;20;L&WLID=V&BROK=0.00;0;15;50;90;2.5&BINV=48&BVAL=30;S;I&BTIM=// No input known for BTIM
+id=dfm_preview5e91eab7ab8f0&PROV=C&licenseKey=DUMMY-12345-ABCDE-FGHIJ-67890&userId=999&email=user@example.com&STLI=1;1.00;1000000;0;0&SHSP=1;5.00;100;0;0&SASP=1;0.50;200;0;0&SMAR=0;0;0;0;0&STRD=0;0;0;0;0;0&SRNK=1;T;13;26;0&RPFS=12&RHPD=13&RTRD=L;0&RPWT=A&ROWT=1;M;9;1;20;L&WLID=V&BROK=0.00;0;15;50;90;2.5&BINV=48&BVAL=30;S;I&BTIM=1;M
 ```
 
