@@ -143,13 +143,19 @@ const transforms = {
         key: () => 'WLID',
         format: value => {
             return {
-                'Safe': 'V',
-                'T: ETF-collection': 'T:E',
-                'T: Best_EPS_Collection': 'T:B',
-                'T: Twenty_Analysts': 'T:T',
-                'T: DivStocks': 'T:D',
-                'T: SnP500': 'T:S',
-            }[value] || firstAsCapital(value);
+                'Own': '0',
+                'All': '1',
+                'SnP500': '2',
+                'DJIA': '3',
+                'T: ETF-collection': '4',
+                'T: Best_EPS_Collection': '5',
+                'T: Twenty_Analysts': '6',
+                'T: DivStocks': '7',
+                'HedgeFundStocks2020': '8',
+                'Liquid': '9',
+                'Russell2000': '10',
+                'Safe': '11',
+            }[value];
         },
     },
     ownWatchlistId: {
