@@ -74,7 +74,7 @@ module.exports = {
     //unknown
     BTIM: values => {
         return [
-            values.TimingInvestementObjective.raw === 'N/A' ? 0 : 1,
+            values.Timing.formatted,
             values.TimingInvestementObjective.formatted,
         ].join(';')
     },

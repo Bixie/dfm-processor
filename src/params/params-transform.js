@@ -82,6 +82,10 @@ const transforms = {
         key: () => 'RPWT',
         format: value => zeroOrFormatted(value, firstAsCapital),
     },
+    Timing: {
+        key: () => 'BTIM',
+        format: value => value,
+    },
     TimingInvestementObjective: {
         key: () => 'BTIM',
         format: value => {
