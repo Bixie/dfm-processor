@@ -1,3 +1,5 @@
+const {toExcelDate,} = require('js-excel-date-convert');
+const moment = require('moment');
 
 const transforms = {
     licenseKey: {
@@ -23,7 +25,7 @@ const transforms = {
     },
     IncludeInactive: {
         key: () => 'BVAL',
-        format: value => value ? 'I' : '',
+        format: value => value ? '1' : '0',
     },
     Benchmark: {
         key: () => 'BVAL',
@@ -60,7 +62,7 @@ const transforms = {
     },
     Ranking: {
         key: () => 'SRNK',
-        format: value => zeroOrFormatted(value, firstAsCapital),
+        format: value => zeroOrFormatted(value, ranking),
     },
     ShortCorrelation: {
         key: () => 'SRNK',
@@ -101,7 +103,11 @@ const transforms = {
     },
     ValidationPeriod: {
         key: () => 'BVAL',
-        format: cleanNumber,
+        format: value => {
+            const end = toExcelDate(moment().toDate());
+            const start = toExcelDate(moment().subtract(value, 'years').toDate());
+            return {start, end,};
+        },
     },
     PriceWeighing: {
         key: () => 'RPWT',
@@ -150,7 +156,7 @@ const transforms = {
     },
     OptimalizationTechnique: {
         key: () => 'ROWT',
-        format: value => zeroOrFormatted(value, firstAsCapital),
+        format: value => zeroOrFormatted(value, optimalization),
     },
     Watchlists: {
         key: () => 'WLID',
@@ -235,6 +241,22 @@ function ordering(value) {
         'N/A': 0,
         'BOT#': 1,
         'TOP#': 2,
+    }[value];
+}
+
+function ranking(value) {
+    return {
+        'N/A': 0,
+        'Trend-reversing': 1,
+        'Trend-following': 2,
+    }[value];
+}
+
+function optimalization(value) {
+    return {
+        'N/A': 0,
+        'LongThenShort': 1,
+        'RankByRank': 2,
     }[value];
 }
 

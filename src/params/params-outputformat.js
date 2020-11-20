@@ -65,7 +65,8 @@ module.exports = {
     BINV: values => values.Investment.formatted,
     BVAL: values => {
         return [
-            values.ValidationPeriod.formatted,
+            values.ValidationPeriod.formatted.start,
+            values.ValidationPeriod.formatted.end,
             values.Benchmark.formatted,
             values.IncludeInactive.formatted,
         ].join(';')
