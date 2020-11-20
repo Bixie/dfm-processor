@@ -1,5 +1,5 @@
 const {minBy, maxBy,} = require('lodash');
-const {getJsDateFromExcel,} = require('../util/date');
+const {fromExcelDate ,} = require('js-excel-date-convert');
 
 class GraphFromCsvs {
 
@@ -34,7 +34,7 @@ class GraphFromCsvs {
     recordValues([x, y,]) {
         x = Number(x);
         if (this.graphDefinition.axes.x.type === 'time') {
-            x = getJsDateFromExcel(x);
+            x = fromExcelDate(x);
         }
         return {x, y: Number(y)};
     }
