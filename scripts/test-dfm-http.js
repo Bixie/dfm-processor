@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const {DFM_INPUT_PORT_CSI, ZIPFILES_OUTPUT_PATH,} = require('../config');
+const {DFM_INPUT_PORT_CSI, DFM_INPUT_PORT_YAHOO, ZIPFILES_OUTPUT_PATH,} = require('../config');
 
 const path = require('path');
 const http = require('http');
@@ -51,52 +51,51 @@ async function handleRequest(req) {
     }
     return {status, response,};
 }
+function createServer(port, handler) {
+    const server = http.createServer(async function (req, res) {
+        logger.info(`${req.method} - ${req.url}`);
+        const {status, response,} = await handler(req);
+        res.writeHead(status, {'Content-Type': 'text/plain'});
+        res.write(response);
+        res.end();
+    }).listen(port);
 
-const server = http.createServer(async function (req, res) {
-    logger.info(`${req.method} - ${req.url}`);
-    const {status, response,} = await handleRequest(req);
-    res.writeHead(status, {'Content-Type': 'text/plain'});
-    res.write(response);
-    res.end();
-}).listen(DFM_INPUT_PORT_CSI);
+    server.on('error', onError);
+    server.on('listening', onListening);
 
-server.on('error', onError);
-server.on('listening', onListening);
-
-function onError(error) {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-
-    const bind = typeof port === 'string' ?
-        'Pipe ' + port :
-        'Port ' + port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-        case 'EACCES':
-            logger.error(bind + ' requires elevated privileges');
-            process.exit(1);
-            break;
-        case 'EADDRINUSE':
-            logger.error(bind + ' is already in use');
-            process.exit(1);
-            break;
-        default:
+    function onError(error) {
+        if (error.syscall !== 'listen') {
             throw error;
+        }
+
+        const bind = typeof port === 'string' ?
+            'Pipe ' + port :
+            'Port ' + port;
+
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+            case 'EACCES':
+                logger.error(bind + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                logger.error(bind + ' is already in use');
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
     }
+
+    function onListening() {
+        const addr = server.address();
+        const bind = typeof addr === 'string' ?
+            'pipe ' + addr :
+            'port ' + addr.port;
+        logger.verbose('Listening on %s', bind);
+    }
+    return server;
 }
 
-function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string' ?
-        'pipe ' + addr :
-        'port ' + addr.port;
-    logger.verbose('Listening on %s', bind);
-}
-
-
-
-
-
-
+createServer(DFM_INPUT_PORT_CSI, handleRequest);
+createServer(DFM_INPUT_PORT_YAHOO, handleRequest);
