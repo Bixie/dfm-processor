@@ -66,7 +66,7 @@ router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
 
     request.get({url: `${url}?${paramsFile.queryString()}`,}, (err, response) => {
         if (err) {
-            return errorResponse(err);
+            return errorResponse(err.message);
         }
         const {statusCode, body,} = response;
         if (statusCode === 200) {
