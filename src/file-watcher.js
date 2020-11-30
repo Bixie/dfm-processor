@@ -10,8 +10,8 @@ const {OUTPUT_FILENAME_PREFIX, OUTPUT_FILENAME_SUFFIX,} = require('../config');
 const replacedSuffix = OUTPUT_FILENAME_SUFFIX.replace(/%d/g, '(\\d{1,2})');
 const filenameRegex = new RegExp(`^${OUTPUT_FILENAME_PREFIX}(.*)_(?:EN|NL)${replacedSuffix}_*(.*)$`);
 
-//the filewatcher instance
-let watcher;
+//the filewatcher instances
+const watchers = {};
 
 //place where files can wait to be sent out as group
 //todo do we want to invalidate groups that are waitting too long to get complete?
@@ -69,7 +69,7 @@ function groupedCallback (filepath, onAddCallback) {
 
 function setupWatcher (path, grouped, onAddCallback) {
     // Initialize watcher.
-    watcher = chokidar.watch(path, {
+    const watcher = chokidar.watch(path, {
         ignored: /(^|[\/\\])\../, //ignores .dotfiles
         persistent: true,
         awaitWriteFinish: {
@@ -82,9 +82,11 @@ function setupWatcher (path, grouped, onAddCallback) {
         if (grouped) {
             groupedCallback(filepath, onAddCallback);
         } else {
+            logger.verbose('Calling callback for file %s', filepath);
             onAddCallback(filepath);
         }
     });
+    watchers[path] = watcher;
     return watcher;
 }
 
@@ -119,7 +121,7 @@ function storeZipAndRemoveSources (zipFilepath, buffer, files) {
 }
 
 module.exports = {
-    getWatcher: () => watcher,
+    getWatcher: (path = null) => path ? watchers[path] : watchers,
     getGroupQueues: () => groupQueues,
     watch: (path, onAddCallback) => setupWatcher(path, true, onAddCallback),
     watchSingle: (path, onAddCallback) => setupWatcher(path, false, onAddCallback),

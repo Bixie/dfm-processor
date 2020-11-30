@@ -16,9 +16,8 @@ const stats = new ServerStatus();
 
 function getWatchedPaths() {
     //flatten the arrays of paths to single string
-    return Object.values(getWatcher().getWatched())
-        .map(paths => paths.join(', '))
-        .filter(paths => paths !== '')
+    return Object.values(getWatcher())
+        .map(watcher => Object.keys(watcher.getWatched()).pop())
         .join(', ');
 }
 
