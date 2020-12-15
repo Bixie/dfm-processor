@@ -44,7 +44,7 @@ module.exports = {
         ].join(';')
     },
     WLID: values => {
-        if (values.Watchlists.formatted === 'O') {
+        if (values.Watchlists.formatted === '0') {
             return [
                 values.Watchlists.formatted,
                 values.ownWatchlistId.formatted,
