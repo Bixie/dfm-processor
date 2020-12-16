@@ -194,7 +194,7 @@ const transforms = {
     },
     Investment: {
         key: () => 'BINV',
-        format: cleanNumber,
+        format: value => Number(cleanNumber(value)) * 1000,
     },
     RiskFreeRate: {
         key: () => 'BROK',
