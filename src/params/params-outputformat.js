@@ -29,7 +29,7 @@ module.exports = {
     RTRD: values => {
         return [
             values.LongShort.formatted,
-            values.LongShort.raw === 'Long/short' ? values.HedgePercentage.formatted : 0,
+            values.HedgePercentage.formatted,
         ].join(';')
     },
     RPWT: values => values.PriceWeighing.formatted,
