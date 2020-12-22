@@ -34,7 +34,7 @@ async function handleRequest(req) {
     if (!id) {
         return {status: 400, response: 'id param is required',};
     }
-    const sourcePath = path.join(__dirname, 'test-data', 'v2-flat');
+    const sourcePath = path.join(__dirname, 'test-data', 'v2-2');
     const filename = `${id}.zip`;
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
     try {
