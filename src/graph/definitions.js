@@ -5,7 +5,7 @@ module.exports = {
         axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
-                filename: 'chart_compound_equ_w_f.txt',
+                filename: 'comp_equ_w_f.txt',
                 className: 'equ_w_f',
                 type: 'line',
             },
@@ -15,18 +15,28 @@ module.exports = {
                 type: 'line',
             },
             {
+                filename: 'comp_benchmark_djia.txt',
+                className: 'djia',
+                type: 'line',
+            },
+            {
                 filename: 'comp_random_500_f.txt',
                 className: 'random_500_f',
                 type: 'line',
             },
             {
-                filename: 'chart_compound_equ_w_m.txt',
+                filename: 'comp_equ_w_m.txt',
                 className: 'equ_w_m',
                 type: 'line',
             },
             {
-                filename: 'chart_compound_pr_w_asp_m.txt',
+                filename: 'comp_pr_w_asp_m.txt',
                 className: 'pr_w_asp_m',
+                type: 'line',
+            },
+            {
+                filename: 'comp_pr_w_usp_m.txt',
+                className: 'pr_w_usp_m',
                 type: 'line',
             },
         ],
@@ -37,7 +47,7 @@ module.exports = {
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
-                filename: 'chart_constant_equ_w_m_cashflow.txt',
+                filename: 'const_equ_w_m_cash.txt',
                 className: 'equ_w_m_cashflow',
                 type: 'line',
             },
@@ -47,17 +57,27 @@ module.exports = {
                 type: 'line',
             },
             {
-                filename: 'chart_constant_pr_w_asp_m_cashflow.txt',
+                filename: 'const_pr_w_asp_m_cash.txt',
                 className: 'pr_w_asp_m_cashflow',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_asp_m_nlv.txt',
-                className: 'prw_m_net_liquidation',
+                filename: 'const_pr_w_usp_m_cash.txt',
+                className: 'pr_w_usp_m_cashflow',
                 type: 'line',
             },
             {
-                filename: 'chart_constant_opt_w_cashflow.txt',
+                filename: 'const_pr_w_asp_m_nlv.txt',
+                className: 'prw_asp_m_net_liquidation',
+                type: 'line',
+            },
+            {
+                filename: 'const_pr_w_usp_m_nlv.txt',
+                className: 'prw_usp_m_net_liquidation',
+                type: 'line',
+            },
+            {
+                filename: 'const_opt_w_cash.txt',
                 className: 'opt_w_cashflow',
                 type: 'line',
             },
@@ -68,7 +88,12 @@ module.exports = {
             },
             {
                 filename: 'const_ve_v_benchmark_s_p_500.txt',
-                className: 'sandp500_cashflow',
+                className: 's_p_500_cashflow',
+                type: 'line',
+            },
+            {
+                filename: 'const_ve_v_benchmark_djia.txt',
+                className: 'djia_cashflow',
                 type: 'line',
             },
         ],
@@ -151,6 +176,28 @@ module.exports = {
             },
         ],
     },
+    chart_timing_pr_w_usp_m_comp: {
+        viewBox: {width: 455, height: 225,},
+        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        axes: {x: {type: 'time',}, y: {type: 'log',},},
+        dataSets: [
+            {
+                filename: 'comp_pr_w_usp_m.txt',
+                className: 'default',
+                type: 'line',
+            },
+            {
+                filename: 'comp_pr_w_usp_m_best.txt',
+                className: 'best',
+                type: 'line',
+            },
+            {
+                filename: 'comp_pr_w_usp_m_worst.txt',
+                className: 'worst',
+                type: 'line',
+            },
+        ],
+    },
     chart_timing_equ_w_m_constant: {
         viewBox: {width: 455, height: 225,},
         margin: {top: 10, right: 10, bottom: 50, left: 50,},
@@ -190,6 +237,28 @@ module.exports = {
             },
             {
                 filename: 'const_pr_w_asp_m_cash_worst.txt',
+                className: 'worst',
+                type: 'line',
+            },
+        ],
+    },
+    chart_timing_pr_w_usp_m_constant: {
+        viewBox: {width: 455, height: 225,},
+        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        axes: {x: {type: 'time',}, y: {type: 'linear',},},
+        dataSets: [
+            {
+                filename: 'const_pr_w_usp_m_cash.txt',
+                className: 'default',
+                type: 'line',
+            },
+            {
+                filename: 'const_pr_w_usp_m_cash_best.txt',
+                className: 'best',
+                type: 'line',
+            },
+            {
+                filename: 'const_pr_w_usp_m_cash_worst.txt',
                 className: 'worst',
                 type: 'line',
             },
