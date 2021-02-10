@@ -55,10 +55,10 @@ module.exports = {
     BROK: values => {
         return [
             values.TransactionCosts.formatted,
-            values.LoanPercentage.formatted,
             values.DividendTax.formatted,
             values.InitialMarginRequirement.formatted,
             values.ShareCollateral.formatted,
+            values.LoanPercentage.formatted,
             values.RiskFreeRate.formatted
         ].join(';')
     },
