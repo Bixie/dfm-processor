@@ -30,7 +30,7 @@ Alle parameters en opties voor berekeningen met de DigifundManager
 |InvestementObjective|MaxMAR|`N/A`, `MaxMAR`, `MinRisk`, `MaxProfits`|
 |PriceWeighing|Adjusted|`Adjusted`, `Historical`|
 |HedgePercentage|35%|`N/A`, `0%`, `20%`, `25%`, `30%`, `35%`, `40%`, `50%`, `60%`, `75%`, `90%`, `100%`|
-|IncludeWeightingLargerThan|20%|`N/A`, `10%`, `20%`, `30%`, `40%`, `50%`|
+|IncludeWeightingLargerThan|0.2|`N/A`, `0`, `0.1`, `0.2`, `0.3`, `0.4`, `0.5`|
 |SetupPeriod|9|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
 |WeightInterval|1|`N/A`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `13`, `26`, `52`|
 |OptimalizationTechnique|LongThenShort|`N/A`, `LongThenShort`, `RankByRank`|
@@ -55,19 +55,19 @@ STRD=0;0;0;0;0;0
 SRNK=1;1;13;26;0
 RPFS=12
 RHPD=13
-RTRD=0;0
+RTRD=0;35
 RPWT=0
-ROWT=1;0;9;1;20;1
+ROWT=1;0;9;1;0.2;1
 WLID=11
-BROK=0.00;0;15;50;90;2.5
-BINV=48
-BVAL=33198;44156;0;1
+BROK=0.00;15;50;90;0;2.5
+BINV=48000
+BVAL=33280;44238;0;1
 BTIM=0;0
 ```
 
 As query string
 
 ```
-id=dfm_preview5e91eab7ab8f0&LKEY=DUMMY-12345-ABCDE-FGHIJ-67890&EMAIL=user@example.com&LANG=NL&STLI=1;1.00;1000000;0;0&SHSP=1;5.00;100;0;0&SASP=1;0.50;200;0;0&SMAR=0;0;0;0;0&STRD=0;0;0;0;0;0&SRNK=1;1;13;26;0&RPFS=12&RHPD=13&RTRD=0;0&RPWT=0&ROWT=1;0;9;1;20;1&WLID=11&BROK=0.00;0;15;50;90;2.5&BINV=48&BVAL=33198;44156;0;1&BTIM=0;0
+id=dfm_preview5e91eab7ab8f0&LKEY=DUMMY-12345-ABCDE-FGHIJ-67890&EMAIL=user@example.com&LANG=NL&STLI=1;1.00;1000000;0;0&SHSP=1;5.00;100;0;0&SASP=1;0.50;200;0;0&SMAR=0;0;0;0;0&STRD=0;0;0;0;0;0&SRNK=1;1;13;26;0&RPFS=12&RHPD=13&RTRD=0;35&RPWT=0&ROWT=1;0;9;1;0.2;1&WLID=11&BROK=0.00;15;50;90;0;2.5&BINV=48000&BVAL=33280;44238;0;1&BTIM=0;0
 ```
 
