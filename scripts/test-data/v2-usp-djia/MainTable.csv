@@ -1,0 +1,42 @@
+dfm_preview6024207acd7e0: 11 Feb 1991-8 Feb 2021; HP=13
+Investment: 48000
+transaction costs: $0.00; tax: 15%
+General,F(riday),M(onday),Opt.W
+Average number of stocks,12.0,,11.2
+Stock turnover,72.4%,,72.4%
+Picking Accuracy,68.0%,66.9%,62.0%
+
+Compounded investment,Equ.W (F),DJIA,Random500,Equ.W (M),Pr.W[HSP] (M)
+MAR (reward/risk ratio),1.31,0.20,0.36,1.10,1.11
+CAGR,16.4%,8.2%,15.6%,15.7%,16.3%
+MDD (maximum drawdown),-13%,-42%,-43%,-14%,-15%
+YTD (year-to-date),3.8%,1.8%,16.7%,4.1%,2.1%
+PWR (portfolio win ratio),84.2%,67.5%,75.8%,83.3%,83.3%
+
+Constant investment,Equ.W (M),Pr.W[HSP] (M),Opt.W,Opt.W; benchmark[DJIA],
+MAR (reward/risk ratio),1.16,1.19,1.24,Sharpe ratio,9.5 [3.3]
+EAGR,19.0%,19.6%,19.3%,alpha,13.6%
+MDD (maximum drawdown),-16%,-16%,-16%,beta,48.4%
+YTD (year-to-date),4.5%,2.3%,4.7%,VeV,28.4 [28.8] %
+PWR (portfolio win ratio),83.3%,83.3%,84.2%,Risk ind.,5 [5]
+,,,,Risk-free rate=2.50%
+
+Return curve,Timing,Date,Reward/risk,Reward,Risk
+Friday EquW comp.,Default,,,,
+,Worst,,,,
+,Best,,,,
+Monday EquW comp.,Default,,,,
+,Worst,,,,
+,Best,,,,
+Monday PrW comp.,Default,,,,
+,Worst,,,,
+,Best,,,,
+Monday EquW const.,Default,,,,
+,Worst,,,,
+,Best,,,,
+Monday PrW const.,Default,,,,
+,Worst,,,,
+,Best,,,,
+Monday OptW const.,Default,,,,
+,Worst,,,,
+,Best,,,,

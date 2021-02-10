@@ -29,7 +29,6 @@ function getTimoutTime() {
 async function handleRequest(req) {
     let status = 200;
     let response = 'OK';
-    let data_folder = 'v2-asp';
     const q = url.parse(req.url, true);
     const id = q.query.id;
     const priceWeighting = q.query.RPWT;
@@ -37,12 +36,9 @@ async function handleRequest(req) {
     if (!id) {
         return {status: 400, response: 'id param is required',};
     }
-    if (Number(priceWeighting) === 1) {
-        data_folder = 'v2-usp';
-    }
-    if (Number(benchMark) === 1) {
-        data_folder = 'v2-djia';
-    }
+    let data_folder = 'v2-';
+    data_folder += Number(priceWeighting) === 1 ? 'usp-' : 'asp-';
+    data_folder += Number(benchMark) === 1 ? 'djia' : 's_p';
     const sourcePath = path.join(__dirname, 'test-data', data_folder);
     const filename = `${id}.zip`;
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
