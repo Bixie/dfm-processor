@@ -29,17 +29,26 @@ function getTimoutTime() {
 async function handleRequest(req) {
     let status = 200;
     let response = 'OK';
+    let data_folder = 'v2-asp';
     const q = url.parse(req.url, true);
     const id = q.query.id;
+    const priceWeighting = q.query.RPWT;
+    const benchMark = q.query.BVAL.substring(4,5);
     if (!id) {
         return {status: 400, response: 'id param is required',};
     }
-    const sourcePath = path.join(__dirname, 'test-data', 'v2-2');
+    if (Number(priceWeighting) === 1) {
+        data_folder = 'v2-usp';
+    }
+    if (Number(benchMark) === 1) {
+        data_folder = 'v2-djia';
+    }
+    const sourcePath = path.join(__dirname, 'test-data', data_folder);
     const filename = `${id}.zip`;
     const timeoutTime = quickRespond ? 5 : getTimoutTime();
     try {
         const files = await getFlattenedFiles(sourcePath);
-        logger.info(`Creating ${files.length} files for ${id} in ${Math.round(timeoutTime/1000)} seconds`);
+        logger.info(`Creating ${files.length} files from /${data_folder} for ${id} in ${Math.round(timeoutTime/1000)} seconds`);
         setTimeout(async () => {
            const zipPath = await createZipFile(files, `${ZIPFILES_OUTPUT_PATH}/${filename}`);
            logger.info(`Zipfile ${zipPath} written`);
