@@ -1,6 +1,7 @@
 
 const JSZip = require('jszip');
 const fs = require('fs');
+const {getNormalizedFileName,} = require('../util/filesystem');
 
 function createZip(files) {
     const zip = new JSZip();
@@ -40,7 +41,7 @@ function readZip(zipfile) {
             for (let i = 0; i < entries.length; i++) {
                 const [name, file,] = entries[i];
                 const contents = await file.async('string');
-                files.push({name, contents,});
+                files.push({name: getNormalizedFileName(name), contents,});
             }
             resolve(files);
         });

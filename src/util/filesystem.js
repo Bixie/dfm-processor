@@ -18,12 +18,16 @@ async function getFlattenedFiles(dir) {
     const files = await getFiles(dir);
     return files.map(file => {
         const relPath = file.replace(dir, '');
-        const {extension,} = getFileParts(relPath);
         return {
-            name: snakeCase(relPath.replace(`.${extension}`, '')) + `.${extension}`,
+            name: getNormalizedFileName(relPath),
             filepath: path.join(dir, relPath),
         }
     });
+}
+
+function getNormalizedFileName (relPath) {
+    const {basename, extension,} = getFileParts(relPath);
+    return snakeCase(basename.replace(`.${extension}`, '')) + `.${extension}`;
 }
 
 function getFileParts (filepath) {
@@ -42,4 +46,5 @@ module.exports = {
     getFiles,
     getFileParts,
     getFlattenedFiles,
+    getNormalizedFileName,
 };
