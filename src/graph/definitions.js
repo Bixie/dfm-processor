@@ -62,17 +62,17 @@ module.exports = {
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_usp_m_cash.txt',
+                filename: 'const_pr_w_hsp_m_cash.txt',
                 className: 'pr_w_usp_m_cashflow',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_asp_m_nlv.txt',
+                filename: 'const_pr_w_hsp_m_nlv.txt',
                 className: 'prw_asp_m_net_liquidation',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_usp_m_nlv.txt',
+                filename: 'const_pr_w_hsp_m_nlv.txt',
                 className: 'prw_usp_m_net_liquidation',
                 type: 'line',
             },
@@ -182,17 +182,17 @@ module.exports = {
         axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
-                filename: 'comp_pr_w_usp_m.txt',
+                filename: 'comp_pr_w_hsp_m.txt',
                 className: 'default',
                 type: 'line',
             },
             {
-                filename: 'comp_pr_w_usp_m_best.txt',
+                filename: 'comp_pr_w_hsp_m_best.txt',
                 className: 'best',
                 type: 'line',
             },
             {
-                filename: 'comp_pr_w_usp_m_worst.txt',
+                filename: 'comp_pr_w_hsp_m_worst.txt',
                 className: 'worst',
                 type: 'line',
             },
@@ -226,17 +226,17 @@ module.exports = {
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
-                filename: 'const_pr_w_asp_m_cash.txt',
+                filename: 'const_pr_w_hsp_m_cash.txt',
                 className: 'default',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_asp_m_cash_best.txt',
+                filename: 'const_pr_w_hsp_m_cash_best.txt',
                 className: 'best',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_asp_m_cash_worst.txt',
+                filename: 'const_pr_w_hsp_m_cash_worst.txt',
                 className: 'worst',
                 type: 'line',
             },
@@ -248,17 +248,17 @@ module.exports = {
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
-                filename: 'const_pr_w_usp_m_cash.txt',
+                filename: 'const_pr_w_hsp_m_cash.txt',
                 className: 'default',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_usp_m_cash_best.txt',
+                filename: 'const_pr_w_hsp_m_cash_best.txt',
                 className: 'best',
                 type: 'line',
             },
             {
-                filename: 'const_pr_w_usp_m_cash_worst.txt',
+                filename: 'const_pr_w_hsp_m_cash_worst.txt',
                 className: 'worst',
                 type: 'line',
             },
