@@ -1,7 +1,7 @@
-Gameplan: dfm_preview6038db2b47302
+Gameplan: dfm_preview6038dbb01ad75
 Current rebalancing: 22 Jan 2021
 Next rebalancing: 26 Apr 2021
-,Equally weighted,,Price weighted[ASP],,Opt. weighted,
+,Equally weighted,,Price weighted[HSP],,Opt. weighted,
 Symbol,Ratio,Number,Ratio,Number,Ratio,Number
 ED,1.00,58,0.83,48,0.60,34
 WEC,1.00,45,1.57,72,0.76,34
@@ -63,3 +63,15 @@ CHRW,1.00,40,0.25,10,1.31,53
 CL,1.00,51,1.58,80,1.69,86
 SO,1.00,66,1.77,117,1.15,76
 VZ,1.00,69,0.40,27,0.22,15
+ED,1.00,58,1.14,66,0.60,34
+WEC,1.00,45,1.45,66,0.76,34
+K,1.00,68,0.97,66,1.31,89
+D,1.00,55,1.20,66,0.22,12
+GIS,1.00,71,0.93,66,1.15,81
+HRB,1.00,239,0.28,66,1.25,300
+DNB,1.00,161,0.41,66,1.36,220
+CPB,1.00,85,0.77,66,0.98,84
+CHRW,1.00,40,1.62,66,1.31,53
+CL,1.00,51,1.30,66,1.69,86
+SO,1.00,66,1.00,66,1.15,76
+VZ,1.00,69,0.95,66,0.22,15

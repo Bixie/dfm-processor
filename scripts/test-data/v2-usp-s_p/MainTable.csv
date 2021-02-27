@@ -1,4 +1,4 @@
-dfm_preview6038de435f515: 26 Feb 1991-25 Feb 2021; HP=13
+dfm_preview6038dbb01ad75: 26 Feb 1991-25 Feb 2021; HP=13
 Investment: 48000
 transaction costs: $0.00; tax: 15%
 General,F(riday),M(onday),Opt.W
@@ -6,18 +6,18 @@ Average number of stocks,12.0,,10.3
 Stock turnover,71.5%,,71.8%
 Picking Accuracy,67.2%,66.9%,57.4%
 
-Compounded investment,Equ.W (F),DJIA,Random500,Equ.W (M),Pr.W[HSP] (M)
-MAR (reward/risk ratio),1.13,0.22,0.45,1.12,1.05
-CAGR,16.1%,8.2%,16.8%,15.8%,14.4%
-MDD (maximum drawdown),-14%,-38%,-37%,-14%,-14%
-YTD (year-to-date),3.1%,2.9%,22.0%,2.0%,-0.6%
-PWR (portfolio win ratio),83.3%,67.5%,73.3%,79.2%,76.7%
+Compounded investment,Equ.W (F),S&P500,Random500,Equ.W (M),Pr.W[HSP] (M)
+MAR (reward/risk ratio),1.13,0.18,0.42,1.12,1.05
+CAGR,16.1%,8.1%,15.8%,15.8%,14.4%
+MDD (maximum drawdown),-14%,-44%,-38%,-14%,-14%
+YTD (year-to-date),3.1%,4.0%,19.9%,2.0%,-0.6%
+PWR (portfolio win ratio),83.3%,70.0%,72.5%,79.2%,76.7%
 
-Constant investment,Equ.W (M),Pr.W[HSP] (M),Opt.W,Opt.W; benchmark[DJIA],
-MAR (reward/risk ratio),1.04,1.08,0.87,Sharpe ratio,7.3 [3.5]
+Constant investment,Equ.W (M),Pr.W[HSP] (M),Opt.W,Opt.W; benchmark[S&P500],
+MAR (reward/risk ratio),1.04,1.08,0.87,Sharpe ratio,7.3 [3.4]
 EAGR,19.0%,17.6%,17.5%,alpha,11.5%
-MDD (maximum drawdown),-18%,-16%,-20%,beta,53.5%
-YTD (year-to-date),2.9%,-0.5%,3.7%,VeV,28.9 [28.6] %
+MDD (maximum drawdown),-18%,-16%,-20%,beta,54.0%
+YTD (year-to-date),2.9%,-0.5%,3.7%,VeV,28.9 [28.7] %
 PWR (portfolio win ratio),79.2%,76.7%,75.8%,Risk ind.,5 [5]
 ,,,,Risk-free rate=2.50%
 
