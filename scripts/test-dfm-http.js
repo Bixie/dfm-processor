@@ -32,7 +32,7 @@ async function handleRequest(req) {
     const q = url.parse(req.url, true);
     const id = q.query.id;
     const priceWeighting = q.query.RPWT;
-    const benchMark = q.query.BVAL.substring(4,5);
+    const benchMark = q.query.BVAL.split(';')[2];
     if (!id) {
         return {status: 400, response: 'id param is required',};
     }
