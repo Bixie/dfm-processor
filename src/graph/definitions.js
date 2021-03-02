@@ -43,7 +43,7 @@ module.exports = {
     },
     chart_constant: {
         viewBox: {width: 750, height: 400,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
