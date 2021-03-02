@@ -112,7 +112,7 @@ module.exports = {
     },
     chart_timing_equ_w_f_comp: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
@@ -134,7 +134,7 @@ module.exports = {
     },
     chart_timing_equ_w_m_comp: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
@@ -156,7 +156,7 @@ module.exports = {
     },
     chart_timing_pr_w_asp_m_comp: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
@@ -178,7 +178,7 @@ module.exports = {
     },
     chart_timing_pr_w_usp_m_comp: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'log',},},
         dataSets: [
             {
@@ -200,7 +200,7 @@ module.exports = {
     },
     chart_timing_equ_w_m_constant: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
@@ -222,7 +222,7 @@ module.exports = {
     },
     chart_timing_pr_w_asp_m_constant: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
@@ -244,7 +244,7 @@ module.exports = {
     },
     chart_timing_pr_w_usp_m_constant: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
@@ -266,7 +266,7 @@ module.exports = {
     },
     chart_timing_opt_w_constant: {
         viewBox: {width: 455, height: 225,},
-        margin: {top: 10, right: 10, bottom: 50, left: 50,},
+        margin: {top: 10, right: 10, bottom: 50, left: 70,},
         axes: {x: {type: 'time',}, y: {type: 'linear',},},
         dataSets: [
             {
