@@ -129,7 +129,7 @@ const transforms = {
                 'MaxMAR': '0',
                 'MaxProfits': '1',
                 'MinRisk': '2',
-            }[value];
+            }[value] || '0';
         },
     },
     InvestementObjective: {
