@@ -27,13 +27,18 @@ const filelogFormat = printf(info => {
     return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
+const timezoned = () => {
+    return new Date().toLocaleString('nl-NL', {
+        timeZone: 'Europe/Amsterdam'
+    });
+}
 //set up transports
 const transportsArr = [
     new (transports.DailyRotateFile)({
         name: 'log-file',
         level: 'info',
         format: combine(
-            format.timestamp(),
+            format.timestamp({format: timezoned,}),
             filelogFormat
         ),
         filename: __dirname + '/../../../logs/dfm-processor-%DATE%.log',
