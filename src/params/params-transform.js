@@ -79,7 +79,7 @@ const transforms = {
     HoldingPeriod: {
         key: () => 'RHPD',
         format: value => {
-            value = value === 'hold' ? '-1' : value; //unknown hold value
+            value = value === 'hold' ? '32767' : value; //unknown hold value
             return cleanNumber(value);
         },
     },
