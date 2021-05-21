@@ -52,6 +52,7 @@ module.exports = {
         }
         return values.Watchlists.formatted;
     },
+    WLFS: values =>  values.WatchlistsFilters.formatted,
     BROK: values => {
         return [
             values.TransactionCosts.formatted,

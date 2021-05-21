@@ -23,6 +23,15 @@ const transforms = {
         key: () => 'PROV',
         format: firstAsCapital,
     },
+    WatchlistsFilters: {
+        key: () => 'WLFS',
+        format: value => {
+            if (zeroForNA(value) === 0 || value === '0;0;0') {
+                return '0;0;0;0';
+            }
+            return `1;${value}`;
+        },
+    },
     IncludeInactive: {
         key: () => 'BVAL',
         format: value => value ? '1' : '0',
