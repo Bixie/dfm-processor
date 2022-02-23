@@ -2,24 +2,14 @@
 
 const fs = require('fs');
 
-const {IMAGEFILES_SENT_PATH, IMAGEFILES_OUTPUT_PATH,} = require('../config');
+const { ZIPFILES_OUTPUT_PATH } = require('../config');
 
 //check needed folders
 try {
-    fs.statSync(IMAGEFILES_SENT_PATH);
+    fs.statSync(ZIPFILES_OUTPUT_PATH);
 } catch (e) {
     if (e.code === 'ENOENT') {
-        fs.mkdirSync(IMAGEFILES_SENT_PATH, 755);
-        console.log('Created sent images path ' + IMAGEFILES_SENT_PATH);
+        fs.mkdirSync(ZIPFILES_OUTPUT_PATH, 755);
+        console.log('Created ZIPFILES_OUTPUT_PATH ' + ZIPFILES_OUTPUT_PATH);
     }
 }
-
-try {
-    fs.statSync(IMAGEFILES_OUTPUT_PATH);
-} catch (e) {
-    if (e.code === 'ENOENT') {
-        fs.mkdirSync(IMAGEFILES_OUTPUT_PATH, 755);
-        console.log('Created listener images path ' + IMAGEFILES_OUTPUT_PATH);
-    }
-}
-

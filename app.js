@@ -7,7 +7,7 @@ const logger = winston.logger;
 const bodyParser = require('body-parser');
 
 //setup filewatcher
-const {IMAGEFILES_OUTPUT_PATH, ZIPFILES_OUTPUT_PATH, IMAGEFILES_SENT_PATH, OUTPUT_FILENAME_PREFIX,} = require('./config');
+const {ZIPFILES_OUTPUT_PATH, OUTPUT_FILENAME_PREFIX,} = require('./config');
 const fileWatcher = require('./src/file-watcher');
 const {prepareOutput, prepareLegacyOutput,} = require('./src/dfm-response');
 
@@ -32,11 +32,6 @@ fileWatcher.watchSingle(ZIPFILES_OUTPUT_PATH, async zipFilepath => {
     }
     const preview_id = `${OUTPUT_FILENAME_PREFIX}${m[1]}`;
     await prepareOutput(preview_id, zipFilepath);
-});
-
-// @deprecated v1
-fileWatcher.watch(IMAGEFILES_OUTPUT_PATH, async ({preview_id, files,}) => {
-    await prepareLegacyOutput(preview_id, files);
 });
 
 const app = express();

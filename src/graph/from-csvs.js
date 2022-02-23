@@ -23,10 +23,10 @@ class GraphFromCsvs {
         data = data.filter(r => r.length === 2).map(row => this.recordValues(row));
         const {className, type,} = this.graphDefinition.dataSets.find(d => d.filename === filename);
         const stats = {
-            minX: minBy(data, r => r.x).x,
-            minY: minBy(data, r => r.y).y,
-            maxX: maxBy(data, r => r.x).x,
-            maxY: maxBy(data, r => r.y).y,
+            minX: minBy(data, r => r.x)?.x || 0,
+            minY: minBy(data, r => r.y)?.y || 0,
+            maxX: maxBy(data, r => r.x)?.x || 0,
+            maxY: maxBy(data, r => r.y)?.y || 0,
         };
         return {data, stats, filename, className, type,};
     }
