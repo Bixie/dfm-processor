@@ -10,8 +10,8 @@ See [PARAMETERS.md](PARAMETERS.md) for details on DFM parameters.
 
 **Dependencies**
 
-- NodeJs 8.x
-- Git 8.2
+- NodeJs 16.x
+- Git
     - Bash
     - Tools
 - (Notepad++)
@@ -19,7 +19,7 @@ See [PARAMETERS.md](PARAMETERS.md) for details on DFM parameters.
 
 Global NPM packages 
 
-- yarn
+- npm
 - node-windows
 
 **Environment variables**
@@ -49,32 +49,28 @@ DFM_INTERNAL_API_KEY        //API key used for Internal API
 ```
 
 Make sure above variables are set!
-Use git/yarn to install the client.
+Use git/npm to install the client.
 
 ```
 git clone https://github.com/Bixie/dfm-processor
 cd dfm-processor
-yarn install
+npm install
 ```
 
 ## Run as Windows Service
 
 Install [node-windows](https://www.npmjs.com/package/node-windows) globally.
 
-Link the package to the install directory. First create the link in the global package:
-```
-cd %USERPROFILE%/AppData/Roaming/npm/node_modules/node-windows
-yarn link
-```
 Then activate the link in the application folder
+
 ```
 cd %DFM_APP_PATH%
-yarn link node-windows
+npm link node-windows
 ```
 
 Run service installer.
 
-```yarn run install:service```
+```npm run install:service```
 
 Now you can run the Service "dfm-processor" from the Windows services window, or via cli.
 
@@ -82,7 +78,7 @@ Now you can run the Service "dfm-processor" from the Windows services window, or
 
 Uninstall the service.
 
-```yarn run uninstall:service```
+```npm run uninstall:service```
 
 These scripts may ask for user-permissions multiple times.
 
@@ -92,7 +88,7 @@ Make sure the service is not running, or the port will be in use.
 ```
 cd %DFM_APP_PATH%
 set NODE_ENV=development
-yarn start
+npm start
 ```
 
 ### Logs
@@ -108,7 +104,7 @@ cd %DFM_APP_PATH%
 git fetch origin master
 git reset --hard FETCH_HEAD
 git clean -df
-yarn install
+npm install
 ```
 
 Restart the service after updating!
