@@ -4,6 +4,9 @@ Process param and output files of DFM
 
 [Web Client](https://github.com/Bixie/dfm-app) - [Server API](https://github.com/Bixie/dfm-api) - [Nodejs Processor](https://github.com/Bixie/dfm-processor)
 
+See [PROTOCOL.md](PROTOCOL.md) for the wire formats — the endpoints served, the engine request, the
+output archive, the watchlist table and the licence files. It is the source of truth for all of them.
+
 See [PARAMETERS.md](PARAMETERS.md) for details on DFM parameters.
 
 ### Install
