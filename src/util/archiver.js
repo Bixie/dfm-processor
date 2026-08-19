@@ -1,7 +1,7 @@
 
 const JSZip = require('jszip');
 const fs = require('fs');
-const {getNormalizedFileName,} = require('../util/filesystem');
+const {getNormalizedFileName,} = require('./filesystem');
 
 function createZip(files) {
     const zip = new JSZip();

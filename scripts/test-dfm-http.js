@@ -63,7 +63,7 @@ function createServer(port, handler) {
         res.writeHead(status, {'Content-Type': 'text/plain'});
         res.write(response);
         res.end();
-    }).listen(port);
+    }).listen(port, '0.0.0.0');
 
     server.on('error', onError);
     server.on('listening', onListening);

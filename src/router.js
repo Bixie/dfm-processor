@@ -1,10 +1,10 @@
-const {logger,} = require('../src/util/winston');
+const {logger,} = require('./util/winston');
 
 const express = require('express');
 const router = express.Router();
-const ServerStatus = require('../src/util/server-status');
+const ServerStatus = require('./util/server-status');
 const ApiToken = require('./api-token');
-const {PARAMSFILES_PATH, LICENSEFILES_PATH,} = require('../config');
+const {PARAMSFILES_PATH, LICENSEFILES_PATH, DFM_INPUT_HOST,} = require('../config');
 const request = require('request');
 
 const ParamsFile = require('./params/params-file'); //@deprecated
@@ -61,7 +61,7 @@ router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
     if (providerPath === undefined) {
         return errorResponse(`Invalid dataprovider`, 422);
     }
-    const url = `http://localhost:${paramsFile.getProviderPort()}${providerPath}`;
+    const url = `${DFM_INPUT_HOST}:${paramsFile.getProviderPort()}${providerPath}`;
 
     request.get({url: `${url}?${paramsFile.queryString()}`,}, (err, response) => {
         if (err) {

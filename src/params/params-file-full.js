@@ -37,7 +37,12 @@ const defaultParams = {
     OptimalizationTechnique: 'LongThenShort',
     TransactionCosts: '4',
     LoanPercentage: '0.5',
-    DividendTax: '15'
+    DividendTax: '15',
+    AdaptiveStockCounting: '', //todo default values
+    InitialMarginRequirement: '',
+    RiskFreeRate: '',
+    ShareCollateral: '',
+    WatchlistsFilters: ''
 };
 
 const defaultOptions = {
@@ -105,7 +110,7 @@ class ParamsFileFull {
     }
 
     write(folderpath) {
-        const language = this.options.locale === 'nl-NL' ? 'NL' : 'EN';
+        const language = this.options.locale.substring(0, 2).toUpperCase();
         return new Promise((resolve, reject) => {
             const filename = `${folderpath}/${this.id}_${language}.txt`;
             fs.writeFile(filename, this.render(), err => {

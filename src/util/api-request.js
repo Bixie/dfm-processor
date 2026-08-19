@@ -1,6 +1,5 @@
 const rp = require('request-promise');
 const fs = require('fs');
-const tough = require('tough-cookie');
 const request = require('request');
 const Promise = require('bluebird');
 
@@ -13,19 +12,6 @@ class ApiRequest {
     constructor(server_url, api_key) {
         this.server_url = server_url;
         this.api_key = api_key;
-        this.cookiejar = rp.jar();
-        const domain = this.server_url.replace(/(https?:\/\/)/, '.').split('/')[0];
-        if (process.env.NODE_ENV === 'development') {
-            let cookie = new tough.Cookie({
-                key: 'XDEBUG_SESSION',
-                value: 'PHPSTORM',
-                domain,
-                httpOnly: true,
-                maxAge: 31536000,
-            });
-            // Put cookie in a jar which can be used across multiple requests
-            this.cookiejar.setCookie(cookie.toString(), server_url);
-        }
     }
 
     /**
@@ -39,7 +25,6 @@ class ApiRequest {
         const options = {
             method: 'GET',
             uri: `${this.server_url}/${url}`,
-            jar: this.cookiejar,
             body: data,
             json: true,
             headers: this.getHeaders(headers),
@@ -58,7 +43,6 @@ class ApiRequest {
         const options = {
             method: 'POST',
             uri: `${this.server_url}/${url}`,
-            jar: this.cookiejar,
             body: data,
             json: true,
             headers: this.getHeaders(headers),
@@ -78,7 +62,7 @@ class ApiRequest {
             headers['Content-type'] = 'application/zip';
             headers['Content-length'] = buffer.length;
             headers = this.getHeaders(headers);
-            request.put({url, headers, jar: this.cookiejar, body: buffer,}, (err, res) => {
+            request.put({url, headers, body: buffer,}, (err, res) => {
                 if (err) {
                     reject(new Error(err));
                     return;

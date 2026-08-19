@@ -53,7 +53,7 @@ class ParamsFile {
     }
 
     write(folderpath) {
-        const language = this.options.locale === 'nl-NL' ? 'NL' : 'EN';
+        const language = this.options.locale.substring(0, 2).toUpperCase();
         return new Promise((resolve, reject) => {
             const filename = `${folderpath}/${this.id}_${language}.txt`;
             fs.writeFile(filename, this.render(), err => {

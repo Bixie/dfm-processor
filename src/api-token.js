@@ -2,7 +2,7 @@
  * For communication with internal server a simple API token is used
  * @type {string}
  */
-const {logger,} = require('../src/util/winston');
+const {logger,} = require('./util/winston');
 const {INTERNAL_API_KEY,} = require('../config');
 
 function middleware(req, res, next) {

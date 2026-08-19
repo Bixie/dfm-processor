@@ -15,7 +15,10 @@ const transforms = {
         format: value => {
             return {
                 'nl-NL': 'NL',
+                'nl_NL': 'NL',
                 'en-GB': 'EN',
+                'en_US': 'EN',
+                'en_GB': 'EN',
             }[value];
         },
     },
@@ -172,7 +175,7 @@ const transforms = {
         format: value => {
             return {
                 'Own': '0',
-                'All': '1',
+                'General_watchlist': '1',
                 'SnP500': '2',
                 'DJIA': '3',
                 'ETF-collection': '4',
