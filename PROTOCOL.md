@@ -10,6 +10,11 @@ Everything else here is ours on both ends.
 The parameter vocabulary is **not** repeated here. `apps/calculator/data/parameter-fields.json` in the
 `dfm-core` plugin is its source: 34 names, types, option lists, ranges, defaults.
 
+**Nor is the mapping onto §3's keys.** It was `src/params/` here until August 2026 and is
+`Api\EngineQuery` in the plugin now, next to the fields it reads; the plugin's own `PARAMETERS.md` is
+generated from that class and is where a parameter's route onto the wire is written down. This
+processor no longer knows the vocabulary at all — it receives a finished query string and relays it.
+
 ---
 
 ## 1. Endpoints served
@@ -20,21 +25,26 @@ Base `http://<host>:${DFM_APP_PORT}`. All except `/status` require the header
 | Method | Path | Body | Response |
 |---|---|---|---|
 | GET | `/status` | — | `{status, watchedPaths, groupQueue}` |
-| POST | `/preview/:preview_id` | `{params, options}` | `{result: true, preview_id}`, or `{result: false, preview_id, error}` with 422 (unknown `DataProvider`) or the engine's status |
+| POST | `/preview/:preview_id` | `{query, provider}` | `{result: true, preview_id}`, or `{result: false, preview_id, error}` with 422 (malformed `query`, or a `provider` that is not `CSI`/`Yahoo`) or the engine's status |
 | POST | `/license` | `{data, key, userId}` | `{result}` |
 | GET | `/watchlists/:user_id` | — | `{watchlists: [{id, name, item_count}]}` |
 | GET | `/watchlists/:user_id/:id` | — | `{watchlist: {id, name, item_count, items}}`, 404 if absent |
 | POST | `/watchlists/:user_id/:id?` | `{name, items}` | `{watchlist}`; no `:id` inserts, `:id` updates |
 | DELETE | `/watchlists/:user_id/:id` | — | `204` |
 
-`params` is the 34-name set; `options` is `width`, `layout`, `locale`, `ownWatchlistId`, plus
-`licenseKey`, `userId`, `email` set by the site and never by a browser.
+`query` is §3's query string minus the leading `?`, built by the plugin and passed through
+character for character. It is checked against `^[A-Za-z0-9;.\-_=&]+$` before being appended to a URL
+— not a filter on legitimate input, since everything the mapping emits is a digit, a dot, a minus or
+an ordinal, but a guard on a newline or a `#` arriving from somewhere else. `provider` is the *name*
+`CSI` or `Yahoo`, which §3 resolves to a port; a URL in a request body would make this fetch whatever
+it is told.
 
 ## 2. Pipeline
 
-1. Browser → WordPress: `POST /wp-json/dfm/v1/calculation`. WordPress mints the id and gates the licence.
-2. WordPress → processor: `POST /preview/<id>` (§1).
-3. Processor → engine: `GET` (§3).
+1. Browser → WordPress: `POST /wp-json/dfm/v1/calculation`. WordPress mints the id, gates the licence
+   and maps the parameters onto §3's keys.
+2. WordPress → processor: `POST /preview/<id>` (§1), carrying the finished query string.
+3. Processor → engine: `GET` (§3) — the query appended to the provider's URL, unchanged.
 4. Engine → disk: one zip in `ZIPFILES_OUTPUT_PATH`, named from the id (§4).
 5. Processor → WordPress: `PUT` (§5).
 6. Browser polls `GET /wp-json/dfm/v1/calculation/<id>` until the archive is there.
@@ -45,19 +55,24 @@ sent as `id=`, and the name the engine gives its output file.
 ## 3. The engine request
 
 ```
-GET ${DFM_INPUT_HOST}:<port><path>?id=<preview_id>&LKEY=…&EMAIL=…&LANG=…&STLI=…
+GET ${DFM_INPUT_HOST}:<port><path>?id=<preview_id>&LKEY=…&LANG=…&STLI=…
 ```
 
-`port` and `path` come from `DataProvider` — **6247 = CSI, 6246 = Yahoo**, path `/gameplan` in
+`port` and `path` come from the `provider` name — **6247 = CSI, 6246 = Yahoo**, path `/gameplan` in
 production; `DFM_INPUT_PORT_*` / `DFM_INPUT_PATH_*` point at a stub in dev. `DataProvider` is *not* a
-query key.
+query key, and the mapping never produced one: `PROV` in the old generated `PARAMETERS.md` here was a
+key nothing on the wire ever carried.
 
-Then these 20 keys, in this order. Sub-fields are joined with `;`. No timeout is set on the request.
+Then these 20 keys, in this order — `id` and nineteen four-letter ones. Sub-fields are joined with
+`;`, keys with `&`, and **nothing is URL-encoded**: the engine splits on `&`, `=` and `;` and does not
+decode. No timeout is set on the request.
+
+The **From** column names what the plugin reads; `Api\EngineQuery` is where each row is declared and
+the plugin's `PARAMETERS.md` prints the same table the other way round, by parameter.
 
 | Key | Sub-fields | From |
 |---|---|---|
 | `LKEY` | licence key, `XXXXX-XXXXX-XXXXX-XXXXX-XXXXX` | `options.licenseKey` |
-| `EMAIL` | e-mail address | `options.email` — **the engine does not read this key**; its field is `MAIL`, withdrawn 2021-03-24 |
 | `LANG` | `NL` \| `EN` | `options.locale` |
 | `STLI` | `ord(IsSelected);Min;Max;ord(SortOrder);OrderCount`, or `0;0;0;0;0` | `TradingLiquidity` |
 | `SHSP` | idem | `HistoricalPrice` |
@@ -77,11 +92,24 @@ Then these 20 keys, in this order. Sub-fields are joined with `;`. No timeout is
 | `BVAL` | `StartDate;EndDate;ord(BenchMark);ord(IncludeNotActive)` | `ValidationPeriod`, `Benchmark`, `IncludeInactive` |
 | `BTIM` | `ord(IsSelected);ord(OptimizeCriterion)` | `Timing`, `TimingInvestementObjective` |
 
-`BVAL`'s dates are **Excel/Windows serial numbers, floored**, resolved at request time from the
-processor's clock: `end = today`, `start = today − ValidationPeriod years`. So the same parameter set
-sent on two different days is two different requests — `ValidationPeriod` is a duration, and the window
-is resolved last. `BVAL` field 4 comes from `IncludeInactive` through a JavaScript truthiness test, so
-it must arrive as a number: the string `'0'` inverts it.
+**`EMAIL` sat between `LKEY` and `LANG` until August 2026 and is gone.** The engine's field for it was
+`MAIL` and was withdrawn on 2021-03-24, so for five years the key was read by nothing while putting a
+customer's address in a plaintext query string, in this processor's log and in the site's. Twenty keys
+either way: it left and nothing replaced it, because `id` was never counted in the old nineteen.
+
+`BVAL`'s dates are **Excel/Windows serial numbers naming a wall-clock day**, resolved at request time
+from WordPress's clock in `wp_timezone()`: `end = today`, `start = today − ValidationPeriod years`. So
+the same parameter set sent on two different days is two different requests — `ValidationPeriod` is a
+duration, and the window is resolved last.
+
+Earlier revisions of this file said **floored**, and that was wrong about the JavaScript in a way worth
+recording: `toExcelDate` divided by a day and *rounded*, so from 12:00 UTC onwards both serials named
+tomorrow. The office is in Amsterdam and calculations run in the working day, which is why nobody saw
+it. The PHP names the local day for every instant in it, which changes the value only for a request
+made in the afternoon.
+
+`BVAL` field 4 came from `IncludeInactive` through a JavaScript truthiness test, where the string `'0'`
+inverted it; the PHP compares against the parameter's own accepted values instead.
 
 Declared precision: `%0.2f` for screening min/max, `BROK` 1 and 5, and `ROWT` 5; `%0.3f` for `BROK` 6;
 `%d` elsewhere. Not enforced on our side.
@@ -107,6 +135,10 @@ TBenchMark          0 SP500, 1 DJIA
 
 ### Example
 
+The specification's, with its dummy key — so it still carries `MAIL` and a filter selection the form
+no longer offers. For a request as the plugin builds one today, see the worked example at the end of
+`PARAMETERS.md` in `dfm-core`, which is a golden captured from the JavaScript this replaced.
+
 ```
 http://localhost:6246/gameplan?id=dfm_preview5e91eab7ab8f0
 &LKEY=DUMMY-12345-ABCDE-FGHIJ-67890&MAIL=user@example.com&LANG=EN
@@ -126,6 +158,11 @@ http://localhost:6246/gameplan?id=dfm_preview5e91eab7ab8f0
 - `ROWT` omits `Weighting.StartDate`, which the spec's format string lists and its own example does not.
 - `WeightInterval` is *"required but ignored, default = 1"* since 2021-04-15.
 - The spec's format strings join with `,`; every example and production use `;`.
+- `ROWT` field 2 is **empty** when `InvestementObjective` is `N/A` — `ROWT=0;;9;1;0;1` — because that
+  parameter's map has no `N/A` row and the JavaScript formatter had no fallback, while
+  `TimingInvestementObjective` one key along sends `BTIM=0;0` from the same choice. Reproduced rather
+  than fixed: what the engine makes of the empty field is unknown, and a `0` there would be a change
+  to six years of behaviour on a guess. A question for Nico.
 
 ## 4. The engine's answer
 

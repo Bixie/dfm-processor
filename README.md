@@ -7,7 +7,10 @@ Process param and output files of DFM
 See [PROTOCOL.md](PROTOCOL.md) for the wire formats — the endpoints served, the engine request, the
 output archive, the watchlist table and the licence files. It is the source of truth for all of them.
 
-See [PARAMETERS.md](PARAMETERS.md) for details on DFM parameters.
+The parameters themselves are the plugin's: `PARAMETERS.md` in `dfm-core`, generated from
+`Api\EngineQuery`, is where a form field's route onto the wire is written down. The
+[PARAMETERS.md](PARAMETERS.md) in this repo is a stale generated copy awaiting deletion — its own
+banner says why.
 
 ### Install
 
@@ -129,7 +132,8 @@ as a set for _preview_id_ `dfm_preview5b785cb49b952`.
 #### Full application
 
 Output files are zipfiles with all the response files. The name should be the `preview ID` that is given as `id` in the query
-string, eg `dfm_preview5b785cb49b952.zip`. ([parameters](https://github.com/Bixie/dfm-processor/blob/master/PARAMETERS.md#voorbeeld-met-standaardwaarden))
+string, eg `dfm_preview5b785cb49b952.zip`. (A request with every parameter at the form's own default is
+the worked example in `dfm-core`'s `PARAMETERS.md`; the query itself is [PROTOCOL.md](PROTOCOL.md) §3.)
 
 Chart and data files can be nested in folders in the zip files.
 
