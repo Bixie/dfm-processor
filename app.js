@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 //setup filewatcher
 const {ZIPFILES_OUTPUT_PATH, OUTPUT_FILENAME_PREFIX,} = require('./config');
 const fileWatcher = require('./src/file-watcher');
-const {prepareOutput, prepareLegacyOutput,} = require('./src/dfm-response');
+const {prepareOutput,} = require('./src/dfm-response');
 
 //watchlists db
 const watchlists = require('./src/util/watchlists');

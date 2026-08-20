@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const {DFM_INPUT_PORT_CSI, DFM_INPUT_PORT_YAHOO, ZIPFILES_OUTPUT_PATH,} = require('../config');
+const {ENGINE_TARGETS, ZIPFILES_OUTPUT_PATH,} = require('../config');
 
 const path = require('path');
 const http = require('http');
@@ -58,7 +58,9 @@ async function handleRequest(req) {
 }
 function createServer(port, handler) {
     const server = http.createServer(async function (req, res) {
-        logger.info(`${req.method} - ${req.url}`);
+        // Path only. The query carries LKEY, and src/router.js goes to the trouble
+        // of keeping it out of this same logfile — see PROTOCOL.md §7.
+        logger.info(`${req.method} - ${url.parse(req.url).pathname}`);
         const {status, response,} = await handler(req);
         res.writeHead(status, {'Content-Type': 'text/plain'});
         res.write(response);
@@ -102,5 +104,14 @@ function createServer(port, handler) {
     return server;
 }
 
-createServer(DFM_INPUT_PORT_CSI, handleRequest);
-createServer(DFM_INPUT_PORT_YAHOO, handleRequest);
+/*
+ * One listener, on the one engine target. There were two, CSI and Yahoo, both
+ * answering identically — the fixtures under test-data/ are CSI captures either
+ * way, so the second port only ever proved that the routing table had two rows.
+ * Task 53 will add a second target for real, and it will be a second machine.
+ *
+ * The files go out under the engine's own names now (see src/util/filesystem.js):
+ * normalising them here made the emulator's archives *unlike* the ones this is
+ * standing in for, which is how the rename hid from every test that used it.
+ */
+createServer(ENGINE_TARGETS.main.port, handleRequest);

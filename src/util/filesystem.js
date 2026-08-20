@@ -1,7 +1,6 @@
 const {promisify} = require('util');
 const path = require('path');
 const fs = require('fs');
-const {snakeCase,} = require('lodash');
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 
@@ -14,37 +13,33 @@ async function getFiles(dir) {
     return files.reduce((a, f) => a.concat(f), []);
 }
 
+/**
+ * Every file under `dir`, paired with the name it should carry in an archive.
+ *
+ * The name is the plain basename. It used to be lodash `snakeCase()` of it,
+ * which was the bridge between the engine's own filenames
+ * (`const_Pr.W[ASP]_(M)_nlv.txt`) and the snake_case ones the browser looks up
+ * (`const_pr_w_asp_m_nlv.txt`). That bridge is `Api\PreviewZip::normalizeName()`
+ * in the WordPress plugin since task 23, because nothing here opens an archive
+ * any more.
+ *
+ * The only caller left is the engine emulator, whose entire job is to produce
+ * archives that look like the engine's — and normalising here made its zips
+ * *unlike* the real ones, so every test driven by the emulator was blind to the
+ * rename it was supposed to exercise. See PROTOCOL.md §4.
+ */
 async function getFlattenedFiles(dir) {
     const files = await getFiles(dir);
     return files.map(file => {
         const relPath = file.replace(dir, '');
         return {
-            name: getNormalizedFileName(relPath),
+            name: path.basename(relPath),
             filepath: path.join(dir, relPath),
         }
     });
 }
 
-function getNormalizedFileName (relPath) {
-    const {basename, extension,} = getFileParts(relPath);
-    return snakeCase(basename.replace(`.${extension}`, '')) + `.${extension}`;
-}
-
-function getFileParts (filepath) {
-    const basename = path.basename(filepath);
-    const parts = basename.split('.');
-    const extension = parts.pop();
-    const filename = parts.join('.');
-    return {
-        basename,
-        extension,
-        filename,
-    };
-}
-
 module.exports = {
     getFiles,
-    getFileParts,
     getFlattenedFiles,
-    getNormalizedFileName,
 };

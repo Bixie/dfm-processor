@@ -7,15 +7,11 @@ const ApiToken = require('./api-token');
 const {
     LICENSEFILES_PATH,
     DFM_INPUT_HOST,
-    DFM_INPUT_PORT_CSI,
-    DFM_INPUT_PORT_YAHOO,
-    DFM_INPUT_PATH_CSI,
-    DFM_INPUT_PATH_YAHOO,
+    ENGINE_TARGETS,
 } = require('../config');
-const request = require('request');
 
 const LicenseFile = require('./license/license-file');
-const {getWatcher, getGroupQueues,} = require('./file-watcher');
+const {getWatcher,} = require('./file-watcher');
 
 const stats = new ServerStatus();
 
@@ -28,11 +24,23 @@ function getWatchedPaths() {
 
 router.get('/status', (req, res) => {
     logger.verbose('Status request.');
-    const groupQueue = getGroupQueues();
     const watchedPaths = getWatchedPaths();
     const status = stats.getStatus();
-    res.send({status, watchedPaths, groupQueue,});
+    res.send({status, watchedPaths,});
 });
+
+/*
+ * How long the engine gets to accept a calculation. Nico's interface answers the
+ * moment it has queued the run — it does not wait for the calculation — so this
+ * only has to cover a handshake, and an engine that has stopped answering used to
+ * hold this HTTP request, and the customer's browser, open indefinitely.
+ *
+ * It has to stay strictly under the site's own client timeout — dfm-core's
+ * Api\Client::TIMEOUT, 15s — or the site gives up first and the customer reads a
+ * cURL message instead of the 504 below. Measured at 15s the two fired within
+ * 50ms of each other and the site lost. 10s leaves the 504 five seconds to arrive.
+ */
+const ENGINE_TIMEOUT_MS = 10000;
 
 /**
  * Relay a calculation request to the DFM engine.
@@ -41,29 +49,29 @@ router.get('/status', (req, res) => {
  * to live here, in src/params/. It lives in the WordPress plugin now
  * (Api\EngineQuery — see PROTOCOL.md §3 and the port plan's task 49), which is
  * where the fields, their option lists and the whitelist that filters them
- * already were. What arrives is the finished query string plus the *name* of the
- * data provider; this resolves the name against DFM_INPUT_* and passes the query
+ * already were. What arrives is the finished query string plus the *name* of an
+ * engine; this resolves the name against ENGINE_TARGETS and passes the query
  * through untouched.
  *
- * The provider stays a name on purpose. A URL out of a request body would make
- * this fetch whatever it is told, and the alternative — the plugin building the
- * whole URL — would mean the engine's LAN address in a wp-config on a machine
- * that cannot reach it.
+ * The target stays a name on purpose. A URL out of a request body would make this
+ * fetch whatever it is told, and the alternative — the plugin building the whole
+ * URL — would mean the engine's LAN address in a wp-config on a machine that
+ * cannot reach it.
  *
  * @param string preview_id Unique ID to tag images
  * @param string query      Query string for the engine, already mapped
- * @param string provider   CSI or Yahoo: which front end to send it to
+ * @param string engine     Which engine machine to send it to; `main` today
  */
 router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
     const {preview_id,} = req.params;
-    const {query, provider,} = req.body;
+    const {query, engine,} = req.body;
     logger.verbose('Incoming request for preview for %s', preview_id);
 
     const errorResponse = (message, status = 500) => {
         logger.error(`Error sending params to DFM: ${message}`);
         res.status(status);
         res.send({result: false, preview_id, error: message,});
-    }
+    };
 
     //Everything the mapping can emit is a digit, a dot, a minus or an ordinal,
     //so this is not a filter on legitimate input: it is a guard on appending a
@@ -73,27 +81,33 @@ router.post('/preview/:preview_id', ApiToken.middleware, async (req, res) => {
         return errorResponse('Missing or malformed query', 422);
     }
 
-    const providerPort = {'CSI': DFM_INPUT_PORT_CSI, 'Yahoo': DFM_INPUT_PORT_YAHOO,}[provider];
-    const providerPath = {'CSI': DFM_INPUT_PATH_CSI, 'Yahoo': DFM_INPUT_PATH_YAHOO,}[provider];
-    if (providerPort === undefined || providerPath === undefined) {
-        return errorResponse(`Invalid dataprovider`, 422);
+    const target = ENGINE_TARGETS[engine];
+    if (target === undefined) {
+        return errorResponse('Unknown engine', 422);
     }
-    const url = `${DFM_INPUT_HOST}:${providerPort}${providerPath}`;
+    const url = `${DFM_INPUT_HOST}:${target.port}${target.path}`;
 
-    request.get({url: `${url}?${query}`,}, (err, response) => {
-        if (err) {
-            return errorResponse(err.message);
-        }
-        const {statusCode, body,} = response;
-        if (statusCode === 200) {
-            //The query is not logged. It carries the customer's licence key, and
-            //this line used to write it to disk on every calculation.
-            logger.info('Params for %s were sent to %s.', preview_id, url);
-            res.send({result: true, preview_id,});
-        } else {
-            return errorResponse(body, statusCode);
-        }
-    });
+    let response;
+
+    try {
+        response = await fetch(`${url}?${query}`, {signal: AbortSignal.timeout(ENGINE_TIMEOUT_MS),});
+    } catch (err) {
+        const timedOut = err.name === 'TimeoutError' || err.name === 'AbortError';
+
+        return errorResponse(
+            timedOut ? `The calculation engine did not answer within ${ENGINE_TIMEOUT_MS / 1000}s` : err.message,
+            timedOut ? 504 : 502
+        );
+    }
+
+    if (!response.ok) {
+        return errorResponse((await response.text()).trim().substring(0, 500), response.status);
+    }
+
+    //The query is not logged. It carries the customer's licence key, and this
+    //line used to write it to disk on every calculation.
+    logger.info('Params for %s were sent to %s.', preview_id, url);
+    res.send({result: true, preview_id,});
 });
 
 /**
@@ -105,6 +119,18 @@ router.post('/license', ApiToken.middleware, (req, res) => {
     const {data, key, userId,} = req.body;
     logger.verbose('Incoming registration for license %s', key);
     let result = false;
+
+    //The key becomes a filename directly below. Keys are generated by the site
+    //and have always been alphanumeric with dashes, so this rejects nothing real
+    //— it closes the same traversal that PreviewZip::ID_PATTERN closes on the
+    //other side of the wire.
+    if (typeof key !== 'string' || !/^[A-Za-z0-9-]{1,64}$/.test(key)) {
+        logger.error('Refused a license registration with a malformed key');
+        res.status(422);
+
+        return res.send({result, error: 'Malformed license key',});
+    }
+
     const licenseFile = new LicenseFile(key, data, userId);
     licenseFile.write(LICENSEFILES_PATH).then(result => {
         logger.info('Licensefile for %s saved in %s.', key, LICENSEFILES_PATH);

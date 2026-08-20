@@ -28,7 +28,6 @@ function setup() {
 function ensureUserOwnsWatchlist(user_id, id) {
     return knex('watchlists').where({id, user_id,}).count('id', {as: 'count'})
         .then(([{count,},]) => {
-            console.log(count);
             if (count !== 1) {
                 throw new HttpError('No access to watchlist for this user', 403);
             }
