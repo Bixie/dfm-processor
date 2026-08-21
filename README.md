@@ -116,10 +116,22 @@ cd %DFM_APP_PATH%
 git fetch origin master
 git reset --hard FETCH_HEAD
 git clean -df
-npm install
+npm ci
 ```
 
 Restart the service after updating!
+
+**`npm ci`, not `npm install`.** `package-lock.json` is committed, and `ci` installs exactly what it
+says; `install` is free to resolve anything the `^` ranges allow, which is how this repo ended up
+running 2021 packages under a 2025 manifest for four years. If `ci` refuses, the lockfile and
+`package.json` genuinely disagree and that is worth reading rather than working around.
+
+**`sqlite3` is the one native module,** and it fetches a prebuilt binary rather than compiling —
+`prebuild-install` pulls `napi-v6-<platform>` into `node_modules/sqlite3/build/Release/`. Being N-API
+is why it survives a Node major without a rebuild. If the fetch fails on the engine machine (no
+network to GitHub, or a platform with no published build) it falls back to compiling from source,
+which needs the MSVC build tools that are not otherwise a requirement here. A failed
+`npm ci` on that machine is far more likely to be this than anything in the repo.
 
 ### Filename formats
 
