@@ -235,7 +235,7 @@ Content-type: application/zip
 
 Handled by `dfm-core`'s `Api\Receiver`, which compares the token with `hash_equals` and requires the id
 to match `/^[A-Za-z0-9_-]{1,64}$/`. The token is the whole authorisation — the id is not checked against
-a live request. On success the archive is moved to `IMAGEFILES_SENT_PATH`, and that move is what says
+a live request. On success the archive is moved to `RESPONSES_SENT_PATH`, and that move is what says
 the delivery succeeded.
 
 **Nothing happens between §4 and here.** The bytes chokidar saw are the bytes WordPress receives. Until
@@ -301,7 +301,7 @@ Names only; values live in `config.js` defaults and the environment.
 | `DFM_DB_PATH` | directory holding `watchlists.sqlite` |
 | `DFM_INPUT_HOST`, `DFM_ENGINE_PORT_MAIN`, `DFM_ENGINE_PATH_MAIN` | the engine (§3) |
 | `ZIPFILES_OUTPUT_PATH`, `DFM_OUTPUT_FILENAME_PREFIX` | the watched output (§4) |
-| `DFM_IMAGEFILES_SENT_PATH` | where a delivered archive is moved to (§5) |
+| `DFM_RESPONSES_SENT_PATH` | where a delivered archive is moved to (§5) |
 | `DFM_LICENSEFILES_PATH` | licence files (§7) |
 | `DFM_INTERNAL_API_HOST`, `DFM_INTERNAL_API_KEY` | WordPress, and the shared token both directions |
 

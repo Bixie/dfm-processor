@@ -47,7 +47,7 @@ DFM_ENGINE_PATH_MAIN        //Path the engine serves calculation requests on
 DFM_LICENSEFILES_PATH       //Path where License application will listen for license files
 DFM_OUTPUT_FILENAME_PREFIX  //Prefix in front of the unique preview ID in the file
 ZIPFILES_OUTPUT_PATH        //Path where DFM application outputs the zip files
-DFM_IMAGEFILES_SENT_PATH    //Path to move delivered archives to
+DFM_RESPONSES_SENT_PATH     //Path to move delivered archives to
 DFM_INTERNAL_API_HOST       //URL of Internal API on webserver
 DFM_INTERNAL_API_KEY        //API key used for Internal API
 ```

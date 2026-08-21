@@ -21,10 +21,11 @@ exports.ENGINE_TARGETS = {
     },
 };
 
+// naming conventions from engine perspective - zip-put is the output of the engine
 exports.LICENSEFILES_PATH = process.env.DFM_LICENSEFILES_PATH || '/var/www/html/license-in';
 exports.OUTPUT_FILENAME_PREFIX = process.env.DFM_OUTPUT_FILENAME_PREFIX || 'dfm_preview';
 exports.ZIPFILES_OUTPUT_PATH = process.env.ZIPFILES_OUTPUT_PATH || '/var/www/html/zip-out';
-exports.IMAGEFILES_SENT_PATH = process.env.DFM_IMAGEFILES_SENT_PATH || '/var/www/html/image-sent';
+exports.RESPONSES_SENT_PATH = process.env.DFM_RESPONSES_SENT_PATH || '/var/www/html/responses-sent';
 
 // WordPress REST base. putToApi('preview/<id>') therefore PUTs to
 // https://dfm-wordpress.ddev.site/wp-json/dfm/v1/preview/<id>, handled by

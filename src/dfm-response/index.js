@@ -5,7 +5,7 @@ const fileWatcher = require('../file-watcher');
 const {createZipBuffer,} = require('../util/archiver');
 const {putToApi,} = require('../util/api-request');
 
-const {IMAGEFILES_SENT_PATH,} = require('../../config');
+const {RESPONSES_SENT_PATH,} = require('../../config');
 
 //One retry, then the archive is left where it is. Long enough for a container
 //restart or a deploy to finish, short enough that a customer is still watching.
@@ -109,7 +109,7 @@ async function prepareOutput(preview_id, zipFilepath) {
 
 async function moveAside(preview_id, zipFilepath) {
     try {
-        await fileWatcher.move(zipFilepath, `${IMAGEFILES_SENT_PATH}/${preview_id}.zip`);
+        await fileWatcher.move(zipFilepath, `${RESPONSES_SENT_PATH}/${preview_id}.zip`);
         logger.verbose('Zipfile for %s moved to archive', preview_id);
     } catch (e) {
         //The delivery is done; a file left in the watched directory only means
