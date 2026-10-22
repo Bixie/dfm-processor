@@ -1,6 +1,6 @@
 {
   "name": "dfm-processor",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Requests and file processor for DFM",
   "main": "index.js",
   "scripts": {
