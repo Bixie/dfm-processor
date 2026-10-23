@@ -16,7 +16,7 @@ repo's own stale copy of that document is gone.
 
 **Dependencies**
 
-- NodeJs 22.x LTS
+- NodeJs 24.x
 - Git
     - Bash
     - Tools
@@ -181,4 +181,3 @@ name: string
 item_count: integer
 items: JSON text
 ```
-
