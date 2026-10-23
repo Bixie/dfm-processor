@@ -1,4 +1,5 @@
 const fs = require('fs');
+const nodePath = require('path');
 const {logger,} = require('./util/winston');
 
 const chokidar = require('chokidar');
@@ -18,11 +19,27 @@ const watchers = {};
  * complete set by parsing counts out of their filenames — went with the v1 output
  * format in task 23. The engine has written one zip per calculation since 2020,
  * and nothing had called the grouped watcher in as long.
+ *
+ * `accept` is given a basename and decides which files are watched at all, not
+ * merely which ones reach the callback. The difference matters on Windows: the
+ * engine composes its archive as `temp.zip` in the same directory and holds it
+ * open while it writes, and fs.watch() on a file another process has locked
+ * throws EBUSY. Filtering after the `add` event was too late — the watch had
+ * already been attempted, and the error took the process down.
  */
-function setupWatcher (path, onAddCallback) {
-    // Initialize watcher.
+function setupWatcher (path, onAddCallback, accept = () => true) {
+    const root = nodePath.resolve(path);
     const watcher = chokidar.watch(path, {
-        ignored: /(^|[\/\\])\../, //ignores .dotfiles
+        // Called with and without stats, for the root too, so the root is exempt
+        // by path rather than by type. depth 0 means nothing below it is reached.
+        ignored: filepath => {
+            if (nodePath.resolve(filepath) === root) {
+                return false;
+            }
+            const name = nodePath.basename(filepath);
+            return name.startsWith('.') || !accept(name);
+        },
+        depth: 0,
         persistent: true,
         awaitWriteFinish: {
             stabilityThreshold: 500,
@@ -33,6 +50,12 @@ function setupWatcher (path, onAddCallback) {
     watcher.on('add', filepath => {
         logger.verbose('Calling callback for file %s', filepath);
         onAddCallback(filepath);
+    });
+    // An FSWatcher with no 'error' listener throws, and that ends the process
+    // and every delivery waiting in it. chokidar carries on after reporting, so
+    // logging is the whole of the handling.
+    watcher.on('error', err => {
+        logger.error('File watcher error on %s: %s', err.path || path, err.message);
     });
     watchers[path] = watcher;
     return watcher;
@@ -70,7 +93,7 @@ async function move (from, to) {
 
 module.exports = {
     getWatcher: (path = null) => path ? watchers[path] : watchers,
-    watchSingle: (path, onAddCallback) => setupWatcher(path, onAddCallback),
+    watchSingle: (path, onAddCallback, accept) => setupWatcher(path, onAddCallback, accept),
     remove,
     move,
 };

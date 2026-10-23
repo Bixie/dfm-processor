@@ -25,6 +25,8 @@ watchlists.setup()
  * Watch the output directory and send files to webserver. Move files when sent
  */
 const zipfileRegex = new RegExp(`${OUTPUT_FILENAME_PREFIX}([^\\\\].*)\.zip$`);
+// Only finished archives are watched; the engine's temp.zip is not (see watchSingle).
+const isEngineArchive = name => name.startsWith(OUTPUT_FILENAME_PREFIX) && zipfileRegex.test(name);
 fileWatcher.watchSingle(ZIPFILES_OUTPUT_PATH, async zipFilepath => {
     const m = zipFilepath.match(zipfileRegex);
     if (!m) {
@@ -32,7 +34,7 @@ fileWatcher.watchSingle(ZIPFILES_OUTPUT_PATH, async zipFilepath => {
     }
     const preview_id = `${OUTPUT_FILENAME_PREFIX}${m[1]}`;
     await prepareOutput(preview_id, zipFilepath);
-});
+}, isEngineArchive);
 
 const app = express();
 
